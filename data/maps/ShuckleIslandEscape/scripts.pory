@@ -1,0 +1,161 @@
+mapscripts ShuckleIslandEscape_MapScripts {}
+
+const JUMPSTART_ID = 1
+const TM_MERCHANT_ID = 2
+
+script ShuckleIslandEscape_EventScript_TMMerchant {
+
+    lock
+
+    setflag(FLAG_DONT_TRANSITION_MUSIC)
+    playbgm(MUS_SAILING, FALSE)
+    delay(120)
+    msgbox("HELP!\nI CAN'T STOP!")
+    waitmessage
+    closemessage
+    applymovement(TM_MERCHANT_ID, moves(walk_fast_left * 14, walk_fast_up * 2, walk_fast_right * 4))
+    waitmovement
+    msgbox("Quick!\nThrow a net!")
+    waitmessage
+
+    dynmultipush("Throw a net", 0)
+    dynmultipush("Throw Annette", 1)
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("You don't have a net or Annette\.")
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox("You don't have a net\.")
+
+    }
+    else {
+
+        msgbox("You don't have Annette\.")
+
+    }
+
+    waitmessage
+    closemessage
+
+    applymovement(TM_MERCHANT_ID, moves(face_down, lock_facing_direction, walk_fast_down * 4, jump_2_up))
+    waitmovement
+    setflag(FLAG_TM_MERCHANT_END)
+    removeobject(TM_MERCHANT_ID)
+    playbgm(MUS_NONE, FALSE)
+    clearflag(FLAG_DONT_TRANSITION_MUSIC)
+    playse(SE_M_BUBBLE3)
+    waitse
+    delay(30)
+    playse(SE_M_ACID_ARMOR)
+    waitse
+    delay(60)
+    playse(MUS_OBTAIN_BADGE)
+    msgbox("Congratulations!\nYou helped the TM Merchant stop!")
+    waitse
+    closemessage
+    setvar(VAR_SHUCKLE_ISLAND_ESCAPE_STATE, 1)
+    fadedefaultbgm
+
+    release
+    end
+
+}
+
+script ShuckleIslandEscape_EventScript_Jumpstart {
+
+    lock
+    faceplayer
+
+    special(BufferPlaytime)
+
+    msgbox(jumpstartIntro_text)
+    waitmessage
+
+    msgbox("Now then\.\pDo you want to know your final time?", MSGBOX_YESNO)
+
+    if (var(VAR_RESULT) == YES) {
+
+        msgbox("You completed the game in {STR_VAR_1}:{STR_VAR_2}!")
+        waitmessage
+
+        special(BufferHints)
+        msgbox("You used {STR_VAR_1} small, {STR_VAR_2} medium,\nand {STR_VAR_3} large hints.")
+        waitmessage
+
+        special(BufferSolutions)
+        msgbox("You also used {STR_VAR_1} solutions.")
+        waitmessage
+
+        msgbox("And so\.")
+        waitmessage
+
+        special(BufferAdjustedTime)
+        msgbox("Your adjusted completion time is {STR_VAR_1}:{STR_VAR_2}!")
+        waitmessage
+
+    }
+    else {
+    
+        msgbox(jumpstartNo_text)
+        waitmessage
+
+    }
+
+    msgbox(jumpstartParting_text)
+    waitmessage
+    closemessage
+
+    applymovement(JUMPSTART_ID, moves(walk_in_place_faster_up))
+    waitmovement
+    opendoor(23,20)
+    waitdooranim
+    applymovement(JUMPSTART_ID, moves(walk_in_place_faster_up, walk_up))
+    waitmovement
+    removeobject(JUMPSTART_ID)
+    setflag(FLAG_SPOKE_JUMPSTART)
+    closedoor(23,20)
+    waitdooranim
+
+    release
+    end
+
+}
+
+text jumpstartIntro_text {
+
+    "Hey there!\p"
+    "I'm Jumpstart, the creator of this\n"
+    "escape room.\p"
+    "First of all, congratulations!\p"
+    "You've officially escaped from Shuckle\n"
+    "Island and completed the escape room!\p"
+    "I sincerely appreciate you taking the\n"
+    "time to play through my game."
+
+}
+
+text jumpstartNo_text {
+
+    "No problem!\p"
+    "The most important thing is that\n"
+    "you had fun!\p"
+    "You can come to my house anytime if\n"
+    "you ever change your mind."
+
+}
+
+text jumpstartParting_text {
+
+    "I guess we're done here, then!\p"
+    "However\.\p"
+    "If you're interested in one more\n"
+    "optional challenge, come speak to me!\p"
+    "Otherwise, thank you again for playing\n"
+    "Escape from Shuckle Island!"
+
+}

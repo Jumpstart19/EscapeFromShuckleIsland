@@ -1,0 +1,52 @@
+mapscripts ShuckleIslandMain_House1_MapScripts {}
+
+const DITTO_DOLL_ID = 1
+
+script ShuckleIslandMain_House1_EventScript_DittoDoll {
+
+    lockall
+    msgbox("It's a Ditto doll.\pIt looks like its owners want it to\ntransform into a Shedinja\.\lor possibly a Vaporeon?")
+    releaseall
+    end
+
+}
+
+script ShuckleIslandMain_House1_EventScript_Drawer {
+
+    lockall
+    msgbox("It looks like a child's private drawer.\nPeek inside?", MSGBOX_YESNO)
+    if (var(VAR_RESULT) == YES) {
+
+        msgbox(Opened_Drawer_Text)
+
+    }
+    else {
+
+        msgbox(Left_Drawer_Closed_Text)
+
+    }
+    releaseall
+    end
+
+}
+
+text Opened_Drawer_Text {
+
+    "You find several pictures of Vaporeon\.\p"
+    "that aren't anywhere near as\n"
+    "disturbing as what you had feared.\p"
+    "They're actually kind of\.cute?\n"
+    "Well, you hope others see it that way.\p"
+    "Then again, you just looked in a child's\n"
+    "drawer without a second thought.\l"
+    "So why start doubting yourself now?"
+
+}
+
+text Left_Drawer_Closed_Text {
+
+    "Good call.\p"
+    "You would prefer if the allegations\n"
+    "stopped at child beater."
+
+}

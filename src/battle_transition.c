@@ -113,6 +113,8 @@ static void Task_AngledWipes(u8);
 static void Task_Mugshot(u8);
 static void Task_Aqua(u8);
 static void Task_Magma(u8);
+static void Task_Shuckle(u8);
+static void Task_ShuckleShiny(u8);
 static void Task_Regice(u8);
 static void Task_Registeel(u8);
 static void Task_Regirock(u8);
@@ -159,6 +161,10 @@ static bool8 Aqua_Init(struct Task *);
 static bool8 Aqua_SetGfx(struct Task *);
 static bool8 Magma_Init(struct Task *);
 static bool8 Magma_SetGfx(struct Task *);
+static bool8 Shuckle_Init(struct Task *);
+static bool8 Shuckle_SetGfx(struct Task *);
+static bool8 ShuckleShiny_Init(struct Task *);
+static bool8 ShuckleShiny_SetGfx(struct Task *);
 static bool8 FramesCountdown(struct Task *);
 static bool8 Regi_Init(struct Task *);
 static bool8 Regice_SetGfx(struct Task *);
@@ -306,6 +312,11 @@ static const u32 sTeamAqua_Tileset[] = INCBIN_U32("graphics/battle_transitions/t
 static const u32 sTeamAqua_Tilemap[] = INCBIN_U32("graphics/battle_transitions/team_aqua.bin.smolTM");
 static const u32 sTeamMagma_Tileset[] = INCBIN_U32("graphics/battle_transitions/team_magma.4bpp.smol");
 static const u32 sTeamMagma_Tilemap[] = INCBIN_U32("graphics/battle_transitions/team_magma.bin.smolTM");
+static const u16 sTeamShuckle_Palette[] = INCBIN_U16("graphics/battle_transitions/Team_Shuckle_Logo.gbapal");
+static const u32 sTeamShuckle_Tileset[] = INCBIN_U32("graphics/battle_transitions/Team_Shuckle_Logo.4bpp.smol");
+static const u32 sTeamShuckle_Tilemap[] = INCBIN_U32("graphics/battle_transitions/Team_Shuckle_Logo.bin.smolTM");
+static const u32 sTeamShuckleShiny_Tileset[] = INCBIN_U32("graphics/battle_transitions/Team_Shuckle_Logo_Shiny.4bpp.smol");
+static const u32 sTeamShuckleShiny_Tilemap[] = INCBIN_U32("graphics/battle_transitions/Team_Shuckle_Logo_Shiny.bin.smolTM");
 static const u32 sRegis_Tileset[] = INCBIN_U32("graphics/battle_transitions/regis.4bpp");
 static const u16 sRegice_Palette[] = INCBIN_U16("graphics/battle_transitions/regice.gbapal");
 static const u16 sRegisteel_Palette[] = INCBIN_U16("graphics/battle_transitions/registeel.gbapal");
@@ -360,6 +371,8 @@ static const TaskFunc sTasks_Main[B_TRANSITION_COUNT] =
     [B_TRANSITION_MUGSHOT] = Task_Mugshot,
     [B_TRANSITION_AQUA] = Task_Aqua,
     [B_TRANSITION_MAGMA] = Task_Magma,
+    [B_TRANSITION_SHUCKLE] = Task_Shuckle,
+    [B_TRANSITION_SHUCKLE_SHINY] = Task_ShuckleShiny,
     [B_TRANSITION_REGICE] = Task_Regice,
     [B_TRANSITION_REGISTEEL] = Task_Registeel,
     [B_TRANSITION_REGIROCK] = Task_Regirock,
@@ -427,6 +440,28 @@ static const TransitionStateFunc sMagma_Funcs[] =
 {
     Magma_Init,
     Magma_SetGfx,
+    PatternWeave_Blend1,
+    PatternWeave_Blend2,
+    PatternWeave_FinishAppear,
+    FramesCountdown,
+    PatternWeave_CircularMask
+};
+
+static const TransitionStateFunc sShuckle_Funcs[] =
+{
+    Shuckle_Init,
+    Shuckle_SetGfx,
+    PatternWeave_Blend1,
+    PatternWeave_Blend2,
+    PatternWeave_FinishAppear,
+    FramesCountdown,
+    PatternWeave_CircularMask
+};
+
+static const TransitionStateFunc sShuckleShiny_Funcs[] =
+{
+    ShuckleShiny_Init,
+    ShuckleShiny_SetGfx,
     PatternWeave_Blend1,
     PatternWeave_Blend2,
     PatternWeave_FinishAppear,
@@ -1335,6 +1370,16 @@ static void Task_Magma(u8 taskId)
     while (sMagma_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
 }
 
+static void Task_Shuckle(u8 taskId)
+{
+    while (sShuckle_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
+}
+
+static void Task_ShuckleShiny(u8 taskId)
+{
+    while (sShuckleShiny_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
+}
+
 static void Task_Regice(u8 taskId)
 {
     while (sRegice_Funcs[gTasks[taskId].tState](&gTasks[taskId]));
@@ -1410,6 +1455,36 @@ static bool8 Magma_Init(struct Task *task)
     return FALSE;
 }
 
+static bool8 Shuckle_Init(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    task->tEndDelay = 60;
+    InitPatternWeaveTransition(task);
+    GetBg0TilesDst(&tilemap, &tileset);
+    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
+    DecompressDataWithHeaderVram(sTeamShuckle_Tileset, tileset);
+    LoadPalette(sTeamShuckle_Palette, BG_PLTT_ID(15), sizeof(sTeamShuckle_Palette));
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 ShuckleShiny_Init(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    task->tEndDelay = 60;
+    InitPatternWeaveTransition(task);
+    GetBg0TilesDst(&tilemap, &tileset);
+    CpuFill16(0, tilemap, BG_SCREEN_SIZE);
+    DecompressDataWithHeaderVram(sTeamShuckleShiny_Tileset, tileset);
+    LoadPalette(sTeamShuckle_Palette, BG_PLTT_ID(15), sizeof(sTeamShuckle_Palette));
+
+    task->tState++;
+    return FALSE;
+}
+
 static bool8 Regi_Init(struct Task *task)
 {
     u16 *tilemap, *tileset;
@@ -1476,6 +1551,30 @@ static bool8 Magma_SetGfx(struct Task *task)
 
     GetBg0TilesDst(&tilemap, &tileset);
     DecompressDataWithHeaderVram(sTeamMagma_Tilemap, tilemap);
+    SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 Shuckle_SetGfx(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    GetBg0TilesDst(&tilemap, &tileset);
+    DecompressDataWithHeaderVram(sTeamShuckle_Tilemap, tilemap);
+    SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
+
+    task->tState++;
+    return FALSE;
+}
+
+static bool8 ShuckleShiny_SetGfx(struct Task *task)
+{
+    u16 *tilemap, *tileset;
+
+    GetBg0TilesDst(&tilemap, &tileset);
+    DecompressDataWithHeaderVram(sTeamShuckleShiny_Tilemap, tilemap);
     SetSinWave((s16*)gScanlineEffectRegBuffers[0], 0, task->tSinIndex, 132, task->tAmplitude, DISPLAY_HEIGHT);
 
     task->tState++;

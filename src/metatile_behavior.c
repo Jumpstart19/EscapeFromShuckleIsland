@@ -1,6 +1,7 @@
 #include "global.h"
 #include "metatile_behavior.h"
 #include "constants/metatile_behaviors.h"
+#include "field_player_avatar.h"
 
 #define TILE_FLAG_HAS_ENCOUNTERS (1 << 0)
 #define TILE_FLAG_SURFABLE       (1 << 1)
@@ -85,7 +86,7 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_WATER_DOOR]                         = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE,
     [MB_WATER_SOUTH_ARROW_WARP]             = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE,
     [MB_DEEP_SOUTH_WARP]                    = TILE_FLAG_UNUSED,
-    [MB_UNUSED_6F]                          = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE,
+    [MB_BRIDGE_OVER_COLLISION]              = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_LOW]               = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_MED]               = TILE_FLAG_UNUSED,
     [MB_BRIDGE_OVER_POND_HIGH]              = TILE_FLAG_UNUSED,
@@ -210,7 +211,7 @@ bool8 MetatileBehavior_IsReflective(u8 metatileBehavior)
     if (metatileBehavior == MB_POND_WATER
      || metatileBehavior == MB_PUDDLE
      || metatileBehavior == MB_UNUSED_SOOTOPOLIS_DEEP_WATER_2
-     || metatileBehavior == MB_ICE
+     || (metatileBehavior == MB_ICE && PlayerGetElevation() == 3)
      || metatileBehavior == MB_SOOTOPOLIS_DEEP_WATER
      || metatileBehavior == MB_REFLECTION_UNDER_BRIDGE)
         return TRUE;
@@ -220,7 +221,7 @@ bool8 MetatileBehavior_IsReflective(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsIce(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_ICE)
+    if (metatileBehavior == MB_ICE && PlayerGetElevation() == 3)
         return TRUE;
     else
         return FALSE;
@@ -361,7 +362,7 @@ bool8 MetatileBehavior_IsForcedMovementTile(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsIce_2(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_ICE)
+    if (metatileBehavior == MB_ICE && PlayerGetElevation() == 3)
         return TRUE;
     else
         return FALSE;

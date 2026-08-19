@@ -425,8 +425,10 @@
 	.4byte \jumpInstr
 	.endm
 
-	.macro unused_0x48
-	.byte B_SCR_OP_UNUSED_0x48
+	.macro jumpifnotpresent battler:req, jumpInstr:req
+	.byte B_SCR_OP_JUMPIFNOTPRESENT
+	.byte \battler
+	.4byte \jumpInstr
 	.endm
 
 	.macro moveend endMode:req, endState:req
@@ -608,6 +610,18 @@
 	.byte \isVolatile
 	.endm
 
+	.macro jumpifwideaimblocks battler:req, jumpInstr:req
+	.byte B_SCR_OP_JUMPIFWIDEAIMBLOCKS
+	.byte \battler
+	.4byte \jumpInstr
+	.endm
+
+	.macro jumpiflaststandactive battler:req, jumpInstr:req
+	.byte B_SCR_OP_JUMPIFLASTSTANDACTIVE
+	.byte \battler
+	.4byte \jumpInstr
+	.endm
+
 	.macro volatileanimation battler:req, volatile:req
 	statusanimation \battler, \volatile, TRUE
 	.endm
@@ -685,6 +699,10 @@
 
 	.macro setprotectlike
 	.byte B_SCR_OP_SETPROTECTLIKE
+	.endm
+
+	.macro trycharm
+	.byte B_SCR_OP_TRYCHARM
 	.endm
 
 	.macro tryexplosion
@@ -1416,6 +1434,10 @@
 	callnative BS_ItemIncreaseStat
 	.endm
 
+	.macro itemchangeabilityunnerve
+	callnative BS_ItemChangeAbilityUnnerve
+	.endm
+
 	.macro itemrestorepp
 	callnative BS_ItemRestorePP
 	.endm
@@ -1598,6 +1620,10 @@
 	callnative BS_TryTrainerSlideMegaEvolutionMsg
 	.endm
 
+	@ .macro trytrainerslidelaststandmsg
+	@ callnative BS_TryTrainerSlideLastStandMsg
+	@ .endm
+
 	.macro trytrainerslidedynamaxmsg
 	callnative BS_TryTrainerSlideDynamaxMsg
 	.endm
@@ -1715,6 +1741,24 @@
 	callnative BS_JumpIfBlockedBySoundproof
 	.byte \battler
 	.4byte \failInstr
+	.endm
+
+	.macro jumpifblockedbywaterabsorb battler:req, jumpInstr:req
+	callnative BS_JumpIfBlockedByWaterAbsorb
+	.byte \battler
+	.4byte \jumpInstr
+	.endm
+
+	.macro jumpifwaterabsorbmonnotmaxhp battler:req, jumpInstr:req
+	callnative BS_JumpIfWaterAbsorbMonNotMaxHP
+	.byte \battler
+	.4byte \jumpInstr
+	.endm
+
+	.macro jumpifuploadactive battler:req, jumpInstr:req
+	callnative BS_JumpIfUploadActive
+	.byte \battler
+	.4byte \jumpInstr
 	.endm
 
 	.macro setmagiccoattarget
@@ -1872,6 +1916,10 @@
 
 	.macro dmg_1_8_targethp
 	manipulatedamage DMG_1_8_TARGET_HP
+	.endm
+
+	.macro heal_last_stand
+	manipulatedamage HEAL_LAST_STAND
 	.endm
 
 	.macro dmgtomaxattackerhp
@@ -2232,6 +2280,26 @@
 
 	.macro trytrainerslidemsgfirstoff battler:req
 	callnative BS_TryTrainerSlideMsgFirstOff
+	.byte \battler
+	.endm
+
+	.macro trytrainerslidemsgsecondmon battler:req
+	callnative BS_TryTrainerSlideMsgSecondMon
+	.byte \battler
+	.endm
+
+	.macro trytrainerslidemsgthirdmon battler:req
+	callnative BS_TryTrainerSlideMsgThirdMon
+	.byte \battler
+	.endm
+
+	.macro trytrainerslidemsgfourthmon battler:req
+	callnative BS_TryTrainerSlideMsgFourthMon
+	.byte \battler
+	.endm
+
+	.macro trytrainerslidemsgfifthmon battler:req
+	callnative BS_TryTrainerSlideMsgFifthMon
 	.byte \battler
 	.endm
 

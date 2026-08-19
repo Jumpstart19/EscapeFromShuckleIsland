@@ -1,0 +1,37 @@
+mapscripts ShuckleIslandSouthCave_B2F_MapScripts {
+
+    MAP_SCRIPT_ON_TRANSITION : ShuckleIslandSouthCave_B2F_EventScript_SetFlags
+
+}
+
+const STRENGTH_TOOL_ID = 1
+
+script ShuckleIslandSouthCave_B2F_EventScript_SetFlags {
+
+    clearflag(FLAG_DONT_REMOVE_OFFSCREEN_OBJECT)
+
+    if (var(VAR_ICE_CAVE_BOULDER_1) != 10) {
+
+        setflag(FLAG_REMOVE_ICE_STRENGTH_PUZZLE_1_CLEAR_BOULDER)
+        setflag(FLAG_CLEAR_HINT_NPC_ICE_PUZZLE_2)
+
+    }
+
+    if (var(VAR_ICE_CAVE_BOULDER_2) != 10) {
+
+        setflag(FLAG_REMOVE_ICE_STRENGTH_PUZZLE_2_CLEAR_BOULDER)
+
+    }
+
+}
+
+script ShuckleIslandSouthCave_B2F_EventScript_StrengthTool {
+
+    lockall
+    giveitem(ITEM_STRENGTH_TOOL, 1)
+    removeobject(STRENGTH_TOOL_ID)
+    setflag(FLAG_RECEIVED_STRENGTH_TOOL)
+    releaseall
+    end
+
+}

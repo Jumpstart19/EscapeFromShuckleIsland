@@ -127,6 +127,19 @@ void CreateScriptedWildMon(u16 species, u8 level, u16 item)
         SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, heldItem);
     }
 }
+void CreateScriptedWildMonExtended(u16 species, u8 level, u16 item, u16 nature, u8 abilityNum, u8 gender, u16 hpEv, u16 atkEv, u16 defEv, u16 speedEv, u16 spAtkEv, u16 spDefEv, u16 hpIv, u16 atkIv, u16 defIv, u16 speedIv, u16 spAtkIv, u16 spDefIv, u16 move1, u16 move2, u16 move3, u16 move4, u8 shinyMode)
+{
+    u8 heldItem[2];
+
+    ZeroEnemyPartyMons();
+    CreateMonExtended(&gEnemyParty[0], species, level, nature, abilityNum, gender, hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv, hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv, move1, move2, move3, move4, shinyMode);
+    if (item)
+    {
+        heldItem[0] = item;
+        heldItem[1] = item >> 8;
+        SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, heldItem);
+    }
+}
 void CreateScriptedDoubleWildMon(u16 species1, u8 level1, u16 item1, u16 species2, u8 level2, u16 item2)
 {
     u8 heldItem1[2];
@@ -155,6 +168,30 @@ void CreateScriptedDoubleWildMon(u16 species1, u8 level1, u16 item1, u16 species
         heldItem2[1] = item2 >> 8;
         SetMonData(&gEnemyParty[1], MON_DATA_HELD_ITEM, heldItem2);
     }
+}
+
+void CreateScriptedDoubleWildMonExtended(u16 species, u8 level, u16 item, u16 nature, u8 abilityNum, u8 gender, u16 hpEv, u16 atkEv, u16 defEv, u16 speedEv, u16 spAtkEv, u16 spDefEv, u16 hpIv, u16 atkIv, u16 defIv, u16 speedIv, u16 spAtkIv, u16 spDefIv, u16 move1, u16 move2, u16 move3, u16 move4, u8 shinyMode, u16 species2, u8 level2, u16 item2, u16 nature2, u8 abilityNum2, u8 gender2, u16 hpEv2, u16 atkEv2, u16 defEv2, u16 speedEv2, u16 spAtkEv2, u16 spDefEv2, u16 hpIv2, u16 atkIv2, u16 defIv2, u16 speedIv2, u16 spAtkIv2, u16 spDefIv2, u16 move12, u16 move22, u16 move32, u16 move42, u8 shinyMode2)
+{
+    u8 heldItem[2];
+    u8 heldItem2[2];
+
+    ZeroEnemyPartyMons();
+    CreateMonExtended(&gEnemyParty[0], species, level, nature, abilityNum, gender, hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv, hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv, move1, move2, move3, move4, shinyMode);
+    if (item)
+    {
+        heldItem[0] = item;
+        heldItem[1] = item >> 8;
+        SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, heldItem);
+    }
+    
+    CreateMonExtended(&gEnemyParty[1], species2, level2, nature2, abilityNum2, gender2, hpEv2, atkEv2, defEv2, speedEv2, spAtkEv2, spDefEv2, hpIv2, atkIv2, defIv2, speedIv2, spAtkIv2, spDefIv2, move12, move22, move32, move42, shinyMode2);
+    if (item2)
+    {
+        heldItem2[0] = item2;
+        heldItem2[1] = item2 >> 8;
+        SetMonData(&gEnemyParty[1], MON_DATA_HELD_ITEM, heldItem2);
+    }
+
 }
 
 void ScriptSetMonMoveSlot(u8 monIndex, u16 move, u8 slot)
@@ -557,7 +594,7 @@ void ScrCmd_createmon(struct ScriptContext *ctx)
     u16 move2                = PARSE_FLAG(18, MOVE_NONE);
     u16 move3                = PARSE_FLAG(19, MOVE_NONE);
     u16 move4                = PARSE_FLAG(20, MOVE_NONE);
-    enum ShinyMode shinyMode = PARSE_FLAG(21, SHINY_MODE_RANDOM);
+    enum ShinyMode shinyMode = PARSE_FLAG(21, SHINY_MODE_NEVER);
     bool8 gmaxFactor         = PARSE_FLAG(22, FALSE);
     enum Type teraType       = PARSE_FLAG(23, NUMBER_OF_MON_TYPES);
     u8 dmaxLevel             = PARSE_FLAG(24, 0);

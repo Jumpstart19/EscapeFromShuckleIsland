@@ -208,6 +208,7 @@ static void Task_FreeAbilityPopUpGfx(u8);
 static void SpriteCB_LastUsedBall(struct Sprite *);
 static void SpriteCB_LastUsedBallWin(struct Sprite *);
 static void SpriteCB_MoveInfoWin(struct Sprite *sprite);
+static void SpriteCB_EnemyInfoWin(struct Sprite *sprite);
 
 static const struct OamData sOamData_64x32 =
 {
@@ -730,6 +731,7 @@ u8 CreateBattlerHealthboxSprites(u8 battler)
     gBattleStruct->ballSpriteIds[0] = MAX_SPRITES;
     gBattleStruct->ballSpriteIds[1] = MAX_SPRITES;
     gBattleStruct->moveInfoSpriteId = MAX_SPRITES;
+    gBattleStruct->enemyInfoSpriteId = MAX_SPRITES;
 
     return healthboxLeftSpriteId;
 }
@@ -2121,9 +2123,9 @@ static void MoveBattleBarGraphically(u8 battler, u8 whichBar)
                             &gBattleSpritesDataPtr->battleBars[battler].currValue,
                             array, B_HEALTHBAR_PIXELS / 8);
 
-        if (filledPixelsCount > (B_HEALTHBAR_PIXELS * 50 / 100)) // more than 50 % hp
+        if (filledPixelsCount >= (B_HEALTHBAR_PIXELS * 50 / 100)) // more than 50 % hp
             barElementId = HEALTHBOX_GFX_HP_BAR_GREEN;
-        else if (filledPixelsCount > (B_HEALTHBAR_PIXELS * 20 / 100)) // more than 20% hp
+        else if (filledPixelsCount >= (B_HEALTHBAR_PIXELS * 20 / 100)) // more than 20% hp
             barElementId = HEALTHBOX_GFX_HP_BAR_YELLOW;
         else
             barElementId = HEALTHBOX_GFX_HP_BAR_RED; // 20 % or less
@@ -2333,9 +2335,9 @@ u8 GetHPBarLevel(s16 hp, s16 maxhp)
     else
     {
         u8 fraction = GetScaledHPFraction(hp, maxhp, B_HEALTHBAR_PIXELS);
-        if (fraction > (B_HEALTHBAR_PIXELS * 50 / 100)) // more than 50 % hp
+        if (fraction >= (B_HEALTHBAR_PIXELS * 50 / 100)) // more than 50 % hp
             result = HP_BAR_GREEN;
-        else if (fraction > (B_HEALTHBAR_PIXELS * 20 / 100)) // more than 20% hp
+        else if (fraction >= (B_HEALTHBAR_PIXELS * 20 / 100)) // more than 20% hp
             result = HP_BAR_YELLOW;
         else if (fraction > 0)
             result = HP_BAR_RED;
@@ -2861,6 +2863,36 @@ static const struct SpriteTemplate sSpriteTemplate_MoveInfoWindow =
     .callback = SpriteCB_MoveInfoWin
 };
 
+#define ENEMY_INFO_WINDOW_TAG 0xE722
+
+static const struct OamData sOamData_EnemyInfoWindow =
+{
+    .y = 0,
+    .affineMode = 0,
+    .objMode = 0,
+    .mosaic = 0,
+    .bpp = 0,
+    .shape = SPRITE_SHAPE(32x32),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x32),
+    .tileNum = 0,
+    .priority = 2,
+    .paletteNum = 0,
+    .affineParam = 0,
+};
+
+static const struct SpriteTemplate sSpriteTemplate_EnemyInfoWindow =
+{
+    .tileTag = ENEMY_INFO_WINDOW_TAG,
+    .paletteTag = TAG_ABILITY_POP_UP,
+    .oam = &sOamData_EnemyInfoWindow,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_EnemyInfoWin
+};
+
 #if B_LAST_USED_BALL_BUTTON == R_BUTTON && B_LAST_USED_BALL_CYCLE == TRUE
     static const u8 ALIGNED(4) sLastUsedBallWindowGfx[] = INCBIN_U8("graphics/battle_interface/last_used_ball_r_cycle.4bpp");
 #elif B_LAST_USED_BALL_CYCLE == TRUE
@@ -2881,9 +2913,16 @@ static const u8 sMoveInfoWindowGfx[] = INCBIN_U8("graphics/battle_interface/move
 static const u8 sMoveInfoWindowGfx[] = INCBIN_U8("graphics/battle_interface/move_info_window_l.4bpp");
 #endif
 
+static const u8 sEnemyInfoWindowGfx[] = INCBIN_U8("graphics/battle_interface/enemy_info_window_l.4bpp");
+
 static const struct SpriteSheet sSpriteSheet_MoveInfoWindow =
 {
     sMoveInfoWindowGfx, sizeof(sMoveInfoWindowGfx), MOVE_INFO_WINDOW_TAG
+};
+
+static const struct SpriteSheet sSpriteSheet_EnemyInfoWindow =
+{
+    sEnemyInfoWindowGfx, sizeof(sEnemyInfoWindowGfx), ENEMY_INFO_WINDOW_TAG
 };
 
 #define LAST_USED_BALL_X_F    14
@@ -2961,6 +3000,7 @@ void TryAddLastUsedBallItemSprites(void)
                                                        LAST_USED_WIN_Y, 5);
         gSprites[gBattleStruct->ballSpriteIds[1]].sHide = FALSE;
         gSprites[gBattleStruct->moveInfoSpriteId].sHide = TRUE;
+        gSprites[gBattleStruct->enemyInfoSpriteId].sHide = TRUE;
         gLastUsedBallMenuPresent = TRUE;
     }
     if (B_LAST_USED_BALL_CYCLE == TRUE)
@@ -3008,6 +3048,24 @@ void TryToHideMoveInfoWindow(void)
     gSprites[gBattleStruct->moveInfoSpriteId].sHide = TRUE;
 }
 
+void TryToAddEnemyInfoWindow(void)
+{
+    LoadSpritePalette(&sSpritePalette_AbilityPopUp);
+    if (GetSpriteTileStartByTag(ENEMY_INFO_WINDOW_TAG) == 0xFFFF)
+        LoadSpriteSheet(&sSpriteSheet_EnemyInfoWindow);
+
+    if (gBattleStruct->enemyInfoSpriteId == MAX_SPRITES)
+    {
+        gBattleStruct->enemyInfoSpriteId = CreateSprite(&sSpriteTemplate_EnemyInfoWindow, LAST_BALL_WIN_X_0, LAST_USED_WIN_Y + 32, 5);
+        gSprites[gBattleStruct->enemyInfoSpriteId].sHide = FALSE;
+    }
+}
+
+void TryToHideEnemyInfoWindow(void)
+{
+    gSprites[gBattleStruct->enemyInfoSpriteId].sHide = TRUE;
+}
+
 static void DestroyMoveInfoWinGfx(struct Sprite *sprite)
 {
     FreeSpriteTilesByTag(MOVE_INFO_WINDOW_TAG);
@@ -3015,6 +3073,15 @@ static void DestroyMoveInfoWinGfx(struct Sprite *sprite)
         FreeSpritePaletteByTag(TAG_ABILITY_POP_UP);
     DestroySprite(sprite);
     gBattleStruct->moveInfoSpriteId = MAX_SPRITES;
+}
+
+static void DestroyEnemyInfoWinGfx(struct Sprite *sprite)
+{
+    FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);
+    if (GetSpriteTileStartByTag(TAG_LAST_BALL_WINDOW) == 0xFFFF)
+        FreeSpritePaletteByTag(TAG_ABILITY_POP_UP);
+    DestroySprite(sprite);
+    gBattleStruct->enemyInfoSpriteId = MAX_SPRITES;
 }
 
 static void SpriteCB_LastUsedBallWin(struct Sprite *sprite)
@@ -3063,6 +3130,23 @@ static void SpriteCB_MoveInfoWin(struct Sprite *sprite)
 
         if (sprite->x == LAST_BALL_WIN_X_0)
             DestroyMoveInfoWinGfx(sprite);
+    }
+    else
+    {
+        if (sprite->x != LAST_BALL_WIN_X_F)
+            sprite->x++;
+    }
+}
+
+static void SpriteCB_EnemyInfoWin(struct Sprite *sprite)
+{
+    if (sprite->sHide)
+    {
+        if (sprite->x != LAST_BALL_WIN_X_0)
+            sprite->x--;
+
+        if (sprite->x == LAST_BALL_WIN_X_0)
+            DestroyEnemyInfoWinGfx(sprite);
     }
     else
     {

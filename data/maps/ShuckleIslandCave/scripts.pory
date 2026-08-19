@@ -1,0 +1,183 @@
+mapscripts ShuckleIslandCave_MapScripts {}
+
+const BERRY_MAN_ID = 1
+
+script ShuckleIslandCave_EventScript_Sign{
+
+    lock
+    msgbox(Sign_text, MSGBOX_SIGN)
+    release
+    end
+
+}
+
+script ShuckleIslandCave_EventScript_berryGuy{
+
+    lock
+    applymovement(BERRY_MAN_ID, moves(face_player))
+    waitmovement
+
+    if(!flag(FLAG_MET_BERRY_GUY_CAVE)) {
+
+        setflag(FLAG_MET_BERRY_GUY_CAVE)
+        msgbox(Cave_Careful_text)
+
+    }
+
+    if(!flag(FLAG_RECEIVED_BERRY_3)) {
+
+        msgbox(berryGuyPresentOptions_text)
+
+        dynmultipush("Liechi Berry", ITEM_LIECHI_BERRY)
+        dynmultipush("Ganlon Berry", ITEM_GANLON_BERRY)
+        dynmultipush("Salac Berry", ITEM_SALAC_BERRY)
+        dynmultipush("Petaya Berry", ITEM_PETAYA_BERRY)
+        dynmultipush("Apicot Berry", ITEM_APICOT_BERRY)
+        dynmultipush("Lansat Berry", ITEM_LANSAT_BERRY)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back when you know\nwhich berry you want!")
+
+        }
+        else {
+
+            copyvar(VAR_BATTLE3_BERRY, VAR_RESULT)
+            giveitem(VAR_BATTLE3_BERRY, 1)
+            setflag(FLAG_RECEIVED_BERRY_3)
+
+        }
+    }
+    else {
+
+        msgbox("I hope you make good use of that berry!")
+
+    }
+
+    applymovement(BERRY_MAN_ID, moves(face_up))
+    waitmovement
+    release
+    end
+
+}
+
+script ShuckleIslandCave_EventScript_trigger{
+
+    lock
+
+    if(!flag(FLAG_MET_BERRY_GUY_CAVE)) {
+
+        setflag(FLAG_MET_BERRY_GUY_CAVE)
+        applymovement(BERRY_MAN_ID, moves(face_player))
+        msgbox("Careful!")
+        applymovement(OBJ_EVENT_ID_PLAYER, moves(lock_facing_direction))
+        waitmovement
+        applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_down, unlock_facing_direction))
+        applymovement(BERRY_MAN_ID, moves(walk_right, face_down))
+        waitmovement
+        msgbox(Cave_Careful_text)
+
+        if(!flag(FLAG_RECEIVED_BERRY_3)) {
+
+            msgbox(berryGuyPresentOptions_text)
+
+            dynmultipush("Liechi Berry", ITEM_LIECHI_BERRY)
+            dynmultipush("Ganlon Berry", ITEM_GANLON_BERRY)
+            dynmultipush("Salac Berry", ITEM_SALAC_BERRY)
+            dynmultipush("Petaya Berry", ITEM_PETAYA_BERRY)
+            dynmultipush("Apicot Berry", ITEM_APICOT_BERRY)
+            dynmultipush("Lansat Berry", ITEM_LANSAT_BERRY)
+
+            dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+            if (var(VAR_RESULT) == 127) {
+
+                msgbox("Come back when you know\nwhich berry you want!")
+
+            }
+            else {
+
+                copyvar(VAR_BATTLE3_BERRY, VAR_RESULT)
+                giveitem(VAR_BATTLE3_BERRY, 1)
+                setflag(FLAG_RECEIVED_BERRY_3)
+
+            }
+        }
+        else {
+
+            msgbox("I hope you make good use of that berry!")
+
+        }
+
+        applymovement(BERRY_MAN_ID, moves(walk_left, face_up))
+        waitmovement
+
+    }
+    else {
+
+        applymovement(BERRY_MAN_ID, moves(face_player))
+        applymovement(OBJ_EVENT_ID_PLAYER, moves(face_left))
+        waitmovement
+
+        if(!flag(FLAG_RECEIVED_BERRY_3)) {
+
+            msgbox(berryGuyPresentOptions_text)
+
+            dynmultipush("Liechi Berry", ITEM_LIECHI_BERRY)
+            dynmultipush("Ganlon Berry", ITEM_GANLON_BERRY)
+            dynmultipush("Salac Berry", ITEM_SALAC_BERRY)
+            dynmultipush("Petaya Berry", ITEM_PETAYA_BERRY)
+            dynmultipush("Apicot Berry", ITEM_APICOT_BERRY)
+            dynmultipush("Lansat Berry", ITEM_LANSAT_BERRY)
+
+            dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+            if (var(VAR_RESULT) == 127) {
+
+                msgbox("Come back when you know\nwhich berry you want!")
+
+            }
+            else {
+
+                copyvar(VAR_BATTLE3_BERRY, VAR_RESULT)
+                giveitem(VAR_BATTLE3_BERRY, 1)
+                setflag(FLAG_RECEIVED_BERRY_3)
+
+            }
+        }
+        else {
+
+            msgbox("I hope you make good use of that berry!")
+
+        }
+
+        applymovement(BERRY_MAN_ID, moves(face_up))
+        applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_down))
+        waitmovement
+
+    }
+    
+    release
+    end
+
+}
+
+text Sign_text {
+
+    "There are markings on the floor,\n"
+    "but the floor isn't damaged at all!\p"
+    "How strange\."
+
+}
+
+text Cave_Careful_text {
+
+    "The floor is cracked here, so you'll\n"
+    "have to use the ladder to the left.\p"
+    "Maybe a berry could help you?\p"
+    "I suppose I could spare one more\n"
+    "from my supply."
+
+}

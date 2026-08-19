@@ -92,7 +92,16 @@
     "Underwater_Route128",
     "Underwater_Route129",
     "Underwater_Route105",
-    "Underwater_Route125"
+    "Underwater_Route125",
+    "ShuckleIsland",
+    "ShuckleIslandMain",
+    "ShuckleIslandSouth",
+    "ShuckleIslandRemote",
+    "ShuckleIslandShuckleHideout_B1F",
+    "ShuckleIslandShuckleHideout_2F",
+    "ShuckleIslandShuckleHideout_B2F",
+    "ShuckleIslandEscape",
+    "ShuckleIslandEscapeHouse"
   ],
   "gMapGroup_IndoorLittleroot": [
     "LittlerootTown_BrendansHouse_1F",
@@ -114,7 +123,10 @@
     "DewfordTown_PokemonCenter_2F",
     "DewfordTown_Gym",
     "DewfordTown_Hall",
-    "DewfordTown_House2"
+    "DewfordTown_House2",
+    "ShuckleIslandMain_House1",
+    "ShuckleIslandMain_House2",
+    "ShuckleIslandMain_House3"
   ],
   "gMapGroup_IndoorLavaridge": [
     "LavaridgeTown_HerbShop",
@@ -429,7 +441,16 @@
     "TerraCave_Entrance",
     "TerraCave_End",
     "AlteringCave",
-    "MeteorFalls_StevensCave"
+    "MeteorFalls_StevensCave",
+    "ShuckleIslandCave",
+    "ShuckleIslandCave_B2F",
+    "ShuckleIslandCaveIceF1",
+    "ShuckleIslandSouthCave",
+    "ShuckleIslandSouthCave_B2F",
+    "ShuckleIslandSouthCaveIce",
+    "ShuckleIslandRemoteCave_B2F",
+    "ShuckleIslandRemoteCave",
+    "ShuckleIslandShuckleHideout_1F"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

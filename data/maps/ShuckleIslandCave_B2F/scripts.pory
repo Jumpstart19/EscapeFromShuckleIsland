@@ -1,0 +1,20 @@
+mapscripts ShuckleIslandCave_B2F_MapScripts {}
+
+script ShuckleIslandCave_B2F_EventScript_Hiker {
+
+    lock
+    faceplayer
+    msgbox(hiker_text)
+    release
+    end
+
+}
+
+text hiker_text {
+
+    "Isn't it strange that Team Shuckle's\n"
+    "Pokémon all have an extra ability?\p"
+    "Where do you think they found\n"
+    "Pokémon like that?"
+
+}

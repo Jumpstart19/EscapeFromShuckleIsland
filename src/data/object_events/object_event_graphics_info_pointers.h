@@ -184,6 +184,13 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BigWailmerD
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BigRegirockDoll;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BigRegiceDoll;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BigRegisteelDoll;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Regirock2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Regice2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Registeel2;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Regigigas;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Sableye;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Hariyama;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Shuckle22;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Latias;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Latios;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_GameboyKid;
@@ -236,6 +243,12 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RubySapphir
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RubySapphireMay;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Lugia;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_HoOh;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Munchlax;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ShuckleGruntM;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ShuckleAdminPetrel;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ShuckleLeaderGiovanni;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_InvisibleCushion;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ShuckleGruntF;
 // Begin pokemon event objects
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PokeBall;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower;
@@ -438,6 +451,13 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_BIG_REGIROCK_DOLL] =        &gObjectEventGraphicsInfo_BigRegirockDoll,
     [OBJ_EVENT_GFX_BIG_REGICE_DOLL] =          &gObjectEventGraphicsInfo_BigRegiceDoll,
     [OBJ_EVENT_GFX_BIG_REGISTEEL_DOLL] =       &gObjectEventGraphicsInfo_BigRegisteelDoll,
+    [OBJ_EVENT_GFX_REGIROCK2] =                &gObjectEventGraphicsInfo_Regirock2,
+    [OBJ_EVENT_GFX_REGICE2] =                  &gObjectEventGraphicsInfo_Regice2,
+    [OBJ_EVENT_GFX_REGISTEEL2] =               &gObjectEventGraphicsInfo_Registeel2,
+    [OBJ_EVENT_GFX_REGIGIGAS] =                &gObjectEventGraphicsInfo_Regigigas,
+    [OBJ_EVENT_GFX_SABLEYE] =                  &gObjectEventGraphicsInfo_Sableye,
+    [OBJ_EVENT_GFX_HARIYAMA] =                 &gObjectEventGraphicsInfo_Hariyama,
+    [OBJ_EVENT_GFX_SHUCKLE22] =                &gObjectEventGraphicsInfo_Shuckle22,
     [OBJ_EVENT_GFX_LATIAS] =                   &gObjectEventGraphicsInfo_Latias,
     [OBJ_EVENT_GFX_LATIOS] =                   &gObjectEventGraphicsInfo_Latios,
     [OBJ_EVENT_GFX_GAMEBOY_KID] =              &gObjectEventGraphicsInfo_GameboyKid,
@@ -494,6 +514,12 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_OW_MON] =                   &gObjectEventGraphicsInfo_Follower,
     [OBJ_EVENT_GFX_LIGHT_SPRITE] =             &gObjectEventGraphicsInfo_BallLight,
     [OBJ_EVENT_GFX_APRICORN_TREE] =            &gObjectEventGraphicsInfo_ApricornTree,
+    [OBJ_EVENT_GFX_SHUCKLE_GRUNT_M] =          &gObjectEventGraphicsInfo_ShuckleGruntM,
+    [OBJ_EVENT_GFX_MUNCHLAX] =                 &gObjectEventGraphicsInfo_Munchlax,
+    [OBJ_EVENT_GFX_INVISIBLE_CUSHION] =        &gObjectEventGraphicsInfo_InvisibleCushion,
+    [OBJ_EVENT_GFX_SHUCKLE_ADMIN_PETREL] =     &gObjectEventGraphicsInfo_ShuckleAdminPetrel,
+    [OBJ_EVENT_GFX_SHUCKLE_GRUNT_F] =          &gObjectEventGraphicsInfo_ShuckleGruntF,
+    [OBJ_EVENT_GFX_SHUCKLE_LEADER_GIOVANNI] =  &gObjectEventGraphicsInfo_ShuckleLeaderGiovanni,
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

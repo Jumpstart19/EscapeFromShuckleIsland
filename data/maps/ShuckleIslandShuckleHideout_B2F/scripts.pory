@@ -1,0 +1,1169 @@
+mapscripts ShuckleIslandShuckleHideout_B2F_MapScripts {
+
+    MAP_SCRIPT_ON_FRAME_TABLE [
+        
+        VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F_STATE, 1: ShuckleIslandShuckleHideout_B2F_EventScript_battle7Failed
+
+    ]
+
+}
+
+const SHUCKLE_DMG_CALC_ID = 1
+const SHUCKLE_SHINY_1_ID = 2
+const SHUCKLE_SHINY_2_ID = 3
+const GIOVANNI_FINAL_ID = 4
+const SHUCKLE_1_ID = 5
+const SHUCKLE_2_ID = 6
+const SHUCKLE_GRUNT_MIMIC_ID = 7
+const SHUCKLE_3_ID = 8
+const SHUCKLE_4_ID = 9
+const PETREL_BATTLE_7_ID = 10
+const RESET_NPC_BATTLE_7_ID = 11
+const HINT_NPC_BATTLE_7_ID = 12
+const NEW_MECH_NPC_BATTLE_7_ID = 13
+const SHUCKLE_GRUNT_ID = 14
+const SHUCKLE_5_ID = 15
+const SHUCKLE_6_ID = 16
+const GRUNT_F_SHUCKLE_MIMIC_ID = 17
+const SHUCKLE_7_ID = 18
+const SURFBOARD_ID = 19
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_battle7Failed {
+
+    lock
+
+    indexspeciesinparty(SPECIES_SNORLAX)
+    copyvar(VAR_TEMP_B, VAR_RESULT)
+    if (var(VAR_TEMP_B) != 7) {
+
+        setsnorlax2(VAR_TEMP_B)
+
+    }
+
+    if (!flag(0x521)) {
+
+        if (!flag(FLAG_LEARNED_ULTIMATE_MOVES)) {
+
+            applymovement(RESET_NPC_BATTLE_7_ID, moves(emote_exclamation_mark))
+            playse(SE_PIN)
+            waitse
+
+            msgbox(battle7MissingMoves_text)
+            waitmessage
+            closemessage
+
+            delay(60)
+
+        }
+
+        if (!flag(FLAG_BATTLE_7_HINT_NPC_TEXT)) {
+
+            applymovement(HINT_NPC_BATTLE_7_ID, moves(walk_down, face_left))
+            waitmovement
+            applymovement(OBJ_EVENT_ID_PLAYER, moves(face_right))
+            waitmovement
+            msgbox(hintNPC7message_text)
+            waitmessage
+
+            applymovement(HINT_NPC_BATTLE_7_ID, moves(walk_up, face_down))
+            waitmovement
+            applymovement(OBJ_EVENT_ID_PLAYER, moves(face_up))
+            waitmovement
+            
+            setflag(FLAG_BATTLE_7_HINT_NPC_TEXT)
+
+        }
+
+        if (flag(FLAG_LAST_STAND_TRIGGERED) && !flag(FLAG_BATTLE_7_RESET_NPC_TEXT)) {
+
+            
+            applymovement(RESET_NPC_BATTLE_7_ID, moves(emote_exclamation_mark))
+            playse(SE_PIN)
+            waitse
+
+            msgbox(battle7NewOptions_text)
+            waitmessage
+            closemessage
+
+            setflag(FLAG_BATTLE_7_RESET_NPC_TEXT)
+
+        }
+
+        removeitemfrommon(0)
+        removeitemfrommon(1)
+        removeitem(VAR_BATTLE7_BERRY)
+        giveitemnojingle(VAR_BATTLE7_BERRY)
+        removeitem(VAR_BATTLE7_BERRY_2)
+        giveitemnojingle(VAR_BATTLE7_BERRY_2)
+
+    }
+
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F_STATE, 2)
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_ShuckleCry {
+
+    lock
+    playmoncry(SPECIES_SHUCKLE, CRY_MODE_NORMAL)
+    waitmoncry
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_GruntShuckle {
+
+    lock
+    msgbox(gruntShuckle_text)
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_ShuckleGrunt {
+
+    lock
+    msgbox(shuckleGrunt_text)
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_GruntFShuckle {
+
+    lock
+    playmoncry(SPECIES_SHUCKLE, CRY_MODE_NORMAL)
+    waitmoncry
+    msgbox(gruntFShuckle_text)
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Petrel {
+
+    lock
+    faceplayer
+
+    if (!flag(FLAG_PETREL_PRE_BATTLE_7)) {
+
+        msgbox(petrelBattle7Intro_text)
+        setflag(FLAG_PETREL_PRE_BATTLE_7)
+
+    }
+
+    if(!flag(FLAG_RECEIVED_BERRY_7)) {
+
+        msgbox(berryGuyPresentOptions_text)
+
+        dynmultipush("Occa Berry", ITEM_OCCA_BERRY)
+        dynmultipush("Passho Berry", ITEM_PASSHO_BERRY)
+        dynmultipush("Wacan Berry", ITEM_WACAN_BERRY)
+        dynmultipush("Rindo Berry", ITEM_RINDO_BERRY)
+        dynmultipush("Yache Berry", ITEM_YACHE_BERRY)
+        dynmultipush("Chople Berry", ITEM_CHOPLE_BERRY)
+        dynmultipush("Kebia Berry", ITEM_KEBIA_BERRY)
+        dynmultipush("Shuca Berry", ITEM_SHUCA_BERRY)
+        dynmultipush("Coba Berry", ITEM_COBA_BERRY)
+        dynmultipush("Payapa Berry", ITEM_PAYAPA_BERRY)
+        dynmultipush("Tanga Berry", ITEM_TANGA_BERRY)
+        dynmultipush("Charti Berry", ITEM_CHARTI_BERRY)
+        dynmultipush("Kasib Berry", ITEM_KASIB_BERRY)
+        dynmultipush("Haban Berry", ITEM_HABAN_BERRY)
+        dynmultipush("Colbur Berry", ITEM_COLBUR_BERRY)
+        dynmultipush("Babiri Berry", ITEM_BABIRI_BERRY)
+        dynmultipush("Chilan Berry", ITEM_CHILAN_BERRY)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("I don't blame you. I doubt a single\nberry would make a difference.")
+
+        }
+        else {
+
+            copyvar(VAR_BATTLE7_BERRY, VAR_RESULT)
+            giveitem(VAR_BATTLE7_BERRY, 1)
+            setflag(FLAG_RECEIVED_BERRY_7)
+
+        }
+    }
+
+    if(flag(FLAG_LAST_STAND_TRIGGERED) && !flag(FLAG_RECEIVED_BERRY_7_2)) {
+
+        if (!flag(FLAG_PETREL_PRE_BATTLE_7_2)) {
+
+            msgbox(petrelBattle7Intro2_text)
+            setflag(FLAG_PETREL_PRE_BATTLE_7_2)
+
+        }
+
+        msgbox(berryGuyPresentOptions2_text)
+
+        dynmultipush("Occa Berry", ITEM_OCCA_BERRY)
+        dynmultipush("Passho Berry", ITEM_PASSHO_BERRY)
+        dynmultipush("Wacan Berry", ITEM_WACAN_BERRY)
+        dynmultipush("Rindo Berry", ITEM_RINDO_BERRY)
+        dynmultipush("Yache Berry", ITEM_YACHE_BERRY)
+        dynmultipush("Chople Berry", ITEM_CHOPLE_BERRY)
+        dynmultipush("Kebia Berry", ITEM_KEBIA_BERRY)
+        dynmultipush("Shuca Berry", ITEM_SHUCA_BERRY)
+        dynmultipush("Coba Berry", ITEM_COBA_BERRY)
+        dynmultipush("Payapa Berry", ITEM_PAYAPA_BERRY)
+        dynmultipush("Tanga Berry", ITEM_TANGA_BERRY)
+        dynmultipush("Charti Berry", ITEM_CHARTI_BERRY)
+        dynmultipush("Kasib Berry", ITEM_KASIB_BERRY)
+        dynmultipush("Haban Berry", ITEM_HABAN_BERRY)
+        dynmultipush("Colbur Berry", ITEM_COLBUR_BERRY)
+        dynmultipush("Babiri Berry", ITEM_BABIRI_BERRY)
+        dynmultipush("Chilan Berry", ITEM_CHILAN_BERRY)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("I don't blame you. I doubt another\nberry would make a difference.")
+
+        }
+        else {
+
+            copyvar(VAR_BATTLE7_BERRY_2, VAR_RESULT)
+            giveitem(VAR_BATTLE7_BERRY_2, 1)
+            setflag(FLAG_RECEIVED_BERRY_7_2)
+
+        }
+    }
+    else {
+
+        msgbox("I'd say good luck, but you should now\nunderstand you don't stand a chance.")
+
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_resetNPC7 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_RESET_NPC)) {
+
+        setflag(FLAG_SPOKE_RESET_NPC)
+        msgbox(resetNPCIntro_text)
+
+    }
+
+    if(!flag(FLAG_RECEIVED_BERRY_7)) {
+
+        msgbox(resetNPCNothingToReset_text)
+
+    }
+    else {
+
+        msgbox("What would you like to reset?\n(Press B to exit)")
+
+        if(flag(FLAG_RECEIVED_BERRY_7_2)) {
+
+            dynmultipush("Reset Berries", 0)
+
+        }
+        else {
+
+            dynmultipush("Reset Berry", 0)
+
+        }
+
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back if you would ever\nlike to reset your actions!")
+
+        }
+        else {
+
+            msgbox("One moment while I reset your actions.", MSGBOX_AUTOCLOSE)
+            fadescreen(FADE_TO_BLACK)
+            call(ResetBerry_7)
+            fadescreen(FADE_FROM_BLACK)
+            msgbox("Your actions have been reset!")
+
+        }
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ResetBerry_7 {
+
+    clearflag(FLAG_RECEIVED_BERRY_7)
+    clearflag(FLAG_RECEIVED_BERRY_7_2)
+    removeitemfrommon(0)
+    removeitemfrommon(1)
+    removeitem(VAR_BATTLE7_BERRY)
+    removeitem(VAR_BATTLE7_BERRY_2)
+    setvar(VAR_BATTLE7_BERRY, 0)
+    setvar(VAR_BATTLE7_BERRY_2, 0)
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_hintNPC7 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+
+    dynmultipush("Small Hint", 1)
+
+    if (!flag(FLAG_LAST_STAND_TRIGGERED)) {
+
+        dynmultipush("Medium Hint", 2)
+        dynmultipush("Large Hint", 3)
+
+        if (flag(FLAG_SM_HINT_BATTLE_7) && flag(FLAG_MED_HINT_BATTLE_7) && flag(FLAG_LRG_HINT_BATTLE_7)) {
+
+            dynmultipush("Solution", 4)
+
+        }
+
+    }
+
+    if (flag(FLAG_LAST_STAND_TRIGGERED)) {
+
+        dynmultipush("Small Hint 2", 5)
+        dynmultipush("Medium Hint 2", 6)
+        dynmultipush("Large Hint 2", 7)
+
+        if (flag(FLAG_SM_HINT_BATTLE_7_2) && flag(FLAG_MED_HINT_BATTLE_7_2) && flag(FLAG_LRG_HINT_BATTLE_7_2)) {
+
+            dynmultipush("Solution 2", 8)
+
+        }
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+            msgbox(hintNPCRefusedHint_text)
+
+        }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        msgbox(hintNPCBattle7SmallHint_text)
+
+        if (!flag(FLAG_SM_HINT_BATTLE_7)) {
+
+            setflag(FLAG_SM_HINT_BATTLE_7)
+            addvar(VAR_NUM_SMALL_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+        msgbox(hintNPCBattle7MedHint_text)
+
+        if (!flag(FLAG_MED_HINT_BATTLE_7)) {
+
+            setflag(FLAG_MED_HINT_BATTLE_7)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 3) {
+
+        msgbox(hintNPCBattle7LrgHint_text)
+
+        if (!flag(FLAG_LRG_HINT_BATTLE_7)) {
+
+            setflag(FLAG_LRG_HINT_BATTLE_7)
+            addvar(VAR_NUM_LARGE_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 4) {
+
+        if (!flag(FLAG_SOLUTION_BATTLE_7)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_BATTLE_7)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/EvvD5ovwIUo")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_SOLUTION_BATTLE_7)) {
+
+                setflag(FLAG_SOLUTION_BATTLE_7)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+    elif(var(VAR_RESULT) == 5) {
+
+        msgbox(hintNPCBattle7SmallHint2_text)
+
+        if (!flag(FLAG_SM_HINT_BATTLE_7_2)) {
+
+            setflag(FLAG_SM_HINT_BATTLE_7_2)
+            addvar(VAR_NUM_SMALL_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 6) {
+
+        msgbox(hintNPCBattle7MedHint2_text)
+
+        if (!flag(FLAG_MED_HINT_BATTLE_7_2)) {
+
+            setflag(FLAG_MED_HINT_BATTLE_7_2)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 7) {
+
+        msgbox(hintNPCBattle7LrgHint2_text)
+
+        if (!flag(FLAG_LRG_HINT_BATTLE_7_2)) {
+
+            setflag(FLAG_LRG_HINT_BATTLE_7_2)
+            addvar(VAR_NUM_LARGE_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 8) {
+
+        if (!flag(FLAG_SOLUTION_BATTLE_7_2)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_BATTLE_7_PART_2)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/PNuuwXbzMTg")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_SOLUTION_BATTLE_7_2)) {
+
+                setflag(FLAG_SOLUTION_BATTLE_7_2)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_NewMechNPC7 {
+    
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_NEW_MECH_NPC)) {
+
+        setflag(FLAG_SPOKE_NEW_MECH_NPC)
+        msgbox(newMechNPCIntro_text)
+
+    }
+
+    call(NewMechNPC7Choices)
+
+    release
+    end
+
+}
+
+script NewMechNPC7Choices {
+
+    msgbox("Now then, what new mechanics do\nyou want explained? (Press B to exit)")
+
+    dynmultipush("Second Abilities", 0)
+    dynmultipush("Sated Belch", 1)
+    dynmultipush("Shuckle's Abilities", 2)
+    dynmultipush("Shuckle AI", 3)
+    dynmultipush("Confusion", 4)
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("Stop by if you ever want\nthe new mechanics explained again!")
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox(secondAbilities_text)
+        call(NewMechNPC7Choices)
+
+    }
+    elif (var(VAR_RESULT) == 1) {
+
+        msgbox(satedBelch_text)
+        call(NewMechNPC7Choices)
+
+    }
+    elif (var(VAR_RESULT) == 2) {
+
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 3) {
+
+        msgbox("Shuckle will always attack Snorlax\nwith its strongest viable move.")
+        call(NewMechNPC7Choices)
+
+    }
+    elif (var(VAR_RESULT) == 4) {
+
+        msgbox("Confusion lasts for 5 turns.\pConfused Pokémon always hit\nthemselves in confusion.")
+        call(NewMechNPC7Choices)
+
+    }
+
+}
+
+script ShuckleAbilityChoices {
+
+    msgbox("Now then, which ability do you want\nexplained? (Press B to exit)")
+
+    dynmultipush("Shed Skin", 0)
+    dynmultipush("Clear Body", 1)
+    dynmultipush("Extra Pressure", 2)
+    dynmultipush("Soul Linker", 3)
+    dynmultipush("Unlimited Power", 4)
+    dynmultipush("Fully Charged", 5)
+    dynmultipush("Second Wind", 6)
+    dynmultipush("Wide Aim", 7)
+
+    if (flag(FLAG_LAST_STAND_TRIGGERED)) {
+
+        dynmultipush("Last Stand", 8)
+        
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        call(NewMechNPC7Choices)
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox("Shed Skin now always triggers\nat the end of each turn.")
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 1) {
+
+        msgbox("Clear Body has no changes from\nits typical behavior.")
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 2) {
+
+        msgbox(extraPressure_text)
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 3) {
+
+        msgbox("If a Pokémon with Soul Linker KOs one\nenemy, it also KOs all other enemies.")
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 4) {
+
+        msgbox("Pokémon with Unlimited Power do not\nlose PP when attacking.")
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 5) {
+
+        msgbox("Pokémon with Fully Charged ignore\ncharge and recharge turns for moves.")
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 6) {
+
+        msgbox("Pokémon with Second Wind exclusively\nuse spread moves when below half HP.")
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 7) {
+
+        msgbox("Wide Aim prevents spread moves\nfrom being disabled.")
+        call(ShuckleAbilityChoices)
+
+    }
+    elif (var(VAR_RESULT) == 8) {
+
+        msgbox(lastStand_text)
+        call(ShuckleAbilityChoices)
+
+    }
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_ShuckleDmgCalc {
+    
+    lockall
+
+    playse(SE_PC_ON)
+    msgbox("LOADING SHUCKLE DAMAGE CALCULATOR\.")
+    waitse
+    
+    call(ShuckleDmgCalcOptions)
+
+    releaseall
+    end
+
+}
+
+script ShuckleDmgCalcOptions {
+
+    msgbox("For which attack are you interested in\nthe damage calcs?")
+
+    if (!flag(FLAG_DMG_CALC_INFO_BATTLE_7)) {
+
+        dynmultipush("Damage Calc Table Usage (new info!)", 0)
+
+    }
+    else {
+
+        dynmultipush("Damage Calc Table Usage", 0)
+
+    }
+    
+    dynmultipush("Rock Wrecker", 1)
+    dynmultipush("Dynamic Punch", 2)
+    dynmultipush("Diamond Storm", 3)
+
+    if (flag(FLAG_LAST_STAND_TRIGGERED)) {
+
+        dynmultipush("Natural Gift", 4)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        playse(SE_PC_OFF)
+        msgbox(dmgCalcClose_text)
+        waitse
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        setflag(FLAG_DMG_CALC_INFO_BATTLE_7)
+        msgbox(dmgCalcTableUsageBattle7_text)
+        call(ShuckleDmgCalcOptions)
+
+    }
+    elif (var(VAR_RESULT) == 1) {
+
+        msgbox("This table shows the damage done\nby Shuckle to Snorlax.")
+        closemessage
+        displayshucklerockwreckerdmgcalc()
+        waitbbuttonpress
+        call(ShuckleDmgCalcOptions)
+
+    }
+    elif (var(VAR_RESULT) == 2) {
+
+        msgbox("This table shows the damage done\nby Shuckle to Snorlax.")
+        closemessage
+        displayshuckledynamicpunchdmgcalc()
+        waitbbuttonpress
+        call(ShuckleDmgCalcOptions)
+
+    }
+    elif (var(VAR_RESULT) == 3) {
+
+        closemessage
+        displayshucklediamondstormdmgcalc()
+        waitbbuttonpress
+        call(ShuckleDmgCalcOptions)
+
+    }
+    elif (var(VAR_RESULT) == 4) {
+
+        msgbox("This table shows the damage done\nto Shuckle by Snorlax's Natural Gift.")
+        closemessage
+        displayshucklenaturalgiftdmgcalc()
+        waitbbuttonpress
+        call(ShuckleDmgCalcOptions)
+
+    }
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Approach1 {
+
+    lock
+    
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_up * 4, walk_right * 2, face_up))
+    waitmovement
+
+    release
+    call(ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Intro)
+
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Approach2 {
+
+    lock
+    
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_up * 4, walk_right * 1, face_up))
+    waitmovement
+
+    release
+    call(ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Intro)
+
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Approach3 {
+
+    lock
+    
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_up * 4))
+    waitmovement
+
+    release
+    call(ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Intro)
+
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Approach4 {
+
+    lock
+    
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_up * 4, walk_left * 1, face_up))
+    waitmovement
+
+    release
+    call(ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Intro)
+
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Approach5 {
+
+    lock
+    
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_up * 4, walk_left * 2, face_up))
+    waitmovement
+
+    release
+    call(ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Intro)
+
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Battle7Intro {
+
+    lock
+
+    msgbox(giovanni7_1_text)
+    waitmessage
+    closemessage
+
+    applymovement(GIOVANNI_FINAL_ID, moves(face_up, delay_16 * 4, face_down, delay_16 * 2))
+    waitmovement
+
+    msgbox(giovanni7_2_text)
+    waitmessage
+
+    setflag(FLAG_CLEAR_PETREL_BATTLE_6)
+    clearflag(FLAG_CLEAR_BATTLE_7_NPCS)
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F_2)
+
+    release
+    call(ShuckleIslandShuckleHideout_B2F_EventScript_ContinueBattle7)
+
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_ContinueBattle7 {
+
+    lock
+    faceplayer
+
+    setvar(VAR_STARTING_FIELD_EFFECT, STARTING_STATUS_NONE)
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F_STATE, 1)
+    trainerbattle_single(TRAINER_GIOVANNI_2, Battle7_Intro_text, Battle7_Lose_text, ShuckleIslandShuckleHideout_B2F_EventScript_PostBattle7)
+
+
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_PostBattle7 {
+
+    lock
+
+    msgbox(giovanni_loss_text)
+    waitmessage
+    closemessage
+
+    special(HealPlayerParty)
+
+    setflag(FLAG_CLEAR_BATTLE_7_NPCS)
+    setflag(FLAG_WON_BATTLE_7)
+    clearflag(FLAG_RECEIVED_SURFBOARD)
+
+    fadescreen(FADE_TO_BLACK)
+    removeobject(SHUCKLE_SHINY_1_ID)
+    removeobject(SHUCKLE_SHINY_2_ID)
+    removeobject(GIOVANNI_FINAL_ID)
+    removeobject(SHUCKLE_GRUNT_MIMIC_ID)
+    removeobject(SHUCKLE_3_ID)
+    removeobject(SHUCKLE_4_ID)
+    removeobject(SHUCKLE_7_ID)
+    removeobject(SHUCKLE_GRUNT_ID)
+    removeobject(GRUNT_F_SHUCKLE_MIMIC_ID)
+    addobject(SURFBOARD_ID)
+    playse(SE_EXIT)
+    waitse
+    fadescreen(FADE_FROM_BLACK)
+
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B2F_EventScript_Surfboard {
+
+    lockall
+    giveitem(ITEM_SURF_TOOL, 1)
+    removeobject(SURFBOARD_ID)
+    setflag(FLAG_RECEIVED_SURFBOARD)
+    releaseall
+    end
+
+}
+
+text gruntShuckle_text {
+
+    "Shuckle! Shuckle!\p"
+    "...\p"
+    "A grunt is pretending to be a Shuckle.\p"
+    "...\p"
+    "But he isn't doing a very good job\."
+
+}
+
+text shuckleGrunt_text {
+
+    "Grunt! Grunt!\p"
+    "...\p"
+    "A Shuckle is pretending to be a grunt.\p"
+    "...\p"
+    "\.or it's just overexerting itself."
+
+}
+
+text gruntFShuckle_text {
+
+    "A grunt is pretending to be a Shuckle.\p"
+    "...\p"
+    "And she's doing a great job!"
+
+}
+
+text berryGuyPresentOptions2_text {
+
+    "Take another berry, but this will be\n"
+    "your last one! (Press B to exit)"
+
+}
+
+text petrelBattle7Intro2_text {
+
+    "Huh, you want another berry?\p"
+    "Kid, you need to realize you can't win\n"
+    "this battle. That Shuckle is too strong.\p"
+    "But sure, knock yourself out.\n"
+    "\.just not with metal bars this time."
+
+}
+
+text hintNPCBattle7SmallHint_text {
+
+    "Start by answering these questions:\p"
+    "1) Can you win if Shuckle only\n"
+    "uses Rock Wrecker?\p"
+    "2) If Shuckle uses Dynamic Punch, what\n"
+    "must be active before Snorlax is hit?\p"
+    "3) How long will Shuckle use Dynamic\n"
+    "Punch before using Rock Wrecker again?\p"
+    "4) Can you survive for long once\n"
+    "Shuckle begins using Diamond Storm?\p"
+    "If not, is there a way to damage Shuckle\n"
+    "to guarantee it never uses this move?"
+
+}
+
+text hintNPCBattle7MedHint_text {
+
+    "There are many solutions, so this and\n"
+    "the large hint are for one solution.\p"
+    "Consider having Gallade always use\n"
+    "Will-o-Wisp or Disable on Rock Wrecker."
+
+}
+
+text hintNPCBattle7LrgHint_text {
+
+    "Consider the following opening move\n"
+    "sequence for Snorlax:\p"
+    "Recycle, Stockpile, Stockpile,\n"
+    "Stockpile, Natural Gift, Swallow.\p"
+    "After using these moves, the battle can\n"
+    "be won in 4 turns."
+
+}
+
+text hintNPCBattle7SmallHint2_text {
+
+    "Consider how to win once Shuckle heals\n"
+    "to 70 HP after activating Last Stand:\p"
+    "What is the maximum number of turns\n"
+    "Gallade can survive Diamond Storm?\p"
+    "How many Will-o-Wisp uses does Gallade\n"
+    "need to survive this number of turns?\p"
+    "Can you figure out a way for Snorlax\n"
+    "to KO Shuckle in this timeframe?\p"
+    "Remember to fully consider each\n"
+    "Pokemon's moveset."
+
+}
+
+text hintNPCBattle7MedHint2_text {
+
+    "Make Shuckle always use Rock Wrecker\n"
+    "for the minimum consecutive turns.\p"
+    "Also, note that Snorlax can only keep a\n"
+    "recycled Chople before Last Stand\l"
+    "while Shuckle uses Rock Wrecker."
+
+}
+
+text hintNPCBattle7LrgHint2_text {
+
+    "Gallade must start the battle by using\n"
+    "Will-o-Wisp.\p"
+    "Gallade will never use Will-o-Wisp on a\n"
+    "turn Shuckle uses Dynamic Punch.\p"
+    "Snorlax must use Stockpile on three\n"
+    "consecutive turns, both at the start\l"
+    "of battle and after its first Swallow."
+
+}
+
+text extraPressure_text {
+
+    "Extra Pressure saps 2 extra PP from the\n"
+    "enemy's move, regardless of targeting."
+
+}
+
+text lastStand_text {
+
+    "When a Pokémon with Last Stand would\n"
+    "have its HP reduced to 0,\l"
+    "it instead survives with 1 HP.\p"
+    "Defense is cut by 5 stages, it heals to\n"
+    "half HP, and it skips its next attack.\p"
+    "This effect activates once per battle."
+
+}
+
+text dmgCalcTableUsageBattle7_text {
+
+    "Press the L button to see the damage\n"
+    "(in red) if Shuckle is burned.\p"
+    "Press the R button to see the damage\n"
+    "(in blue) with a type-reducing berry.\p"
+    "Pressing Select will show the damage\n"
+    "(in green) if Shuckle is burned\l"
+    "AND a type-reducing berry is held.\p"
+    "The default results can be displayed\n"
+    "again by pressing the A button."
+
+}
+
+text giovanni7_1_text {
+
+    "So, how did you like those floor lights\n"
+    "I had installed in the corridor?\p"
+    "You know, the ones behind the walls\.\n"
+    "that you probably couldn't see.\p"
+    "Well, then\.\n"
+    "Let's try this again."
+
+}
+
+text giovanni7_2_text {
+
+    "Let's cut straight to the chase.\p"
+    "Have you ever considered giving a\n"
+    "Pokémon multiple of our Rare Candies?\p"
+    "Well, you're about to experience the\n"
+    "true strength abilities can provide."
+
+}
+
+text Battle7_Intro_text {
+
+    "Prepare to be washed away by a tidal\n"
+    "wave of powerful abilities!"
+
+}
+
+text Battle7_Lose_text {
+
+    "I-Impossible!"
+
+}
+
+text giovanni_loss_text {
+
+    "No, no, no, no, NO!\p"
+    "This can't be happening again!\n"
+    "Why is it always the 10-year-olds?\p"
+    "Do you realize how many years I put\n"
+    "into building up that Shuckle?\p"
+    "Sigh, it's going to take so long to\n"
+    "rebuild\.\l"
+    "again\.\p"
+    "We'll have to relocate for now.\n"
+    "You should leave this island too, kid.\p"
+    "Farewell\."
+
+}
+
+text battle7MissingMoves_text {
+
+    "Oh, I can see your Pokémon are not\n"
+    "prepared for the battle ahead.\p"
+    "Perhaps someone on the island could\n"
+    "help them achieve their true potential?"
+
+}
+
+text hintNPC7message_text {
+
+    "Excuse me.\p"
+    "...\p"
+    "This battle, too, is quite difficult.\p"
+    "Once again, I strongly recommend taking\n"
+    "the small hint now.\p"
+    "This should help guide you through the\n"
+    "new information the battle presents.\p"
+    "And if you're truly struggling, there's\n"
+    "no shame in viewing the solution!"
+
+}
+
+text battle7NewOptions_text {
+
+    "Oh, I must commend you for your effort!\p"
+    "Even though you didn't win that battle,\n"
+    "you've made some significant progress!\p"
+    "In fact, everyone here is prepared to\n"
+    "provide you with our fullest support.\p"
+    "So please be sure to talk to everyone.\n"
+    "We all have new options to assist you!"
+
+}

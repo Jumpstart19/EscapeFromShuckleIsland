@@ -47,6 +47,12 @@
 #include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/songs.h"
+// Start qol_field_moves
+#include "qol_field_moves.h"
+#include "field_control_avatar.h"
+#include "region_map.h"
+#include "fldeff.h"
+// End qol_field_moves
 
 static void SetUpItemUseCallback(u8);
 static void FieldCB_UseItemOnField(void);
@@ -1353,6 +1359,8 @@ bool32 CannotUseItemsInBattle(u16 itemId, struct Pokemon *mon)
             cannotUse = TRUE;
         }
         break;
+    case EFFECT_ITEM_CHANGE_ABILITY_UNNERVE:
+        break;
     }
 
     if (failStr != NULL)
@@ -1616,5 +1624,34 @@ void ItemUseOutOfBattle_TownMap(u8 taskId)
         gTasks[taskId].func = ItemUseOnFieldCB_TownMap;
     }
 }
+
+// Start qol_field_moves
+void ItemUseOutOfBattle_SurfTool(u8 taskId)
+{
+    if (IsPlayerFacingSurfableFishableWater())
+    {
+        sItemUseOnFieldCB = ItemUseOnFieldCB_SurfTool;
+        SetUpItemUseOnFieldCallback(taskId);
+    }
+    else
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+}
+void ItemUseOnFieldCB_SurfTool(u8 taskId)
+{
+    ScriptContext_SetupScript(EventScript_UseSurfTool);
+    DestroyTask(taskId);
+}
+void ItemUseOutOfBattle_StrengthTool(u8 taskId)
+{
+    sItemUseOnFieldCB = ItemUseOnFieldCB_StrengthTool;
+    SetUpItemUseOnFieldCallback(taskId);
+}
+void ItemUseOnFieldCB_StrengthTool(u8 taskId)
+{
+    LockPlayerFieldControls();
+    ScriptContext_SetupScript(EventScript_UseStrengthTool);
+    DestroyTask(taskId);
+}
+// End qol_field_moves
 
 #undef tUsingRegisteredKeyItem

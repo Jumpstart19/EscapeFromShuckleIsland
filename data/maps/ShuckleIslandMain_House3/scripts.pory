@@ -1,0 +1,85 @@
+mapscripts ShuckleIslandMain_House3_MapScripts {}
+
+const TUTOR_ID = 1
+
+script ShuckleIslandMain_House3_EventScript_Tutor {
+
+    lock
+    applymovement(TUTOR_ID, moves(face_player))
+
+    if (!flag(FLAG_WON_BATTLE_6)) {
+
+        msgbox(Ultimate_Tutor_Text)
+
+    }
+    elif (!flag(FLAG_LEARNED_ULTIMATE_MOVES)) {
+
+        msgbox(Ultimate_Tutor2_Text)
+        msgbox("Now then, should I teach your Pokémon\ntheir ultimate movesets?", MSGBOX_YESNO)
+
+        if (var(VAR_RESULT) == YES) {
+
+            setflag(FLAG_LEARNED_ULTIMATE_MOVES)
+            indexspeciesinparty(SPECIES_GALLADE)
+            copyvar(VAR_TEMP_B, VAR_RESULT)
+
+            if (var(VAR_TEMP_B) == 0) {
+
+                setmonmoves(0, MOVE_WILL_O_WISP, MOVE_DISABLE, MOVE_SAFEGUARD, MOVE_TRICK)
+                setmonmoves(1, MOVE_STOCKPILE, MOVE_SWALLOW, MOVE_RECYCLE, MOVE_NATURAL_GIFT)
+                upmovepp(1, 2)
+
+            }
+            elif (var(VAR_TEMP_B) == 1) {
+
+                setmonmoves(0, MOVE_STOCKPILE, MOVE_SWALLOW, MOVE_RECYCLE, MOVE_NATURAL_GIFT)
+                setmonmoves(1, MOVE_WILL_O_WISP, MOVE_DISABLE, MOVE_SAFEGUARD, MOVE_TRICK)
+                upmovepp(0, 2)
+
+            }
+
+            special(HealPlayerParty)
+            
+            msgbox("And\.done! Your Pokémon should now\nbe prepared to take on any challenge!\pAlso, I pumped two PP ups into Snorlax's\nRecycle. I hope it helps you!")
+
+        }
+        else {
+
+            msgbox("Alright, well come back if you\nchange your mind!")
+
+        }
+
+
+    }
+    else {
+
+        msgbox("Your Pokémon should now be prepared\nto take on any challenge!")
+
+    }
+
+    release
+    end
+
+}
+
+text Ultimate_Tutor_Text {
+
+    "I can teach your Pokémon moves to take\n"
+    "on the ultimate foe! You interested?\p"
+    "Oh, your Munchlax\.\p"
+    "I'm sorry. Team Shuckle is looking for a\n"
+    "Munchlax, and I don't want to interfere.\p"
+    "Maybe I can help you once you\n"
+    "no longer have that Munchlax."
+
+}
+
+text Ultimate_Tutor2_Text {
+
+    "I can teach your Pokémon moves to take\n"
+    "on the ultimate foe! You interested?\p"
+    "Oh, your Snorlax\.\n"
+    "Didn't you have a Munchlax before?\p"
+    "Eh, it's probably just a coincidence."
+
+}

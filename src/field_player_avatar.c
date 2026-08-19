@@ -34,6 +34,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/trainer_types.h"
+#include "qol_field_moves.h" // qol_field_moves
 
 #define NUM_FORCED_MOVEMENTS 18
 #define NUM_ACRO_BIKE_COLLISIONS 5
@@ -98,7 +99,7 @@ static u8 CheckForPlayerAvatarStaticCollision(u8);
 static u8 CheckForObjectEventStaticCollision(struct ObjectEvent *, s16, s16, u8, u8);
 static bool8 CanStopSurfing(s16, s16, u8);
 static bool8 ShouldJumpLedge(s16, s16, u8);
-static bool8 TryPushBoulder(s16, s16, u8);
+//static bool8 TryPushBoulder(s16, s16, u8); //qol_field_moves
 static void CheckAcroBikeCollision(s16, s16, u8, u8 *);
 
 static void DoPlayerAvatarTransition(void);
@@ -106,7 +107,7 @@ static void PlayerAvatarTransition_Dummy(struct ObjectEvent *);
 static void PlayerAvatarTransition_Normal(struct ObjectEvent *);
 static void PlayerAvatarTransition_MachBike(struct ObjectEvent *);
 static void PlayerAvatarTransition_AcroBike(struct ObjectEvent *);
-static void PlayerAvatarTransition_Surfing(struct ObjectEvent *);
+//static void PlayerAvatarTransition_Surfing(struct ObjectEvent *); // qol_field_moves
 static void PlayerAvatarTransition_Underwater(struct ObjectEvent *);
 static void PlayerAvatarTransition_ReturnToField(struct ObjectEvent *);
 
@@ -131,6 +132,8 @@ static void Task_PushBoulder(u8);
 static bool8 PushBoulder_Start(struct Task *, struct ObjectEvent *, struct ObjectEvent *);
 static bool8 PushBoulder_Move(struct Task *, struct ObjectEvent *, struct ObjectEvent *);
 static bool8 PushBoulder_End(struct Task *, struct ObjectEvent *, struct ObjectEvent *);
+static bool8 SlipBoulder_Move(struct Task *, struct ObjectEvent *, struct ObjectEvent *);
+static bool8 SlipBoulder_ContinueSlipOrEnd(struct Task *, struct ObjectEvent *, struct ObjectEvent *);
 
 static void DoPlayerMatJump(void);
 static void DoPlayerAvatarSecretBaseMatJump(u8);
@@ -309,11 +312,22 @@ static bool8 (*const sArrowWarpMetatileBehaviorChecks2[])(u8) =  //Duplicate of 
     [DIR_EAST - 1]  = MetatileBehavior_IsEastArrowWarp,
 };
 
+enum PushBoulderState
+{
+    STATE_PUSH_BOULDER_INIT,
+    STATE_PUSH_BOULDER_MOVE,
+    STATE_SLIP_BOULDER_SLIP_OR_END,
+    STATE_SLIP_BOULDER_MOVE,
+    STATE_PUSH_BOULDER_END
+};
+
 static bool8 (*const sPushBoulderFuncs[])(struct Task *, struct ObjectEvent *, struct ObjectEvent *) =
 {
-    PushBoulder_Start,
-    PushBoulder_Move,
-    PushBoulder_End,
+    [STATE_PUSH_BOULDER_INIT]           = PushBoulder_Start,
+    [STATE_PUSH_BOULDER_MOVE]           = PushBoulder_Move,
+    [STATE_SLIP_BOULDER_SLIP_OR_END]    = SlipBoulder_ContinueSlipOrEnd,
+    [STATE_SLIP_BOULDER_MOVE]           = SlipBoulder_Move,
+    [STATE_PUSH_BOULDER_END]            = PushBoulder_End
 };
 
 static bool8 (*const sPlayerAvatarSecretBaseMatJump[])(struct Task *, struct ObjectEvent *) =
@@ -901,15 +915,29 @@ static u8 CheckForPlayerAvatarStaticCollision(u8 direction)
 u8 CheckForObjectEventCollision(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 direction, u8 metatileBehavior)
 {
     u8 collision = GetCollisionAtCoords(objectEvent, x, y, direction);
+    u32 fieldMoveStatus; // qol_field_moves
 
     if (collision == COLLISION_ELEVATION_MISMATCH && CanStopSurfing(x, y, direction))
         return COLLISION_STOP_SURFING;
+
+    // Start qol_field_moves
+    fieldMoveStatus = CanUseSurf(x,y,collision);
+    if (fieldMoveStatus != FIELD_MOVE_FAIL)
+        return UseSurf(fieldMoveStatus);
+    // End qol_field_moves
 
     if (ShouldJumpLedge(x, y, direction))
     {
         IncrementGameStat(GAME_STAT_JUMPED_DOWN_LEDGES);
         return COLLISION_LEDGE_JUMP;
     }
+
+    // Start qol_field_moves
+    fieldMoveStatus = CanUseStrength(collision);
+    if (fieldMoveStatus)
+        return UseStrength(fieldMoveStatus,x,y,direction);
+    // End qol_field_moves
+
     if (collision == COLLISION_OBJECT_EVENT && TryPushBoulder(x, y, direction))
         return COLLISION_PUSHED_BOULDER;
 
@@ -961,7 +989,7 @@ static bool8 ShouldJumpLedge(s16 x, s16 y, u8 direction)
         return FALSE;
 }
 
-static bool8 TryPushBoulder(s16 x, s16 y, u8 direction)
+bool8 TryPushBoulder(s16 x, s16 y, u8 direction)
 {
     if (FlagGet(FLAG_SYS_USE_STRENGTH))
     {
@@ -1082,7 +1110,10 @@ static void PlayerAvatarTransition_AcroBike(struct ObjectEvent *objEvent)
     Bike_HandleBumpySlopeJump();
 }
 
-static void PlayerAvatarTransition_Surfing(struct ObjectEvent *objEvent)
+// Start qol_field_moves
+//static void PlayerAvatarTransition_Surfing(struct ObjectEvent *objEvent)
+void PlayerAvatarTransition_Surfing(struct ObjectEvent *objEvent)
+// End qol_field_moves
 {
     u8 spriteId;
 
@@ -1287,9 +1318,16 @@ void PlayerFreeze(void)
     if (gPlayerAvatar.tileTransitionState == T_TILE_CENTER || gPlayerAvatar.tileTransitionState == T_NOT_MOVING)
     {
         if (IsPlayerNotUsingAcroBikeOnBumpySlope())
-            PlayerForceSetHeldMovement(GetFaceDirectionMovementAction(gObjectEvents[gPlayerAvatar.objectEventId].facingDirection));
+            ForcePlayerToPerformMovementAction(); //qol_field_moves
     }
 }
+
+// Start qol_field_moves
+void ForcePlayerToPerformMovementAction(void)
+{
+    PlayerForceSetHeldMovement(GetFaceDirectionMovementAction(gObjectEvents[gPlayerAvatar.objectEventId].facingDirection));
+}
+// End qol_field_moves
 
 // wheelie idle
 void PlayerIdleWheelie(u8 direction)
@@ -1752,6 +1790,45 @@ static bool8 PushBoulder_Move(struct Task *task, struct ObjectEvent *player, str
         PlaySE(SE_M_STRENGTH);
         task->tState++;
     }
+    return FALSE;
+}
+
+static bool8 SlipBoulder_Move(struct Task *task, struct ObjectEvent *player, struct ObjectEvent *boulder)
+{
+    if (ObjectEventIsHeldMovementActive(boulder))
+        ObjectEventClearHeldMovementIfFinished(boulder);
+
+    if (!ObjectEventIsMovementOverridden(boulder))
+    {
+        ObjectEventClearHeldMovementIfFinished(boulder);
+        ObjectEventSetHeldMovement(boulder, GetSlideMovementAction((u8)task->tDirection));
+        task->tState = STATE_SLIP_BOULDER_SLIP_OR_END;
+    }
+    
+    return FALSE;
+}
+
+static bool8 SlipBoulder_ContinueSlipOrEnd(struct Task *task, struct ObjectEvent *player, struct ObjectEvent *boulder)
+{
+    if (!ObjectEventClearHeldMovementIfFinished(boulder))
+        return FALSE;
+
+    s16 x = boulder->currentCoords.x;
+    s16 y = boulder->currentCoords.y;
+    s16 x0 = x;
+    s16 y0 = y;
+
+    MoveCoords(boulder->movementDirection, &x, &y);
+
+    if (GetCollisionAtCoords(&gObjectEvents[task->tBoulderObjId], x, y, (u8)task->tDirection) == COLLISION_NONE
+    && MetatileBehavior_IsNonAnimDoor(MapGridGetMetatileBehaviorAt(x, y)) == FALSE
+    && MetatileBehavior_IsIce(MapGridGetMetatileBehaviorAt(x0, y0)))
+    {
+        task->tState++;
+        return TRUE;
+    }
+
+    task->tState = STATE_PUSH_BOULDER_END;
     return FALSE;
 }
 

@@ -5,7 +5,7 @@
 
 #define TRAINER_NONE                          0
 #define TRAINER_SAWYER_1                      1
-#define TRAINER_GRUNT_AQUA_HIDEOUT_1          2
+#define TRAINER_GRUNT_AQUA_HIDEOUT_1          2 //Flag: 0x502
 #define TRAINER_GRUNT_AQUA_HIDEOUT_2          3
 #define TRAINER_GRUNT_AQUA_HIDEOUT_3          4
 #define TRAINER_GRUNT_AQUA_HIDEOUT_4          5
@@ -33,11 +33,11 @@
 #define TRAINER_GRUNT_AQUA_HIDEOUT_5         27
 #define TRAINER_GRUNT_AQUA_HIDEOUT_6         28
 #define TRAINER_FREDRICK                     29
-#define TRAINER_MATT                         30
+#define TRAINER_PETREL                       30 //Flag: 0x51E
 #define TRAINER_ZANDER                       31
 #define TRAINER_SHELLY_WEATHER_INSTITUTE     32
-#define TRAINER_SHELLY_SEAFLOOR_CAVERN       33
-#define TRAINER_ARCHIE                       34
+#define TRAINER_GIOVANNI_2                   33 //Flag: 0x521
+#define TRAINER_GIOVANNI                     34
 #define TRAINER_LEAH                         35
 #define TRAINER_DAISY                        36
 #define TRAINER_ROSE_1                       37
@@ -277,7 +277,7 @@
 #define TRAINER_TATE_AND_LIZA_1             271
 #define TRAINER_JUAN_1                      272
 #define TRAINER_JERRY_1                     273
-#define TRAINER_TED                         274
+#define TRAINER_TIMMY                       274 //Flag: 0x612
 #define TRAINER_PAUL                        275
 #define TRAINER_JERRY_2                     276
 #define TRAINER_JERRY_3                     277
@@ -337,7 +337,7 @@
 #define TRAINER_CALVIN_5                    331
 #define TRAINER_EDDIE                       332
 #define TRAINER_ALLEN                       333
-#define TRAINER_TIMMY                       334
+#define TRAINER_JOHNNY                      334 //Flag: 0x64E
 #define TRAINER_WALLACE                     335
 #define TRAINER_ANDREW                      336
 #define TRAINER_IVAN                        337
@@ -484,7 +484,7 @@
 #define TRAINER_DIANA_3                     478
 #define TRAINER_DIANA_4                     479
 #define TRAINER_DIANA_5                     480
-#define TRAINER_AMY_AND_LIV_1               481
+#define TRAINER_AMY_AND_LIV_1               481 //Flag: 0x6E1
 #define TRAINER_AMY_AND_LIV_2               482
 #define TRAINER_GINA_AND_MIA_1              483
 #define TRAINER_MIU_AND_YUKI                484
@@ -792,7 +792,7 @@
 #define TRAINER_NORMAN_2                    786
 #define TRAINER_NORMAN_3                    787
 #define TRAINER_NORMAN_4                    788
-#define TRAINER_NORMAN_5                    789
+#define TRAINER_JUMPSTART                   789
 #define TRAINER_WINONA_2                    790
 #define TRAINER_WINONA_3                    791
 #define TRAINER_WINONA_4                    792

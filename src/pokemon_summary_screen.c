@@ -26,8 +26,6 @@
 #include "mon_markings.h"
 #include "move_relearner.h"
 #include "naming_screen.h"
-#include "move_relearner.h"
-#include "naming_screen.h"
 #include "party_menu.h"
 #include "palette.h"
 #include "pokeball.h"
@@ -96,8 +94,6 @@
 //Dynamic fields for the Pokemon Traits page
 #define PSS_DATA_WINDOW_TRAITS1 0
 #define PSS_DATA_WINDOW_TRAITS2 1
-#define PSS_DATA_WINDOW_TRAITS3 2
-#define PSS_DATA_WINDOW_TRAITS4 3
 
 // Dynamic fields for the Pokémon Skills page
 #define PSS_DATA_WINDOW_SKILLS_HELD_ITEM 0
@@ -675,38 +671,20 @@ static const struct WindowTemplate sPageTraitsTemplate[] =
 	[PSS_DATA_WINDOW_TRAITS1] = {
 		.bg = 0,
 		.tilemapLeft = 11,
-		.tilemapTop = 4,
+		.tilemapTop = 5,
 		.width = 18,
-		.height = 4,
+		.height = 6,
 		.paletteNum = 6,
 		.baseBlock = 467 + offset,  
 	},
     [PSS_DATA_WINDOW_TRAITS2] = {
 		.bg = 0,
 		.tilemapLeft = 11,
-		.tilemapTop = 8,
+		.tilemapTop = 13,
 		.width = 18,
-		.height = 4,
-		.paletteNum = 6,
-		.baseBlock = 539 + offset,
-	},
-    [PSS_DATA_WINDOW_TRAITS3] = {
-		.bg = 0,
-		.tilemapLeft = 11,
-		.tilemapTop = 12,
-		.width = 18,
-		.height = 4,
+		.height = 6,
 		.paletteNum = 6,
 		.baseBlock = 611 + offset,
-	},
-    [PSS_DATA_WINDOW_TRAITS4] = {
-		.bg = 0,
-		.tilemapLeft = 11,
-		.tilemapTop = 16,
-		.width = 18,
-		.height = 4,
-		.paletteNum = 6,
-		.baseBlock = 683 + offset,
 	},
 };
 static const struct WindowTemplate sPageSkillsTemplate[] =
@@ -3729,13 +3707,20 @@ static void PrintMonOTID(void)
 static void PrintMonAbilityName(void)
 {
     enum Ability ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].name, 0, 1, 0, 1);
+    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].name, 0, 1, 0, 0);
 }
 
 static void PrintMonAbilityDescription(void)
 {
-    enum Ability ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].description, 0, 17, 0, 0);
+    u16 trait = 0;
+    struct PokeSummary* sum = &sMonSummaryScreen->summary;
+
+    trait = gSpeciesInfo[sum->species].innates[0];
+        
+    PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[trait].name, 0, 17, 0, 0);
+    
+    //enum Ability ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.abilityNum);
+    //PrintTextOnWindow(AddWindowFromTemplateList(sPageInfoTemplate, PSS_DATA_WINDOW_INFO_ABILITY), gAbilitiesInfo[ability].description, 0, 17, 0, 0);
 }
 
 static void BufferMonTrainerMemo(void)
@@ -3817,19 +3802,19 @@ static bool8 DoesMonOTMatchOwner(void)
     u32 trainerId;
     u8 gender;
 
-    if (sMonSummaryScreen->monList.mons == gEnemyParty)
-    {
-        u8 multiID = GetMultiplayerId() ^ 1;
-        trainerId = gLinkPlayers[multiID].trainerId & 0xFFFF;
-        gender = gLinkPlayers[multiID].gender;
-        StringCopy(gStringVar1, gLinkPlayers[multiID].name);
-    }
-    else
-    {
-        trainerId = GetPlayerIDAsU32() & 0xFFFF;
-        gender = gSaveBlock2Ptr->playerGender;
-        StringCopy(gStringVar1, gSaveBlock2Ptr->playerName);
-    }
+    //if (sMonSummaryScreen->monList.mons == gEnemyParty)
+    //{
+    //    u8 multiID = GetMultiplayerId() ^ 1;
+    //    trainerId = gLinkPlayers[multiID].trainerId & 0xFFFF;
+    //    gender = gLinkPlayers[multiID].gender;
+    //    StringCopy(gStringVar1, gLinkPlayers[multiID].name);
+    //}
+    //else
+    //{
+    trainerId = GetPlayerIDAsU32() & 0xFFFF;
+    gender = gSaveBlock2Ptr->playerGender;
+    StringCopy(gStringVar1, gSaveBlock2Ptr->playerName);
+    //}
 
     if (gender != sum->OTGender || trainerId != (sum->OTID & 0xFFFF) || StringCompareWithoutExtCtrlCodes(gStringVar1, sum->OTName))
         return FALSE;
@@ -3927,8 +3912,6 @@ static void PrintTraits(void)
 {
     PrintMonTraits(0);
     PrintMonTraits(1);
-    PrintMonTraits(2);
-    PrintMonTraits(3);
 }
 
 static void Task_PrintTraits(u8 taskId)
@@ -3944,12 +3927,6 @@ static void Task_PrintTraits(u8 taskId)
         PrintMonTraits(1);
         break;
     case 3:
-        PrintMonTraits(2);
-        break;
-    case 4:
-        PrintMonTraits(3);
-        break;
-    case 5:
         DestroyTask(taskId);
         return;
     }
@@ -3966,17 +3943,17 @@ static void PrintMonTraits(u8 innateIndex)
     else if (innateIndex <= MAX_MON_INNATES)
         trait = gSpeciesInfo[sum->species].innates[innateIndex-1];
         
-    int x = GetStringRightAlignXOffset(FONT_NORMAL, gAbilitiesInfo[trait].name, 18*8);
+    // int x = GetStringRightAlignXOffset(FONT_NORMAL, gAbilitiesInfo[trait].name, 18*8);
 
     if (trait == 0)
     {
         StringCopy(gStringVar1, gText_Blank);
-        PrintTextOnWindow(AddWindowFromTemplateList(sPageTraitsTemplate, innateIndex), gStringVar1, x, 1, 0, 1);
+        PrintTextOnWindow(AddWindowFromTemplateList(sPageTraitsTemplate, innateIndex), gStringVar1, 0, 1, 0, 1);
         PrintTextOnWindow(AddWindowFromTemplateList(sPageTraitsTemplate, innateIndex), gStringVar1, 0, 17, 0, 0);
     }
     else
     {
-        PrintTextOnWindow(AddWindowFromTemplateList(sPageTraitsTemplate, innateIndex), gAbilitiesInfo[trait].name, x, 1, 0, 1);
+        PrintTextOnWindow(AddWindowFromTemplateList(sPageTraitsTemplate, innateIndex), gAbilitiesInfo[trait].name, 0, 1, 0, 1);
         PrintTextOnWindow(AddWindowFromTemplateList(sPageTraitsTemplate, innateIndex), gAbilitiesInfo[trait].description, 0, 17, 0, 0);
     }
 }
@@ -4628,7 +4605,15 @@ static void SetMoveTypeIcons(void)
             if (P_SHOW_DYNAMIC_TYPES)
             {
                 enum MonState state = gMain.inBattle ? MON_IN_BATTLE : MON_OUTSIDE_BATTLE;
-                type = CheckDynamicMoveType(mon, summary->moves[i], 0, state); // Bug: in battle, this only shows the dynamic type of battler in position 0
+
+                if (state == MON_IN_BATTLE && GetMonData(&gEnemyParty[0], MON_DATA_HP) == 0 && GetMonData(&gEnemyParty[1], MON_DATA_PP1) <= 4)
+                {
+                    type = CheckDynamicMoveType(mon, summary->moves[i], 1, state);
+                }
+                //else
+                //{
+                //    type = CheckDynamicMoveType(mon, summary->moves[i], 0, state); // Bug: in battle, this only shows the dynamic type of battler in position 0
+                //}
             }
 
             SetTypeSpritePosAndPal(type, 85, 32 + (i * 16), i + SPRITE_ARR_ID_TYPE);

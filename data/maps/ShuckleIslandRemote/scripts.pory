@@ -1,0 +1,817 @@
+mapscripts ShuckleIslandRemote_MapScripts {
+
+    MAP_SCRIPT_ON_FRAME_TABLE [
+
+        VAR_SHUCKLE_ISLAND_REMOTE_STATE, 1: ShuckleIslandRemote_EventScript_CheckRareCandy
+        VAR_SHUCKLE_ISLAND_REMOTE_STATE, 2: ShuckleIslandRemote_EventScript_ClearSleepyTerrain
+
+    ]
+
+}
+
+const BERRY_GUY_AND_DOLL_ID = 1
+const RESET_NPC4 = 2
+const HINT_NPC4_ID = 3
+const NEW_MECH_NPC4_ID = 4
+const MOVE_TUTOR_ID = 5
+const ROCK_1_ID = 6
+const ROCK_2_ID = 7
+const ROCK_3_ID = 8
+const ROCK_4_ID = 9
+const ROCK_5_ID = 10
+const ROCK_6_ID = 11
+const ROCK_7_ID = 12
+const PETREL_BATTLE_ID = 13
+const PETREL_NO_DISGUISE = 14
+const PETREL_BERRY_DISGUISE = 15
+const PETREL_FEMALE_DISGUISE = 16
+
+script ShuckleIslandRemote_EventScript_CheckRareCandy {
+
+    if (!flag(FLAG_HAVE_RARE_CANDY)) {
+
+        checkmonitem(0, ITEM_RARE_CANDY)
+        if (var(VAR_RESULT) == TRUE) {
+
+            setflag(FLAG_HAVE_RARE_CANDY)
+            setvar(VAR_RARE_CANDY, 1)
+
+        }
+        else {
+
+            checkmonitem(1, ITEM_RARE_CANDY)
+            if (var(VAR_RESULT) == TRUE) {
+
+                setflag(FLAG_HAVE_RARE_CANDY)
+                setvar(VAR_RARE_CANDY, 1)
+
+            }
+
+        }
+
+    }
+    
+    special(HealPlayerParty)
+    setvar(VAR_SHUCKLE_ISLAND_REMOTE_STATE, 0)
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_ClearSleepyTerrain {
+
+    //setvar(VAR_STARTING_FIELD_EFFECT, 0)
+    setvar(VAR_SHUCKLE_ISLAND_REMOTE_STATE, 0)
+
+    if (!flag(FLAG_WON_BATTLE_4)) {
+
+        setflag(FLAG_CLEAR_PETREL_NO_DISGUISE)
+        removeobject(PETREL_NO_DISGUISE)
+        
+        //Remove rare candy and account for berry
+        removeitemfrommon(0)
+        removeitemfrommon(1)
+        removeitem(VAR_BATTLE4_BERRY)
+        removeitem(ITEM_RARE_CANDY)
+        giveitemnojingle(VAR_BATTLE4_BERRY)
+
+        //Check if rare candy used on Gallade
+        indexspeciesinparty(SPECIES_GALLADE)
+        copyvar(VAR_TEMP_B, VAR_RESULT)
+        getmonlevel(VAR_TEMP_B)
+        if (var(VAR_RESULT) == 28) {
+
+            //Check if rare candy used on Snorlax
+            indexspeciesinparty(SPECIES_SNORLAX)
+            copyvar(VAR_TEMP_B, VAR_RESULT)
+            if (var(VAR_TEMP_B) == 7) {
+
+                giveitemnojingle(ITEM_RARE_CANDY)
+                
+
+            }
+
+        }
+
+    }
+
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_ShuckleRocks {
+
+    lockall
+
+    if (!flag(FLAG_HAVE_RARE_CANDY)) {
+
+        setvar(VAR_SHUCKLE_ISLAND_REMOTE_STATE, 1)
+        setwildbattleextended(SPECIES_SHUCKLE, 1, ITEM_RARE_CANDY, NATURE_DOCILE, 1, MON_ANY, 120, 0, 0, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_WRAP, MOVE_NONE, MOVE_NONE, MOVE_NONE, TRUE)
+        playmoncry(SPECIES_SHUCKLE, CRY_MODE_ENCOUNTER)
+        delay(40)
+        waitmoncry
+        dowildbattle
+
+    }
+    else {
+
+        msgbox("The Shuckle in these rocks seem to\nhave retreated for the time being.")
+        waitmessage
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_BerryGuy4 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_STARTED_BATTLE_4) && !flag(FLAG_RECEIVED_BERRY_4)) {
+
+        msgbox("You shouldn't be here.\nWill you leave if I give you a berry?")
+
+    }
+    elif (!flag(FLAG_RECEIVED_BERRY_4)) {
+
+        setflag(FLAG_SPOKE_MANNEQUIN)
+        msgbox("It's just a mannequin. But it seems like\nit wants to give you a berry.")
+
+    }
+
+    if(!flag(FLAG_RECEIVED_BERRY_4)) {
+
+        msgbox(berryGuyPresentOptions_text)
+
+        dynmultipush("Liechi Berry", ITEM_LIECHI_BERRY)
+        dynmultipush("Ganlon Berry", ITEM_GANLON_BERRY)
+        dynmultipush("Salac Berry", ITEM_SALAC_BERRY)
+        dynmultipush("Petaya Berry", ITEM_PETAYA_BERRY)
+        dynmultipush("Apicot Berry", ITEM_APICOT_BERRY)
+        dynmultipush("Lansat Berry", ITEM_LANSAT_BERRY)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            if(!flag(FLAG_STARTED_BATTLE_4)) {
+        
+                msgbox("Berry, no berry. I don't care. Whatever\ngets you out of here the fastest.")
+
+            }
+            else {
+
+                msgbox("The mannequin is unperturbed\nby your indecisiveness.")
+
+            }
+
+        }
+        else {
+
+            copyvar(VAR_BATTLE4_BERRY, VAR_RESULT)
+            giveitem(VAR_BATTLE4_BERRY, 1)
+            setflag(FLAG_RECEIVED_BERRY_4)
+            if(!flag(FLAG_STARTED_BATTLE_4)) {
+
+                msgbox("Ok, you got your berry. Now scram!")
+
+            }
+            else {
+
+                msgbox("You take your berry,\nawaiting a response.\pBut the mannequin says nothing.")
+
+            }
+
+        }
+    }
+    else {
+
+        if(!flag(FLAG_STARTED_BATTLE_4)) {
+        
+            msgbox("Ok, you got your berry. Now scram!")
+
+        }
+        elif(!flag(FLAG_SPOKE_MANNEQUIN)) {
+
+            setflag(FLAG_SPOKE_MANNEQUIN)
+            msgbox("It's just a mannequin,\nand it says nothing.\pIt is, after all, just a mannequin.")
+
+        }
+        else {
+
+            msgbox("The mannequin says nothing.\pIt is, after all, just a mannequin.")
+
+        }
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_MoveTutor4 {
+
+    lock
+    faceplayer
+
+    if (!flag(FLAG_SPOKE_MOVE_TUTOR_4)) {
+
+        setflag(FLAG_SPOKE_MOVE_TUTOR_4)
+        msgbox(moveTutorIntro)
+
+    }
+
+    call(ShuckleIslandRemote_EventScript_MoveTutor4_WhichMon)
+
+    release
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_MoveTutor4_WhichMon {
+
+    msgbox("So, which Pokémon needs tutoring?")
+    setmoverelearnerstate(MOVE_RELEARNER_LEVEL_UP_MOVES)
+    special(ChooseMonForMoveRelearner)
+	waitstate
+    if (var(VAR_0x8004) == PARTY_NOTHING_CHOSEN) {
+
+        msgbox("Come back if you ever want your\nPokémon to learn any new moves!", MSGBOX_AUTOCLOSE)
+
+    }
+    elif (var(VAR_0x8005) == NO) {
+
+        msgbox("Sorry\.\pIt doesn't appear as if I have any move\nI can teach that Pokémon.", MSGBOX_AUTOCLOSE)
+
+    }
+    else {
+
+        msgbox("Which move should I teach?")
+        special(TeachMoveRelearnerMove)
+	    waitstate
+        if (var(VAR_0x8004) == 0) {
+
+            call(ShuckleIslandRemote_EventScript_MoveTutor4_WhichMon)
+            
+        }
+        else {
+
+            msgbox("Come back if you ever want your\nPokémon to learn any new moves!", MSGBOX_AUTOCLOSE)
+
+        }
+
+    }
+
+}
+
+script ShuckleIslandRemote_EventScript_resetNPC4 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_RESET_NPC)) {
+
+        setflag(FLAG_SPOKE_RESET_NPC)
+        msgbox(resetNPCIntro_text)
+
+    }
+
+    msgbox("What would you like to reset?\n(Press B to exit)")
+
+    dynmultipush("Reset Rare Candy", 0)
+    
+    if(flag(FLAG_RECEIVED_BERRY_4)) {
+
+        dynmultipush("Reset Berry", 1)
+        dynmultipush("Reset All", 2)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("Come back if you would ever\nlike to reset your actions!")
+
+    }
+    else {
+
+        msgbox("One moment while I reset your actions.", MSGBOX_AUTOCLOSE)
+        fadescreen(FADE_TO_BLACK)
+
+        if(var(VAR_RESULT) == 0) {
+
+            call(resetRareCandy)
+
+        }
+        elif (var(VAR_RESULT) == 1) {
+
+            call(resetBerry_4)
+
+        }
+        elif (var(VAR_RESULT) == 2) {
+
+            call(resetRareCandy)
+            call(resetBerry_4)                
+
+        }
+
+        fadescreen(FADE_FROM_BLACK)
+        msgbox("Your actions have been reset!")
+
+    }
+
+    releaseall
+    end
+
+}
+
+script resetBerry_4 {
+
+    clearflag(FLAG_RECEIVED_BERRY_4)
+    removeitemfrommon(0)
+    removeitemfrommon(1)
+    removeitem(VAR_BATTLE4_BERRY)
+    setvar(VAR_BATTLE4_BERRY, 0)
+
+}
+
+script resetRareCandy {
+
+    //Remove rare candy and account for berry
+    removeitemfrommon(0)
+    removeitemfrommon(1)
+    removeitem(VAR_BATTLE4_BERRY)
+    removeitem(ITEM_RARE_CANDY)
+    giveitemnojingle(VAR_BATTLE4_BERRY)
+    giveitemnojingle(ITEM_RARE_CANDY)
+
+    //Reset Gallade level, if rare candy used on it
+    indexspeciesinparty(SPECIES_GALLADE)
+    copyvar(VAR_TEMP_B, VAR_RESULT)
+    getmonlevel(VAR_TEMP_B)
+    if (var(VAR_RESULT) == 29) {
+
+        takemon2(VAR_TEMP_B)
+        givemon(SPECIES_GALLADE, 28, ITEM_NONE, ITEM_POKE_BALL, NATURE_LONELY, 0, 0, 0, 0, 0, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_SKILL_SWAP, MOVE_MIMIC, MOVE_FOCUS_PUNCH, MOVE_TRICK)
+
+    }
+
+    //Reset Snorlax to Munchlax, if rare candy used on it
+    indexspeciesinparty(SPECIES_SNORLAX)
+    copyvar(VAR_TEMP_B, VAR_RESULT)
+    if (var(VAR_TEMP_B) != 7) {
+
+        takemon2(VAR_TEMP_B)
+        givemon(SPECIES_MUNCHLAX, 27, ITEM_NONE, ITEM_POKE_BALL, NATURE_IMPISH, 2, 0, 100, 0, 252, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_RECYCLE, MOVE_DEFENSE_CURL, MOVE_NATURAL_GIFT, MOVE_NONE)
+        
+
+    }
+
+}
+
+script ShuckleIslandRemote_EventScript_hintNPC4 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+    
+    dynmultipush("Small Hint", 1)
+    dynmultipush("Medium Hint", 2)
+    dynmultipush("Large Hint", 3)
+
+    if (flag(FLAG_SM_HINT_BATTLE_4) && flag(FLAG_MED_HINT_BATTLE_4) && flag(FLAG_LRG_HINT_BATTLE_4)) {
+
+        dynmultipush("Solution", 4)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+            msgbox(hintNPCRefusedHint_text)
+
+        }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        msgbox(hintNPCBattle4SmallHint_text)
+
+        if (!flag(FLAG_SM_HINT_BATTLE_4)) {
+
+            setflag(FLAG_SM_HINT_BATTLE_4)
+            addvar(VAR_NUM_SMALL_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+        msgbox(hintNPCBattle4MedHint_text)
+
+        if (!flag(FLAG_MED_HINT_BATTLE_4)) {
+
+            setflag(FLAG_MED_HINT_BATTLE_4)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 3) {
+
+        msgbox(hintNPCBattle4LargeHint_text)
+
+        if (!flag(FLAG_LRG_HINT_BATTLE_4)) {
+
+            setflag(FLAG_LRG_HINT_BATTLE_4)
+            addvar(VAR_NUM_LARGE_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 4) {
+
+        if (!flag(FLAG_SOLUTION_BATTLE_4)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_BATTLE_4)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/yTULg83YfBw")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_SOLUTION_BATTLE_4)) {
+
+                setflag(FLAG_SOLUTION_BATTLE_4)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_NewMechNPC4 {
+    
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_NEW_MECH_NPC)) {
+
+        setflag(FLAG_SPOKE_NEW_MECH_NPC)
+        msgbox(newMechNPCIntro_text)
+
+    }
+
+    call(NewMechNPC4Choices)
+
+    release
+    end
+
+}
+
+script NewMechNPC4Choices {
+
+    msgbox("Now then, what new mechanics do\nyou want explained? (Press B to exit)")
+
+    dynmultipush("Second Abilities", 0)
+    dynmultipush("Max Pressure", 1)
+    dynmultipush("Sleepy Terrain", 2)
+    dynmultipush("Sleep Talk", 3)
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("Stop by if you ever want\nthe new mechanics explained again!")
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox(secondAbilities_text)
+        call(NewMechNPC4Choices)
+
+    }
+    elif (var(VAR_RESULT) == 1) {
+
+        msgbox(maxPressure_text)
+        call(NewMechNPC4Choices)
+
+    }
+    elif (var(VAR_RESULT) == 2) {
+
+        msgbox(sleepyTerrain_text)
+        call(NewMechNPC4Choices)
+
+    }
+    elif (var(VAR_RESULT) == 3) {
+
+        msgbox(sleepTalk_text)
+        call(NewMechNPC4Choices)
+
+    }
+
+}
+
+script ShuckleIslandRemote_EventScript_StartBattle4 {
+    
+    lockall
+    clearflag(FLAG_CLEAR_PETREL_BERRY_DISGUISE)
+    addobject(PETREL_BERRY_DISGUISE)
+
+    msgbox("What are you doing to those Shuckle?")
+    waitmessage
+    closemessage
+
+    applymovement(PETREL_BERRY_DISGUISE, moves(walk_fast_left * 9))
+    waitmovement
+
+    msgbox(petrelText1)
+    waitmessage
+
+    applymovement(PETREL_BERRY_DISGUISE, moves(face_right, delay_16))
+    waitmovement
+
+    msgbox("I guess you can't leave grunt work\nto grunts these days.")
+    waitmessage
+
+    applymovement(PETREL_BERRY_DISGUISE, moves(face_left, delay_16))
+    waitmovement
+
+    msgbox(petrelText2)
+    waitmessage
+
+    applymovement(PETREL_BERRY_DISGUISE, moves(face_up, delay_8, face_right, delay_8, face_down, delay_8, face_left, delay_8, face_up, delay_4, face_right, delay_4, face_down, delay_4, face_left, delay_4, face_up, delay_2, face_right, delay_2, face_down, delay_2, face_left, delay_2, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1))
+    waitmovement
+
+    setflag(FLAG_CLEAR_PETREL_BERRY_DISGUISE)
+    clearflag(FLAG_CLEAR_PETREL_FEMALE_DISGUISE)
+    removeobject(PETREL_BERRY_DISGUISE)
+    addobject(PETREL_FEMALE_DISGUISE)
+
+    applymovement(PETREL_FEMALE_DISGUISE, moves(face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_2, face_right, delay_2, face_down, delay_2, face_left, delay_2, face_up, delay_4, face_right, delay_4, face_down, delay_4, face_left, delay_4, face_up, delay_8, face_right, delay_8, face_down, delay_8, face_left, delay_8, delay_16, delay_16))
+    waitmovement
+
+    msgbox(petrelText3)
+    waitmessage
+
+    applymovement(PETREL_FEMALE_DISGUISE, moves(face_up, delay_8, face_right, delay_8, face_down, delay_8, face_left, delay_8, face_up, delay_4, face_right, delay_4, face_down, delay_4, face_left, delay_4, face_up, delay_2, face_right, delay_2, face_down, delay_2, face_left, delay_2, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1))
+    waitmovement
+
+    setflag(FLAG_CLEAR_PETREL_FEMALE_DISGUISE)
+    clearflag(FLAG_CLEAR_PETREL_NO_DISGUISE)
+    removeobject(PETREL_FEMALE_DISGUISE)
+    addobject(PETREL_NO_DISGUISE)
+
+    applymovement(PETREL_NO_DISGUISE, moves(face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_1, face_right, delay_1, face_down, delay_1, face_left, delay_1, face_up, delay_2, face_right, delay_2, face_down, delay_2, face_left, delay_2, face_up, delay_4, face_right, delay_4, face_down, delay_4, face_left, delay_4, face_up, delay_8, face_right, delay_8, face_down, delay_8, face_left, delay_8, delay_16, delay_16))
+    waitmovement
+
+    setvar(VAR_RARE_CANDY, 0)
+    setvar(VAR_STARTING_FIELD_EFFECT, STARTING_STATUS_SLEEPY_TERRAIN)
+    setvar(VAR_SHUCKLE_ISLAND_REMOTE_STATE, 2)
+    setflag(FLAG_STARTED_BATTLE_4)
+    clearflag(FLAG_SETUP_BATTLE_4_NPCS)
+    releaseall
+    trainerbattle_single(TRAINER_PETREL, petrelText4, Battle4_Lose_text, ShuckleIslandRemote_EventScript_PostBattle4Early)
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_ContinueBattle4 {
+    
+    lockall
+    setvar(VAR_STARTING_FIELD_EFFECT, STARTING_STATUS_SLEEPY_TERRAIN)
+    setvar(VAR_SHUCKLE_ISLAND_REMOTE_STATE, 2)
+    releaseall
+    trainerbattle_single(TRAINER_PETREL, Battle4_Start_text, Battle4_Lose_text, ShuckleIslandRemote_EventScript_PostBattle4)
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_PostBattle4Early {
+
+    lockall
+
+    special(HealPlayerParty)
+
+    setvar(VAR_STARTING_FIELD_EFFECT, 0)
+
+    setflag(FLAG_CLEAR_PETREL_NO_DISGUISE)
+
+    setflag(FLAG_WON_BATTLE_4)
+    setflag(FLAG_SETUP_BATTLE_4_NPCS)
+    setflag(FLAG_PRIOR_BATTLE_4_NPCS)
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F_3)
+
+    msgbox(postBattle4_text)
+    waitmessage
+
+    setflag(FLAG_CLEAR_BATTLE_5_NPCS)
+    setflag(FLAG_CLEAR_CELL_DOOR)
+    setflag(FLAG_CLEAR_BATTLE_5_START_GRUNT)
+    //TODO: Set various flags
+
+    warp(MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F, 58, 15)
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandRemote_EventScript_PostBattle4 {
+
+    lockall
+
+    special(HealPlayerParty)
+
+    setvar(VAR_STARTING_FIELD_EFFECT, 0)
+
+    setflag(FLAG_WON_BATTLE_4)
+    setflag(FLAG_SETUP_BATTLE_4_NPCS)
+    setflag(FLAG_PRIOR_BATTLE_4_NPCS)
+    setrespawn(HEAL_LOCATION_BATTLE_5)
+
+    msgbox(postBattle4_text)
+    waitmessage
+
+    setflag(FLAG_CLEAR_BATTLE_5_NPCS)
+    setflag(FLAG_CLEAR_CELL_DOOR)
+    setflag(FLAG_CLEAR_BATTLE_5_START_GRUNT)
+    //TODO: Set various flags
+
+    warp(MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F, 58, 15)
+
+    releaseall
+    end
+
+}
+
+text moveTutorIntro {
+
+    "Hey there! I'm a move tutor.\p"
+    "I can teach your Pokémon any moves\n"
+    "they have already learned,\l"
+    "as well as a few new moves!"
+
+}
+
+text hintNPCBattle4SmallHint_text {
+
+    "Pay attention, as you must sequence\n"
+    "properly before the battle even begins!"
+
+}
+
+text hintNPCBattle4MedHint_text {
+
+    "You can adjust your moveset to ensure\n"
+    "a move is called by Sleep Talk.\p"
+    "But don't think that means you can just\n"
+    "sleep the whole battle!"
+
+}
+
+text hintNPCBattle4LargeHint_text {
+
+    "Either of your Pokémon can hold an\n"
+    "offense-boosting berry for this fight.\p"
+    "You'll also need the damage output from\n"
+    "both of Snorlax's sound-based moves."
+
+}
+
+text maxPressure_text {
+
+    "Max Pressure drains all PP from the\n"
+    "enemy's move, regardless of targeting."
+
+}
+
+text sleepyTerrain_text {
+
+    "Sleepy Terrain makes all Pokémon fall\n"
+    "asleep at the end of each turn.\p"
+    "Sleeping Pokémon won't wake naturally."
+
+}
+
+text sleepTalk_text {
+
+    "Sleep Talk now calls the first move in\n"
+    "the following list that the user knows:\p"
+    "Swallow, Snore, Recycle, Defense Curl,\n"
+    "Natural Gift, Skill Swap, Trick,\l"
+    "Nightmare, Swift, X-Scissor."
+
+}
+
+text petrelText1 {
+
+    "You've been a real nuisance since you\n"
+    "arrived on this island, you know that?\p"
+    "I spent so much time giving you berries\n"
+    "to see if your Munchlax had Gluttony.\p"
+    "I paid off that Black Belt\n"
+    "to block your path with a boulder.\p"
+    "I redirected you to encounter\n"
+    "one of our Grunts in the ice caverns."
+
+}
+
+text petrelText2 {
+
+    "And now you're terrorizing\n"
+    "our precious Shuckle!\p"
+    "So you leave me no choice\n"
+    "but to deal with you myself!\p"
+    "Hmm, you don't understand how a berry\n"
+    "merchant factors into all this?\p"
+    "Well maybe THIS will explain everything!"
+
+}
+
+text petrelText3 {
+
+    "Ah, whoops. That's for my date\n"
+    "with Big Blue tonight.\p"
+    "Ahem--\p"
+    "Maybe THIS will explain everything!"
+
+}
+
+text petrelText4 {
+
+    "Your actions require involvement from\n"
+    "the highest ranks in Team Shuckle.\p"
+    "Now, prepare to sleep with the fishes!"
+
+}
+
+text Battle4_Lose_text {
+
+    "Hmph."
+
+}
+
+text Battle4_Start_text {
+
+    "Don't sleep on the power\n"
+    "of this terrain!"
+
+}
+
+text postBattle4_text {
+
+    "Why you\.\p"
+    "That's it! You're too dangerous to\n"
+    "leave wandering around the island.\p"
+    "You're coming with me!"
+
+}

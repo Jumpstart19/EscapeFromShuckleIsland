@@ -1323,8 +1323,8 @@ void SetBattlerShadowSpriteCallback(u8 battler, u16 species)
             || gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdSecondary >= MAX_SPRITES)
             return;
 
-        if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
-            species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
+        //if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
+        //    species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
 
         if (gSpeciesInfo[SanitizeSpeciesId(species)].suppressEnemyShadow == FALSE)
         {
@@ -1348,8 +1348,8 @@ void SetBattlerShadowSpriteCallback(u8 battler, u16 species)
         if (gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary >= MAX_SPRITES)
             return;
 
-        if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
-            species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
+        //if (gBattleSpritesDataPtr->battlerData[battler].transformSpecies != SPECIES_NONE)
+        //    species = gBattleSpritesDataPtr->battlerData[battler].transformSpecies;
 
         if (gSpeciesInfo[SanitizeSpeciesId(species)].enemyMonElevation != 0)
             gSprites[gBattleSpritesDataPtr->healthBoxesData[battler].shadowSpriteIdPrimary].callback = SpriteCB_EnemyShadow;

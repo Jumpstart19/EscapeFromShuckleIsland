@@ -114,7 +114,8 @@ static u8 GetLastAlphabetColumn(u8);
 static void ReduceToValidWordSelectColumn(void);
 static bool8 IsSelectedWordIndexInvalid(void);
 static int DidPlayerInputMysteryGiftPhrase(void);
-static u16 DidPlayerInputABerryMasterWifePhrase(void);
+//static u16 DidPlayerInputABerryMasterWifePhrase(void);
+static u16 DidPlayerInputARegiPhrase(void);
 static bool8 InitEasyChatScreenControl_(void);
 static void LoadEasyChatPalettes(void);
 static void InitEasyChatBgs(void);
@@ -352,6 +353,7 @@ enum {
     FRAMEID_QUIZ_ANSWER,
     FRAMEID_QUIZ_QUESTION,
     FRAMEID_QUIZ_SET_QUESTION,
+    FRAMEID_GENERAL_1x1,
 };
 
 // IDs for the footer row of buttons on the main screen
@@ -609,6 +611,16 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
     },
     {
         .type = EASY_CHAT_TYPE_GOOD_SAYING,
+        .numColumns = 1,
+        .numRows = 1,
+        .frameId = FRAMEID_GENERAL_1x1,
+        .fourFooterOptions = FALSE,
+        .titleText = gText_RiddleQuestion,
+        .instructionsText1 = gText_LookIntoEyes,
+        .instructionsText2 = gText_ToFindAnswer,
+        .confirmText1 = gText_TheAnswer,
+        .confirmText2 = gText_IsAsShownOkay,
+        /*
         .numColumns = 2,
         .numRows = 1,
         .frameId = FRAMEID_COMBINE_TWO_WORDS,
@@ -617,7 +629,7 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .instructionsText1 = gText_CombineTwoWordsOrPhrases2,
         .instructionsText2 = gText_ToTeachHerAGoodSaying,
         .confirmText1 = gText_TheAnswer,
-        .confirmText2 = gText_IsAsShownOkay,
+        .confirmText2 = gText_IsAsShownOkay,*/
     },
     {
         .type = EASY_CHAT_TYPE_GABBY_AND_TY,
@@ -679,6 +691,18 @@ static const struct EasyChatScreenTemplate sEasyChatScreenTemplates[] = {
         .confirmText1 = gText_TheAnswer,
         .confirmText2 = gText_IsAsShownOkay,
     },
+    {
+        .type = EASY_CHAT_TYPE_REGI_RIDDLE,
+        .numColumns = 1,
+        .numRows = 1,
+        .frameId = FRAMEID_GENERAL_1x1,
+        .fourFooterOptions = FALSE,
+        .titleText = gText_RiddleQuestion,
+        .instructionsText1 = gText_LookIntoEyes,
+        .instructionsText2 = gText_ToFindAnswer,
+        .confirmText1 = gText_TheAnswer,
+        .confirmText2 = gText_IsAsShownOkay,
+    },
 };
 
 // IDs are used indirectly as indexes into gEasyChatWordsByLetterPointers
@@ -704,6 +728,16 @@ static const u16 sBerryMasterWifePhrases[][2] = {
     [PHRASE_OVERWHELMING_LATIAS - 1] = {EC_WORD_OVERWHELMING, EC_POKEMON(LATIAS)},
     [PHRASE_COOL_LATIOS - 1]         = {EC_WORD_COOL, EC_POKEMON(LATIOS)},
     [PHRASE_SUPER_HUSTLE - 1]        = {EC_WORD_SUPER, EC_WORD_HUSTLE},
+};
+
+static const u16 sRiddlePhrases[][1] = {
+    [PHRASE_SABLEYE - 1]    = {EC_POKEMON(SABLEYE)},
+    [PHRASE_REGIROCK - 1]   = {EC_POKEMON(REGIROCK)},
+    [PHRASE_REGISTEEL - 1]  = {EC_POKEMON(REGISTEEL)},
+    [PHRASE_REGICE - 1]     = {EC_POKEMON(REGICE)},
+    [PHRASE_SHUCKLE - 1]    = {EC_POKEMON_NATIONAL(SHUCKLE)},
+    [PHRASE_SNORLAX - 1]    = {EC_POKEMON_NATIONAL(SNORLAX)},
+    [PHRASE_BAGON - 1]      = {EC_POKEMON(BAGON)},
 };
 
 static const u16 sTriangleCursor_Pal[] = INCBIN_U16("graphics/easy_chat/triangle_cursor.gbapal");
@@ -784,6 +818,13 @@ static const struct EasyChatPhraseFrameDimensions sPhraseFrameDimensions[] = {
         .width = 24,
         .height = 10,
         .footerId = FOOTER_ANSWER,
+    },
+    [FRAMEID_GENERAL_1x1] = {
+        .left = 9,
+        .top = 4,
+        .width = 12,
+        .height = 2,
+        .footerId = FOOTER_NORMAL,
     },
 };
 
@@ -1215,6 +1256,7 @@ static const u8 *const sFooterTextOptions[NUM_FOOTER_TYPES][4] = {
 
 static const u8 *const sEasyChatGroupNamePointers[EC_NUM_GROUPS] = {
     [EC_GROUP_POKEMON]          = gEasyChatGroupName_Pokemon,
+    [EC_GROUP_POKEMON_NATIONAL] = gEasyChatGroupName_Pokemon2,
     [EC_GROUP_TRAINER]          = gEasyChatGroupName_Trainer,
     [EC_GROUP_STATUS]           = gEasyChatGroupName_Status,
     [EC_GROUP_BATTLE]           = gEasyChatGroupName_Battle,
@@ -1235,7 +1277,6 @@ static const u8 *const sEasyChatGroupNamePointers[EC_NUM_GROUPS] = {
     [EC_GROUP_MOVE_1]           = gEasyChatGroupName_Move1,
     [EC_GROUP_MOVE_2]           = gEasyChatGroupName_Move2,
     [EC_GROUP_TRENDY_SAYING]    = gEasyChatGroupName_TrendySaying,
-    [EC_GROUP_POKEMON_NATIONAL] = gEasyChatGroupName_Pokemon2,
 };
 
 static const u16 sDefaultProfileWords[EASY_CHAT_BATTLE_WORDS_COUNT - 2] = {
@@ -1516,7 +1557,7 @@ void ShowEasyChatScreen(void)
         break;
     case EASY_CHAT_TYPE_GOOD_SAYING:
         words = (u16 *)gStringVar3;
-        InitializeEasyChatWordArray(words, 2);
+        InitializeEasyChatWordArray(words, 1);
         break;
     case EASY_CHAT_TYPE_FAN_QUESTION:
         words = gSaveBlock1Ptr->tvShows[gSpecialVar_0x8005].fanClubSpecial.words;
@@ -1540,6 +1581,9 @@ void ShowEasyChatScreen(void)
     case EASY_CHAT_TYPE_QUESTIONNAIRE:
         words = GetQuestionnaireWordsPtr();
         break;
+    case EASY_CHAT_TYPE_REGI_RIDDLE:
+        words = (u16 *)gStringVar3;
+        words[0] = EC_EMPTY_WORD;
     default:
         return;
     }
@@ -2141,12 +2185,17 @@ static u16 TryConfirmWords(void)
         return ECFUNC_PROMPT_CONFIRM;
     }
     else if (sEasyChatScreen->type == EASY_CHAT_TYPE_TRENDY_PHRASE
-          || sEasyChatScreen->type == EASY_CHAT_TYPE_GOOD_SAYING)
+          || sEasyChatScreen->type == EASY_CHAT_TYPE_GOOD_SAYING
+          || sEasyChatScreen->type == EASY_CHAT_TYPE_REGI_RIDDLE)
     {
         if (!IsCurrentPhraseFull())
         {
             sEasyChatScreen->inputState = INPUTSTATE_WAIT_FOR_MSG;
-            return ECFUNC_MSG_COMBINE_TWO_WORDS;
+            
+            if (sEasyChatScreen->type == EASY_CHAT_TYPE_GOOD_SAYING)
+                return ECFUNC_MSG_SELECT_ANSWER;
+            else
+                return ECFUNC_MSG_COMBINE_TWO_WORDS;
         }
 
         sEasyChatScreen->inputState = INPUTSTATE_CONFIRM_WORDS_YES_NO;
@@ -2981,7 +3030,11 @@ static void SetSpecialEasyChatResult(void)
         gSpecialVar_0x8004 = TrySetTrendyPhrase(sEasyChatScreen->currentPhrase);
         break;
     case EASY_CHAT_TYPE_GOOD_SAYING:
-        gSpecialVar_0x8004 = DidPlayerInputABerryMasterWifePhrase();
+        gSpecialVar_0x8004 = DidPlayerInputARegiPhrase();
+        //gSpecialVar_0x8004 = DidPlayerInputABerryMasterWifePhrase();
+        break;
+    case EASY_CHAT_TYPE_REGI_RIDDLE:
+        gSpecialVar_0x8004 = DidPlayerInputARegiPhrase();
         break;
     }
 }
@@ -2990,13 +3043,25 @@ static int DidPlayerInputMysteryGiftPhrase(void)
 {
     return !IsPhraseDifferentThanPlayerInput(sMysteryGiftPhrase, ARRAY_COUNT(sMysteryGiftPhrase));
 }
-
+/*
 static u16 DidPlayerInputABerryMasterWifePhrase(void)
 {
     int i;
     for (i = 0; i < (int)ARRAY_COUNT(sBerryMasterWifePhrases); i++)
     {
         if (!IsPhraseDifferentThanPlayerInput(sBerryMasterWifePhrases[i], ARRAY_COUNT(*sBerryMasterWifePhrases)))
+            return i + 1;
+    }
+
+    return 0;
+}*/
+
+static u16 DidPlayerInputARegiPhrase(void)
+{
+    int i;
+    for (i = 0; i < (int)ARRAY_COUNT(sRiddlePhrases); i++)
+    {
+        if (!IsPhraseDifferentThanPlayerInput(sRiddlePhrases[i], ARRAY_COUNT(*sRiddlePhrases)))
             return i + 1;
     }
 
@@ -5619,6 +5684,9 @@ static void SetUnlockedEasyChatGroups(void)
     if (GetNationalPokedexCount(FLAG_GET_SEEN))
         sWordData->unlockedGroupIds[sWordData->numUnlockedGroups++] = EC_GROUP_POKEMON;
 
+    if (IsNationalPokedexEnabled())
+        sWordData->unlockedGroupIds[sWordData->numUnlockedGroups++] = EC_GROUP_POKEMON_NATIONAL;
+
     // These groups are unlocked automatically
     for (i = EC_GROUP_TRAINER; i <= EC_GROUP_ADJECTIVES; i++)
         sWordData->unlockedGroupIds[sWordData->numUnlockedGroups++] = i;
@@ -5632,9 +5700,6 @@ static void SetUnlockedEasyChatGroups(void)
 
     if (FlagGet(FLAG_UNLOCKED_TRENDY_SAYINGS))
         sWordData->unlockedGroupIds[sWordData->numUnlockedGroups++] = EC_GROUP_TRENDY_SAYING;
-
-    if (IsNationalPokedexEnabled())
-        sWordData->unlockedGroupIds[sWordData->numUnlockedGroups++] = EC_GROUP_POKEMON_NATIONAL;
 }
 
 static u8 GetNumUnlockedEasyChatGroups(void)

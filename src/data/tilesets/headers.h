@@ -330,7 +330,7 @@ const struct Tileset gTileset_Facility =
     .palettes = gTilesetPalettes_Facility,
     .metatiles = gMetatiles_Facility,
     .metatileAttributes = gMetatileAttributes_Facility,
-    .callback = NULL,
+    .callback = InitTilesetAnim_Facility,
 };
 
 const struct Tileset gTileset_BikeShop =

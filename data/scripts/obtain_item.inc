@@ -8,6 +8,12 @@ Std_ObtainItem::
 	call EventScript_ObtainItemMessage
 	return
 
+Std_ObtainItemNoJingle::
+	copyvar VAR_0x8006, ITEMID
+	additem ITEMID, AMOUNT
+	copyvar VAR_0x8007, VAR_RESULT
+	return
+
 EventScript_ObtainItemMessage::
 	bufferitemnameplural STR_VAR_2, ITEMID, AMOUNT
 	checkitemtype ITEMID

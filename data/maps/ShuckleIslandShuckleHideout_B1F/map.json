@@ -1,0 +1,49 @@
+{
+  "id": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F",
+  "name": "ShuckleIslandShuckleHideout_B1F",
+  "layout": "LAYOUT_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F",
+  "music": "MUS_ABNORMAL_WEATHER",
+  "region_map_section": "MAPSEC_SHUCKLE_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_SECRET_BASE",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_GYM",
+  "connections": null,
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_SHUCKLE_LEADER_GIOVANNI",
+      "x": 14,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NORMAL",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandShuckleHideout_B1F_EventScript_ContinueBattle6",
+      "flag": "FLAG_WON_BATTLE_6"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 9,
+      "y": 6,
+      "elevation": 3,
+      "dest_map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F",
+      "dest_warp_id": "4"
+    },
+    {
+      "x": 19,
+      "y": 6,
+      "elevation": 3,
+      "dest_map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

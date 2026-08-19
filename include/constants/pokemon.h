@@ -176,6 +176,7 @@ enum __attribute__((packed)) Stat
 #define MAX_LEVEL_UP_MOVES       20
 
 #define MON_MALE       0x00
+#define MON_ANY        0xEE
 #define MON_FEMALE     0xFE
 #define MON_GENDERLESS 0xFF
 

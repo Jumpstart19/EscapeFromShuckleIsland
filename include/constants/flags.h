@@ -43,54 +43,54 @@
 #define TEMP_FLAGS_END   FLAG_TEMP_1F
 #define NUM_TEMP_FLAGS   (TEMP_FLAGS_END - TEMP_FLAGS_START + 1)
 
-#define FLAG_UNUSED_0x020    0x20 // Unused Flag
-#define FLAG_UNUSED_0x021    0x21 // Unused Flag
-#define FLAG_UNUSED_0x022    0x22 // Unused Flag
-#define FLAG_UNUSED_0x023    0x23 // Unused Flag
-#define FLAG_UNUSED_0x024    0x24 // Unused Flag
-#define FLAG_UNUSED_0x025    0x25 // Unused Flag
-#define FLAG_UNUSED_0x026    0x26 // Unused Flag
-#define FLAG_UNUSED_0x027    0x27 // Unused Flag
-#define FLAG_UNUSED_0x028    0x28 // Unused Flag
-#define FLAG_UNUSED_0x029    0x29 // Unused Flag
-#define FLAG_UNUSED_0x02A    0x2A // Unused Flag
-#define FLAG_UNUSED_0x02B    0x2B // Unused Flag
-#define FLAG_UNUSED_0x02C    0x2C // Unused Flag
-#define FLAG_UNUSED_0x02D    0x2D // Unused Flag
-#define FLAG_UNUSED_0x02E    0x2E // Unused Flag
-#define FLAG_UNUSED_0x02F    0x2F // Unused Flag
-#define FLAG_UNUSED_0x030    0x30 // Unused Flag
-#define FLAG_UNUSED_0x031    0x31 // Unused Flag
-#define FLAG_UNUSED_0x032    0x32 // Unused Flag
-#define FLAG_UNUSED_0x033    0x33 // Unused Flag
-#define FLAG_UNUSED_0x034    0x34 // Unused Flag
-#define FLAG_UNUSED_0x035    0x35 // Unused Flag
-#define FLAG_UNUSED_0x036    0x36 // Unused Flag
-#define FLAG_UNUSED_0x037    0x37 // Unused Flag
-#define FLAG_UNUSED_0x038    0x38 // Unused Flag
-#define FLAG_UNUSED_0x039    0x39 // Unused Flag
-#define FLAG_UNUSED_0x03A    0x3A // Unused Flag
-#define FLAG_UNUSED_0x03B    0x3B // Unused Flag
-#define FLAG_UNUSED_0x03C    0x3C // Unused Flag
-#define FLAG_UNUSED_0x03D    0x3D // Unused Flag
-#define FLAG_UNUSED_0x03E    0x3E // Unused Flag
-#define FLAG_UNUSED_0x03F    0x3F // Unused Flag
-#define FLAG_UNUSED_0x040    0x40 // Unused Flag
-#define FLAG_UNUSED_0x041    0x41 // Unused Flag
-#define FLAG_UNUSED_0x042    0x42 // Unused Flag
-#define FLAG_UNUSED_0x043    0x43 // Unused Flag
-#define FLAG_UNUSED_0x044    0x44 // Unused Flag
-#define FLAG_UNUSED_0x045    0x45 // Unused Flag
-#define FLAG_UNUSED_0x046    0x46 // Unused Flag
-#define FLAG_UNUSED_0x047    0x47 // Unused Flag
-#define FLAG_UNUSED_0x048    0x48 // Unused Flag
-#define FLAG_UNUSED_0x049    0x49 // Unused Flag
-#define FLAG_UNUSED_0x04A    0x4A // Unused Flag
-#define FLAG_UNUSED_0x04B    0x4B // Unused Flag
-#define FLAG_UNUSED_0x04C    0x4C // Unused Flag
-#define FLAG_UNUSED_0x04D    0x4D // Unused Flag
-#define FLAG_UNUSED_0x04E    0x4E // Unused Flag
-#define FLAG_UNUSED_0x04F    0x4F // Unused Flag
+#define FLAG_RECEIVED_MUNCHLAX    0x20 // Receive Munchlax upon first load into Shuckle Island
+#define FLAG_RECEIVED_BERRY_1     0x21 // Received berry from NPC before battle 1
+#define FLAG_RECEIVED_TM_1        0x22 // Received TM from NPC before battle 1
+#define FLAG_STARTED_BATTLE_1     0x23 // Started battle 1
+#define FLAG_SPOKE_NEW_MECH_NPC   0x24 // Heard intro dialogue of New Mech NPC
+#define FLAG_WON_BATTLE_1B        0x25 // Won battle 1b against Big Bro
+#define FLAG_SETUP_BATTLE_1_NPCS  0x26 // Shows NPCs during battle 1
+#define FLAG_SPOKE_BERRY_GUY_1    0x27 // Heard intro dialogue of Berry Guy 1
+#define FLAG_SPOKE_TM_GUY_1       0x28 // Heard intro dialogue of TM Guy 1
+#define FLAG_SPOKE_RESET_NPC      0x29 // Heard intro dialogue of Reset NPC
+#define FLAG_SPOKE_HINT_NPC       0x2A // Heard intro dialogue of Hint NPC
+#define FLAG_SM_HINT_BATTLE_1     0x2B // Received small hint for battle 1
+#define FLAG_MED_HINT_BATTLE_1    0x2C // Received medium hint for battle 1
+#define FLAG_LRG_HINT_BATTLE_1    0x2D // Received large hint for battle 1
+#define FLAG_SOLUTION_BATTLE_1    0x2E // Received solution for battle 1
+#define FLAG_WON_BATTLE_1A        0x2F // Won battle 1a against Timmy
+#define FLAG_RECEIVED_BERRY_2     0x30 // Received berry from NPC before battle 2
+#define FLAG_FOCUS_PUNCH          0x31 // Learned Focus Punch from NPC
+#define FLAG_STARTED_BATTLE_2     0x32 // Started Battle 2
+#define FLAG_WON_BATTLE_2         0x33 // Won Battle 2
+#define FLAG_SETUP_BATTLE_2_NPCS  0x34 // Shows NPCs during battle 2
+#define FLAG_SPOKE_BERRY_GUY_2    0x35 // Heard intro dialogue of Berry Guy 2
+#define FLAG_SM_HINT_BATTLE_2     0x36 // Received small hint for battle 2
+#define FLAG_MED_HINT_BATTLE_2    0x37 // Received medium hint for battle 2
+#define FLAG_LRG_HINT_BATTLE_2    0x38 // Received large hint for battle 2
+#define FLAG_SOLUTION_BATTLE_2    0x39 // Received solution for battle 2
+#define FLAG_SPOKE_FOCUS_PUNCH_TUTOR  0x3A // Heard intro dialogue of Focus Punch Tutor
+#define FLAG_RECEIVED_BERRY_3     0x3B // Received berry from NPC before battle 3
+#define FLAG_STARTED_BATTLE_3     0x3C // Started Battle 3
+#define FLAG_WON_BATTLE_3         0x3D // Won Battle 3
+#define FLAG_SETUP_BATTLE_3_NPCS  0x3E // Shows NPCs during battle 3
+#define FLAG_PRIOR_BATTLE_4_NPCS  0x3F // Unused Flag
+#define FLAG_SM_HINT_BATTLE_3     0x40 // Received small hint for battle 3
+#define FLAG_MED_HINT_BATTLE_3    0x41 // Received medium hint for battle 3
+#define FLAG_LRG_HINT_BATTLE_3    0x42 // Received large hint for battle 3
+#define FLAG_SOLUTION_BATTLE_3    0x43 // Received solution for battle 3
+#define FLAG_RECEIVED_AIR_BALLOON 0x44 // Received air balloon from ice puzzle before battle 3
+#define FLAG_RECEIVED_UNNERVE_CAPSULE 0x45 // Received Unnerve Capsule from ice puzzle before battle 3
+#define FLAG_MET_BERRY_GUY_CAVE   0x46 // Met Berry Guy in Cave
+#define FLAG_MET_BERRY_GUY_ICE_CAVE 0x47 // Met Berry Guy in Ice Cave
+#define FLAG_SAILOR_DIED          0x48 // Set when the Sailor on Shuckle Island dies
+#define FLAG_HIDE_FISHERMAN       0x49 // Set to hide the Fisherman on Shuckle Island Main
+#define FLAG_TRICK_MAN_BALLOON    0x4A // Gave Air Balloon to Trick Man
+#define FLAG_TRICK_MAN_TRICK      0x4B // Learned Trick from the Trick Man
+#define FLAG_TRICK_MAN_GIRL       0x4C // Hides girl in Trick Man's house
+#define FLAG_SPOKE_TRICK_MAN_GIRL 0x4D // Spoke to Trick Man's daughter
+#define FLAG_TRICK_MAN            0x4E // Hides man in Trick Man's house
+#define FLAG_SPOKE_CAMPER         0x4F // Spoke to Camper in Shuckle Island South area
 
 // Scripts
 #define FLAG_HIDE_SKY_PILLAR_TOP_RAYQUAZA_STILL  0x50
@@ -98,8 +98,8 @@
 #define FLAG_RESCUED_BIRCH                       0x52
 #define FLAG_LEGENDARIES_IN_SOOTOPOLIS           0x53
 
-#define FLAG_UNUSED_0x054                    0x54  // Unused Flag
-#define FLAG_UNUSED_0x055                    0x55  // Unused Flag
+#define FLAG_GAVE_CAMPER_BERRY_JUICE         0x54  // Gave the Camper in the South area of Shuckle Island a Berry Juice
+#define FLAG_HAVE_BERRY_JUICE                0x55  // Have berry juice in the South area of Shuckle Island
 
 #define FLAG_HIDE_CONTEST_POKE_BALL          0x56  // Always set after new game, object it hides is added directly
 #define FLAG_MET_RIVAL_MOM                   0x57
@@ -120,7 +120,7 @@
 #define FLAG_MOSSDEEP_GYM_SWITCH_3           0x66 //
 #define FLAG_MOSSDEEP_GYM_SWITCH_4           0x67 //
 
-#define FLAG_UNUSED_0x068                    0x68  // Unused Flag
+#define FLAG_BOPPED_IT                       0x68  // Set when the player bops something in the rocks
 
 #define FLAG_OCEANIC_MUSEUM_MET_REPORTER     0x69
 #define FLAG_RECEIVED_HM_STRENGTH            0x6A
@@ -169,7 +169,7 @@
 #define FLAG_MR_BRINEY_SAILING_INTRO         0x93
 #define FLAG_DOCK_REJECTED_DEVON_GOODS       0x94
 #define FLAG_DELIVERED_DEVON_GOODS           0x95
-#define FLAG_RECEIVED_CONTEST_PASS           0x96 // Unused, leftover from R/S
+#define FLAG_SETUP_WILD_SHUCKLE_NPCS         0x96 // Removes NPCs for wild Shuckle encounter
 #define FLAG_RECEIVED_CASTFORM               0x97
 #define FLAG_RECEIVED_SUPER_ROD              0x98
 #define FLAG_RUSTBORO_NPC_TRADE_COMPLETED    0x99
@@ -255,7 +255,7 @@
 #define FLAG_RECEIVED_TM_ROAR                0xE7
 #define FLAG_RECEIVED_TM_GIGA_DRAIN          0xE8
 
-#define FLAG_UNUSED_0x0E9                    0xE9 // Unused Flag
+#define FLAG_SPOKE_MANNEQUIN                 0xE9 // Unused Flag
 
 #define FLAG_RECEIVED_TM_REST                0xEA
 #define FLAG_RECEIVED_TM_ATTRACT             0xEB
@@ -460,8 +460,8 @@
 #define FLAG_REGISTERED_DRAKE                (TRAINER_REGISTERED_FLAGS_START + REMATCH_DRAKE)
 #define FLAG_REGISTERED_WALLACE              (TRAINER_REGISTERED_FLAGS_START + REMATCH_WALLACE)
 
-#define FLAG_UNUSED_0x1AA                    0x1AA // Unused Flag
-#define FLAG_UNUSED_0x1AB                    0x1AB // Unused Flag
+#define FLAG_SPOKE_MOVE_TUTOR_4              0x1AA // Unused Flag
+#define FLAG_CLEAR_PETREL_BERRY_DISGUISE     0x1AB // Unused Flag
 
 #define FLAG_DEFEATED_DEOXYS                 0x1AC
 #define FLAG_BATTLED_DEOXYS                  0x1AD
@@ -510,18 +510,18 @@
 #define FLAG_ENABLE_TATE_AND_LIZA_MATCH_CALL 0x1D8
 #define FLAG_ENABLE_JUAN_MATCH_CALL          0x1D9
 
-#define FLAG_UNUSED_0x1DA                    0x1DA // Unused Flag
+#define FLAG_SM_HINT_WILD_SHUCKLE            0x1DA // Unused Flag
 
 #define FLAG_SHOWN_MYSTIC_TICKET             0x1DB
 #define FLAG_DEFEATED_HO_OH                  0x1DC
 #define FLAG_DEFEATED_LUGIA                  0x1DD
 
-#define FLAG_UNUSED_0x1DE                    0x1DE // Unused Flag
-#define FLAG_UNUSED_0x1DF                    0x1DF // Unused Flag
-#define FLAG_UNUSED_0x1E0                    0x1E0 // Unused Flag
-#define FLAG_UNUSED_0x1E1                    0x1E1 // Unused Flag
-#define FLAG_UNUSED_0x1E2                    0x1E2 // Unused Flag
-#define FLAG_UNUSED_0x1E3                    0x1E3 // Unused Flag
+#define FLAG_MED_HINT_WILD_SHUCKLE           0x1DE // Unused Flag
+#define FLAG_LRG_HINT_WILD_SHUCKLE           0x1DF // Unused Flag
+#define FLAG_SOLUTION_WILD_SHUCKLE           0x1E0 // Unused Flag
+#define FLAG_MAKE_WILD_AI_SMART              0x1E1 // Unused Flag
+#define FLAG_RECEIVED_STRENGTH_TOOL          0x1E2 // Unused Flag
+#define FLAG_DONT_REMOVE_OFFSCREEN_OBJECT    0x1E3 // Unused Flag
 
 // Mystery Gift Flags (Unknown)
 #define FLAG_MYSTERY_GIFT_DONE               0x1E4
@@ -656,84 +656,84 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY                (FLAG_HIDDEN_ITEMS_START + 0x6E)
 #define FLAG_HIDDEN_ITEM_ROUTE_105_BIG_PEARL                 (FLAG_HIDDEN_ITEMS_START + 0x6F)
 
-#define FLAG_UNUSED_0x264  0x264 // Unused Flag
-#define FLAG_UNUSED_0x265  0x265 // Unused Flag
-#define FLAG_UNUSED_0x266  0x266 // Unused Flag
-#define FLAG_UNUSED_0x267  0x267 // Unused Flag
-#define FLAG_UNUSED_0x268  0x268 // Unused Flag
-#define FLAG_UNUSED_0x269  0x269 // Unused Flag
-#define FLAG_UNUSED_0x26A  0x26A // Unused Flag
-#define FLAG_UNUSED_0x26B  0x26B // Unused Flag
-#define FLAG_UNUSED_0x26C  0x26C // Unused Flag
-#define FLAG_UNUSED_0x26D  0x26D // Unused Flag
-#define FLAG_UNUSED_0x26E  0x26E // Unused Flag
-#define FLAG_UNUSED_0x26F  0x26F // Unused Flag
-#define FLAG_UNUSED_0x270  0x270 // Unused Flag
-#define FLAG_UNUSED_0x271  0x271 // Unused Flag
-#define FLAG_UNUSED_0x272  0x272 // Unused Flag
-#define FLAG_UNUSED_0x273  0x273 // Unused Flag
-#define FLAG_UNUSED_0x274  0x274 // Unused Flag
-#define FLAG_UNUSED_0x275  0x275 // Unused Flag
-#define FLAG_UNUSED_0x276  0x276 // Unused Flag
-#define FLAG_UNUSED_0x277  0x277 // Unused Flag
-#define FLAG_UNUSED_0x278  0x278 // Unused Flag
-#define FLAG_UNUSED_0x279  0x279 // Unused Flag
-#define FLAG_UNUSED_0x27A  0x27A // Unused Flag
-#define FLAG_UNUSED_0x27B  0x27B // Unused Flag
-#define FLAG_UNUSED_0x27C  0x27C // Unused Flag
-#define FLAG_UNUSED_0x27D  0x27D // Unused Flag
-#define FLAG_UNUSED_0x27E  0x27E // Unused Flag
-#define FLAG_UNUSED_0x27F  0x27F // Unused Flag
-#define FLAG_UNUSED_0x280  0x280 // Unused Flag
-#define FLAG_UNUSED_0x281  0x281 // Unused Flag
-#define FLAG_UNUSED_0x282  0x282 // Unused Flag
-#define FLAG_UNUSED_0x283  0x283 // Unused Flag
-#define FLAG_UNUSED_0x284  0x284 // Unused Flag
-#define FLAG_UNUSED_0x285  0x285 // Unused Flag
-#define FLAG_UNUSED_0x286  0x286 // Unused Flag
-#define FLAG_UNUSED_0x287  0x287 // Unused Flag
-#define FLAG_UNUSED_0x288  0x288 // Unused Flag
-#define FLAG_UNUSED_0x289  0x289 // Unused Flag
-#define FLAG_UNUSED_0x28A  0x28A // Unused Flag
-#define FLAG_UNUSED_0x28B  0x28B // Unused Flag
-#define FLAG_UNUSED_0x28C  0x28C // Unused Flag
-#define FLAG_UNUSED_0x28D  0x28D // Unused Flag
-#define FLAG_UNUSED_0x28E  0x28E // Unused Flag
-#define FLAG_UNUSED_0x28F  0x28F // Unused Flag
-#define FLAG_UNUSED_0x290  0x290 // Unused Flag
-#define FLAG_UNUSED_0x291  0x291 // Unused Flag
-#define FLAG_UNUSED_0x292  0x292 // Unused Flag
-#define FLAG_UNUSED_0x293  0x293 // Unused Flag
-#define FLAG_UNUSED_0x294  0x294 // Unused Flag
-#define FLAG_UNUSED_0x295  0x295 // Unused Flag
-#define FLAG_UNUSED_0x296  0x296 // Unused Flag
-#define FLAG_UNUSED_0x297  0x297 // Unused Flag
-#define FLAG_UNUSED_0x298  0x298 // Unused Flag
-#define FLAG_UNUSED_0x299  0x299 // Unused Flag
-#define FLAG_UNUSED_0x29A  0x29A // Unused Flag
-#define FLAG_UNUSED_0x29B  0x29B // Unused Flag
-#define FLAG_UNUSED_0x29C  0x29C // Unused Flag
-#define FLAG_UNUSED_0x29D  0x29D // Unused Flag
-#define FLAG_UNUSED_0x29E  0x29E // Unused Flag
-#define FLAG_UNUSED_0x29F  0x29F // Unused Flag
-#define FLAG_UNUSED_0x2A0  0x2A0 // Unused Flag
-#define FLAG_UNUSED_0x2A1  0x2A1 // Unused Flag
-#define FLAG_UNUSED_0x2A2  0x2A2 // Unused Flag
-#define FLAG_UNUSED_0x2A3  0x2A3 // Unused Flag
-#define FLAG_UNUSED_0x2A4  0x2A4 // Unused Flag
-#define FLAG_UNUSED_0x2A5  0x2A5 // Unused Flag
-#define FLAG_UNUSED_0x2A6  0x2A6 // Unused Flag
-#define FLAG_UNUSED_0x2A7  0x2A7 // Unused Flag
-#define FLAG_UNUSED_0x2A8  0x2A8 // Unused Flag
-#define FLAG_UNUSED_0x2A9  0x2A9 // Unused Flag
-#define FLAG_UNUSED_0x2AA  0x2AA // Unused Flag
-#define FLAG_UNUSED_0x2AB  0x2AB // Unused Flag
-#define FLAG_UNUSED_0x2AC  0x2AC // Unused Flag
-#define FLAG_UNUSED_0x2AD  0x2AD // Unused Flag
-#define FLAG_UNUSED_0x2AE  0x2AE // Unused Flag
-#define FLAG_UNUSED_0x2AF  0x2AF // Unused Flag
-#define FLAG_UNUSED_0x2B0  0x2B0 // Unused Flag
-#define FLAG_UNUSED_0x2B1  0x2B1 // Unused Flag
+#define FLAG_ICE_STRENGTH_PUZZLE_1                      0x264 // Unused Flag
+#define FLAG_REMOVE_ICE_STRENGTH_PUZZLE_1_CLEAR_BOULDER 0x265 // Unused Flag
+#define FLAG_ICE_STRENGTH_PUZZLE_2                      0x266 // Unused Flag
+#define FLAG_REMOVE_ICE_STRENGTH_PUZZLE_2_CLEAR_BOULDER 0x267 // Unused Flag
+#define FLAG_MED_HINT_ICE_PUZZLE_1                      0x268 // Unused Flag
+#define FLAG_SOLUTION_ICE_PUZZLE_1                      0x269 // Unused Flag
+#define FLAG_MED_HINT_ICE_PUZZLE_2                      0x26A // Unused Flag
+#define FLAG_SOLUTION_ICE_PUZZLE_2                      0x26B // Unused Flag
+#define FLAG_CLEAR_HINT_NPC_ICE_PUZZLE_2                0x26C // Unused Flag
+#define FLAG_CLEAR_ICE_PUZZLE_HINT_OBJECTS              0x26D // Unused Flag
+#define FLAG_HAVE_RARE_CANDY                            0x26E // Unused Flag
+#define FLAG_SETUP_BATTLE_4_NPCS                        0x26F // Unused Flag
+#define FLAG_RECEIVED_BERRY_4                           0x270 // Unused Flag
+#define FLAG_STARTED_BATTLE_4                           0x271 // Unused Flag
+#define FLAG_SM_HINT_BATTLE_4                           0x272 // Unused Flag
+#define FLAG_MED_HINT_BATTLE_4                          0x273 // Unused Flag
+#define FLAG_LRG_HINT_BATTLE_4                          0x274 // Unused Flag
+#define FLAG_SOLUTION_BATTLE_4                          0x275 // Unused Flag
+#define FLAG_CLEAR_PETREL_FEMALE_DISGUISE               0x276 // Unused Flag
+#define FLAG_CLEAR_PETREL_NO_DISGUISE                   0x277 // Unused Flag
+#define FLAG_WON_BATTLE_4                               0x278 // Unused Flag
+#define FLAG_CLEAR_BATTLE_5_NPCS                        0x279 // Unused Flag
+#define FLAG_CLEAR_INTRO_GRUNT                          0x27A // Unused Flag
+#define FLAG_READ_CELL_SIGN                             0x27B // Unused Flag
+#define FLAG_CLEAR_CELL_DOOR                            0x27C // Unused Flag
+#define FLAG_CLEAR_BATTLE_5_START_GRUNT                 0x27D // Unused Flag
+#define FLAG_STARTED_BATTLE_5                           0x27E // Unused Flag
+#define FLAG_SM_HINT_BATTLE_5                           0x27F // Unused Flag
+#define FLAG_MED_HINT_BATTLE_5                          0x280 // Unused Flag
+#define FLAG_SOLUTION_BATTLE_5                          0x281 // Unused Flag
+#define FLAG_RECEIVED_SITRUS_BERRY                      0x282 // Unused Flag
+#define FLAG_CLEAR_BATTLE_6_NPCS                        0x283 // Unused Flag
+#define FLAG_CAMPER_CELL_START                          0x284 // Unused Flag
+#define FLAG_CAMPER_CELL_FINISH                         0x285 // Unused Flag
+#define FLAG_PETREL_PRE_BATTLE_6                        0x286 // Unused Flag
+#define FLAG_RECEIVED_BERRY_6                           0x287 // Unused Flag
+#define FLAG_CLEAR_PETREL_BATTLE_6                      0x288 // Unused Flag
+#define FLAG_STARTED_BATTLE_6                           0x289 // Unused Flag
+#define FLAG_WARP_PANEL_GRUNT                           0x28A // Unused Flag
+#define FLAG_SOLVED_REGI_RIDDLE                         0x28B // Unused Flag
+#define FLAG_CLEAR_MOVE_TUTOR                           0x28C // Unused Flag
+#define FLAG_TAUGHT_SNORLAX_MOVE                        0x28D // Unused Flag
+#define FLAG_TAUGHT_GALLADE_MOVE                        0x28E // Unused Flag
+#define FLAG_SPOKE_MOVE_TUTOR_6                         0x28F // Unused Flag
+#define FLAG_SM_HINT_BATTLE_6                           0x290 // Unused Flag
+#define FLAG_MED_HINT_BATTLE_6                          0x291 // Unused Flag
+#define FLAG_LRG_HINT_BATTLE_6                          0x292 // Unused Flag
+#define FLAG_SOLUTION_BATTLE_6                          0x293 // Unused Flag
+#define FLAG_DMG_CALC_INFO_BATTLE_6                     0x294 // Unused Flag
+#define FLAG_WON_BATTLE_6                               0x295 // Unused Flag
+#define FLAG_BATTLE_6_HINT_NPC_TEXT                     0x296 // Unused Flag
+#define FLAG_PETREL_PRE_BATTLE_7                        0x297 // Unused Flag
+#define FLAG_RECEIVED_BERRY_7                           0x298 // Unused Flag
+#define FLAG_LEARNED_ULTIMATE_MOVES                     0x299 // Unused Flag
+#define FLAG_LAST_STAND_TRIGGERED                       0x29A // Unused Flag
+#define FLAG_CLEAR_BATTLE_7_NPCS                        0x29B // Unused Flag
+#define FLAG_RECEIVED_BERRY_7_2                         0x29C // Unused Flag
+#define FLAG_PETREL_PRE_BATTLE_7_2                      0x29D // Unused Flag
+#define FLAG_SM_HINT_BATTLE_7                           0x29E // Unused Flag
+#define FLAG_MED_HINT_BATTLE_7                          0x29F // Unused Flag
+#define FLAG_LRG_HINT_BATTLE_7                          0x2A0 // Unused Flag
+#define FLAG_SOLUTION_BATTLE_7                          0x2A1 // Unused Flag
+#define FLAG_SM_HINT_BATTLE_7_2                         0x2A2 // Unused Flag
+#define FLAG_MED_HINT_BATTLE_7_2                        0x2A3 // Unused Flag
+#define FLAG_LRG_HINT_BATTLE_7_2                        0x2A4 // Unused Flag
+#define FLAG_SOLUTION_BATTLE_7_2                        0x2A5 // Unused Flag
+#define FLAG_DMG_CALC_INFO_BATTLE_7                     0x2A6 // Unused Flag
+#define FLAG_WON_BATTLE_7                               0x2A7 // Unused Flag
+#define FLAG_RECEIVED_SURFBOARD                         0x2A8 // Unused Flag
+#define FLAG_BATTLE_7_HINT_NPC_TEXT                     0x2A9 // Unused Flag
+#define FLAG_BATTLE_7_RESET_NPC_TEXT                    0x2AA // Unused Flag
+#define FLAG_CLEAR_ICE_PUZZLE_HINT_BRENDAN              0x2AB // Unused Flag
+#define FLAG_CLEAR_ICE_PUZZLE_HINT_MAY                  0x2AC // Unused Flag
+#define FLAG_READ_HINT_INFO                             0x2AD // Unused Flag
+#define FLAG_TM_MERCHANT_END                            0x2AE // Unused Flag
+#define FLAG_BEAT_JUMPSTART                             0x2AF // Unused Flag
+#define FLAG_SPOKE_JUMPSTART                            0x2B0 // Unused Flag
+#define FLAG_JUMPSTART_BATTLE_INTRO                     0x2B1 // Unused Flag
 #define FLAG_UNUSED_0x2B2  0x2B2 // Unused Flag
 #define FLAG_UNUSED_0x2B3  0x2B3 // Unused Flag
 #define FLAG_UNUSED_0x2B4  0x2B4 // Unused Flag
@@ -1393,7 +1393,7 @@
 #define FLAG_UNUSED_0x884                           (SYSTEM_FLAGS + 0x24) // Unused Flag
 #define FLAG_UNUSED_0x885                           (SYSTEM_FLAGS + 0x25) // Unused Flag
 #define FLAG_UNUSED_0x886                           (SYSTEM_FLAGS + 0x26) // Unused Flag
-#define FLAG_UNUSED_0x887                           (SYSTEM_FLAGS + 0x27) // Unused Flag
+#define FLAG_SYS_USE_SURF                           (SYSTEM_FLAGS + 0x27)
 
 #define FLAG_SYS_USE_FLASH                          (SYSTEM_FLAGS + 0x28)
 #define FLAG_SYS_USE_STRENGTH                       (SYSTEM_FLAGS + 0x29)

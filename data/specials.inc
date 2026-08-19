@@ -567,3 +567,30 @@ gSpecials::
 	def_special SetAbility
 	def_special ObjectEventInteractionGetApricornTreeData
 	def_special ObjectEventInteractionPickApricornTree
+	def_special RemoveItemFromMon
+	def_special GiveItemToMon
+	def_special SetMonOTData
+	def_special TakeMon
+	def_special TakeMon2
+	def_special IndexSpeciesInParty
+	def_special CheckMonItem
+	def_special GetMonLevel
+	def_special SetMonMoves
+	def_special SetSnorlax2
+	def_special DisplayHariyamaSnorlaxDmgCalc
+	def_special DisplayHariyamaGalladeDmgCalc
+	def_special DisplayRegigigasSnorlaxSuperpowerDmgCalc
+	def_special DisplayRegigigasSnorlaxCrushGripDmgCalc
+	def_special DisplaySableyeSnorlaxDmgCalc
+	def_special DisplaySableyeGalladeDmgCalc
+	def_special DisplayShuckleRockWreckerDmgCalc
+	def_special DisplayShuckleDynamicPunchDmgCalc
+	def_special DisplayShuckleDiamondStormDmgCalc
+	def_special DisplayShuckleNaturalGiftDmgCalc
+	def_special PlayTimeCounter_Stop
+	def_special PlayTimeCounter_Start
+	def_special UpMovePP
+	def_special BufferPlaytime
+	def_special BufferAdjustedTime
+	def_special BufferHints
+	def_special BufferSolutions

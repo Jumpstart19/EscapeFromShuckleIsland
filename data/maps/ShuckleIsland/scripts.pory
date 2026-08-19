@@ -1,0 +1,1666 @@
+mapscripts ShuckleIsland_MapScripts {
+
+    MAP_SCRIPT_ON_FRAME_TABLE [
+
+        VAR_SHUCKLE_ISLAND_STATE, 0: ShuckleIsland_EventScript_getMunchlax
+        VAR_SHUCKLE_ISLAND_STATE, 2: ShuckleIsland_EventScript_setBattle1NPCs
+        VAR_SHUCKLE_ISLAND_STATE, 4: ShuckleIsland_EventScript_setBattle2NPCs
+
+    ]
+
+    MAP_SCRIPT_ON_TRANSITION : ShuckleIsland_EventScript_setBattle1NPCs
+    MAP_SCRIPT_ON_LOAD : ShuckleIsland_EventScript_setBattle2NPCs
+
+}
+
+const MUNCHLAX_ID = 1
+const FATMAN_ID = 2
+const BERRY_MAN_ID = 3
+const TM_MERCHANT_ID = 4
+const RESET_ID = 5
+const LIL_BRO_ID = 6
+const BIG_BRO_ID = 7
+const HINT_ID = 8
+const NEW_MECH_ID = 9
+const BERRY_MAN_CUTSCENE_ID = 10
+const FOCUS_PUNCH_ID = 11
+const TWIN_AMY_ID = 12
+const TWIN_LIV_ID = 13
+const LIL_BRO2_ID = 14
+const BIG_BRO2_ID = 15
+const BERRY_MAN2_ID = 16
+const RESET2_ID = 17
+const HINT2_ID = 18
+
+
+script ShuckleIsland_EventScript_getMunchlax{
+
+    lockall
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_BATTLE_1)
+    msgbox(format("You awaken on a strange island."), MSGBOX_AUTOCLOSE)
+    waitmessage
+    playmoncry(SPECIES_MUNCHLAX, CRY_MODE_NORMAL)
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(face_right))
+    waitmoncry
+    applymovement(MUNCHLAX_ID, moves(walk_fast_left * 13, face_player))
+    waitmovement
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(face_left))
+    applymovement(MUNCHLAX_ID, moves(emote_exclamation_mark, delay_16 * 4))
+    playse(SE_PIN)
+    waitmovement
+    applymovement(MUNCHLAX_ID, moves(walk_right * 3 face_down))
+    waitmovement
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(face_up))
+    waitmovement
+    msgbox(Munchlax_text)
+    givemon(SPECIES_MUNCHLAX, 27, ITEM_NONE, ITEM_POKE_BALL, NATURE_IMPISH, 2, 0, 100, 0, 252, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_RECYCLE, MOVE_DEFENSE_CURL, MOVE_NONE, MOVE_NONE)
+    removeobject(MUNCHLAX_ID)
+    setflag(FLAG_RECEIVED_MUNCHLAX)
+    setflag(FLAG_SYS_POKEMON_GET)
+    setflag(FLAG_SYS_POKEDEX_GET)
+    special(SetUnlockedPokedexFlags)
+    setflag(FLAG_SYS_NATIONAL_DEX)
+    special(EnableNationalPokedex)
+    setvar(VAR_TEMP_1, 1)
+
+    while(var(VAR_TEMP_1) <= 493) { // Loop through all Pokémon up to Arceus
+
+        setseenmon(VAR_TEMP_1)
+        addvar(VAR_TEMP_1, 1)
+
+    }
+
+    setvar(VAR_SHUCKLE_ISLAND_STATE, 1)
+    setvar(VAR_NUM_SMALL_HINTS, 0)
+    setvar(VAR_NUM_MED_HINTS, 0)
+    setvar(VAR_NUM_LARGE_HINTS, 0)
+    setvar(VAR_NUM_SOLUTIONS, 0)
+    setflag(FLAG_SYS_B_DASH)
+    setflag(FLAG_BADGE01_GET)
+    setflag(FLAG_BADGE02_GET)
+    setflag(FLAG_BADGE03_GET)
+    setflag(FLAG_BADGE04_GET)
+    setflag(FLAG_BADGE05_GET)
+    setflag(FLAG_BADGE06_GET)
+    setflag(FLAG_BADGE07_GET)
+    setflag(FLAG_BADGE08_GET)
+    setflag(FLAG_SETUP_BATTLE_1_NPCS)
+    setflag(FLAG_SETUP_BATTLE_2_NPCS)
+    setmetatile(44, 9, 0x2FC, TRUE)
+    setmetatile(45, 9, 0x2FD, TRUE)
+    setmetatile(44, 10, 0x0AB, TRUE)
+    setmetatile(45, 10, 0x0AC, TRUE)
+    special(DrawWholeMapView)
+    playfanfare(MUS_OBTAIN_ITEM)
+    msgbox(format("Munchlax joined your party!"))
+    waitfanfare
+    closemessage
+    applymovement(BERRY_MAN_CUTSCENE_ID, moves(walk_fast_left * 13, face_right, delay_16 * 2, face_left, delay_16 * 2, face_up, delay_16 * 2, walk_up * 4))
+    waitmovement
+    removeobject(BERRY_MAN_CUTSCENE_ID)
+    releaseall
+    end  
+
+}
+
+script ShuckleIsland_EventScript_setBattle1NPCs{
+
+    if(!(flag(FLAG_STARTED_BATTLE_1))) {
+
+        setflag(FLAG_SETUP_BATTLE_1_NPCS)
+
+    }
+    elif (flag(0x64E)) {
+
+        setflag(FLAG_SETUP_BATTLE_1_NPCS)
+
+    }
+    else{
+
+        clearflag(FLAG_SETUP_BATTLE_1_NPCS)
+        clearflag(FLAG_WON_BATTLE_1A)
+        cleartrainerflag(TRAINER_TIMMY)
+        indexspeciesinparty(SPECIES_SHEDINJA)
+        if (var(VAR_RESULT) == 0) {
+
+            takemon(0)
+
+        }
+        elif (var(VAR_RESULT) == 1) {
+
+            takemon(1)
+
+        }
+
+        removeitem(VAR_BATTLE1_BERRY)
+        GiveItemToMon(0, VAR_BATTLE1_BERRY)
+
+    }
+
+    if (var(VAR_SHUCKLE_ISLAND_STATE) == 2) {
+
+        setvar(VAR_SHUCKLE_ISLAND_STATE, 1)
+
+    }
+
+}
+
+script ShuckleIsland_EventScript_Sign1{
+
+    lock
+    msgbox(Sign1_text, MSGBOX_SIGN)
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_Sign2{
+
+    lock
+    msgbox(Sign2_text, MSGBOX_SIGN)
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_fatMan{
+
+    lock
+    faceplayer
+    msgbox(fatMan_text)
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_berryGuy {
+
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_BERRY_GUY_1)) {
+
+        setflag(FLAG_SPOKE_BERRY_GUY_1)
+
+        if(!flag(FLAG_SPOKE_TM_GUY_1)) {
+
+            msgbox(berryGuyIntro_text)
+
+        }
+        else {
+
+            msgbox(berryGuyShortIntro_text)
+
+        }
+
+    }
+
+    if(!flag(FLAG_RECEIVED_BERRY_1)) {
+
+        msgbox(berryGuyPresentOptions_text)
+
+        dynmultipush("Liechi Berry", ITEM_LIECHI_BERRY)
+        dynmultipush("Ganlon Berry", ITEM_GANLON_BERRY)
+        dynmultipush("Salac Berry", ITEM_SALAC_BERRY)
+        dynmultipush("Petaya Berry", ITEM_PETAYA_BERRY)
+        dynmultipush("Apicot Berry", ITEM_APICOT_BERRY)
+        dynmultipush("Lansat Berry", ITEM_LANSAT_BERRY)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back when you know\nwhich berry you want!")
+
+        }
+        else {
+
+            copyvar(VAR_BATTLE1_BERRY, VAR_RESULT)
+            giveitem(VAR_BATTLE1_BERRY, 1)
+            setflag(FLAG_RECEIVED_BERRY_1)
+
+        }
+    }
+    else {
+
+        msgbox("I hope you make good use of that berry!")
+
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_TMGuy {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_TM_GUY_1)) {
+
+        setflag(FLAG_SPOKE_TM_GUY_1)
+
+        if(!flag(FLAG_SPOKE_BERRY_GUY_1)) {
+
+            msgbox(TMGuyIntro_text)
+
+        }
+        else {
+
+            msgbox(TMGuyShortIntro_text)
+
+        }
+
+    }
+
+    if(!flag(FLAG_RECEIVED_TM_1)) {
+        
+        msgbox(TMGuyPresentOptions_text)
+        
+        dynmultipush("TM56 Fling", ITEM_TM56)
+        dynmultipush("TM83 Natural Gift", ITEM_TM83)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back when you know\nwhich TM you want!")
+
+        }
+        else {
+
+            giveitem(VAR_RESULT, 1)
+            setflag(FLAG_RECEIVED_TM_1)
+            
+        }
+    }
+    else {
+
+        msgbox("Teach that TM to Munchlax and\ndefeat those brothers!")
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIsland_EventScript_resetNPC {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_RESET_NPC)) {
+
+        setflag(FLAG_SPOKE_RESET_NPC)
+        msgbox(resetNPCIntro_text)
+
+    }
+
+    if(!(flag(FLAG_RECEIVED_BERRY_1) || flag(FLAG_RECEIVED_TM_1))) {
+
+        msgbox(resetNPCNothingToReset_text)
+
+    }
+    else {
+
+        msgbox("What would you like to reset?\n(Press B to exit)")
+
+        if(flag(FLAG_RECEIVED_BERRY_1)) {
+
+            dynmultipush("Reset Berry", 0)
+
+        }
+
+        if(flag(FLAG_RECEIVED_TM_1)) {
+
+            dynmultipush("Reset TM", 1)
+
+        }
+
+        if(flag(FLAG_RECEIVED_BERRY_1) && flag(FLAG_RECEIVED_TM_1)) {
+
+            dynmultipush("Reset All", 2)
+
+        }
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back if you would ever\nlike to reset your actions!")
+
+        }
+        else {
+
+            msgbox("One moment while I reset your actions.", MSGBOX_AUTOCLOSE)
+            fadescreen(FADE_TO_BLACK)
+
+            if(var(VAR_RESULT) == 0) {
+
+                call(ResetBerry_1)
+
+            }
+            elif(var(VAR_RESULT) == 1) {
+
+                call(ResetTM_1)
+
+            }
+            elif(var(VAR_RESULT) == 2) {
+
+                call(ResetTM_1)
+                call(ResetBerry_1)
+
+            }
+
+            fadescreen(FADE_FROM_BLACK)
+            msgbox("Your actions have been reset!")
+
+        }
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIsland_EventScript_hintNPC {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+
+    dynmultipush("Small Hint", 1)
+    dynmultipush("Medium Hint", 2)
+    dynmultipush("Large Hint", 3)
+
+    if (flag(FLAG_SM_HINT_BATTLE_1) && flag(FLAG_MED_HINT_BATTLE_1) && flag(FLAG_LRG_HINT_BATTLE_1)) {
+
+        dynmultipush("Solution", 4)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+            msgbox(hintNPCRefusedHint_text)
+
+        }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        msgbox(hintNPCBattle1SmallHint_text)
+
+        if (!flag(FLAG_SM_HINT_BATTLE_1)) {
+
+            setflag(FLAG_SM_HINT_BATTLE_1)
+            addvar(VAR_NUM_SMALL_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+        msgbox(hintNPCBattle1MedHint_text)
+
+        if (!flag(FLAG_MED_HINT_BATTLE_1)) {
+
+            setflag(FLAG_MED_HINT_BATTLE_1)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 3) {
+
+        msgbox(hintNPCBattle1LargeHint_text)
+
+        if (!flag(FLAG_LRG_HINT_BATTLE_1)) {
+
+            setflag(FLAG_LRG_HINT_BATTLE_1)
+            addvar(VAR_NUM_LARGE_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 4) {
+
+        if (!flag(FLAG_SOLUTION_BATTLE_1)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_BATTLE_1)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/MW4LPPMXSjE")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_SOLUTION_BATTLE_1)) {
+
+                setflag(FLAG_SOLUTION_BATTLE_1)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIsland_EventScript_NewMechNPC {
+    
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_NEW_MECH_NPC)) {
+
+        setflag(FLAG_SPOKE_NEW_MECH_NPC)
+        msgbox(newMechNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what new mechanics do\nyou want explained? (Press B to exit)")
+
+    dynmultipush("Skill Swap", 0)
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("Stop by if you ever want\nthe new mechanics explained again!")
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox("Skill Swap can now be used\nto swap the ability Wonder Guard.")
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIsland_EventScript_Battle1a{
+
+    if (!flag(FLAG_STARTED_BATTLE_1)) {
+
+        setflag(FLAG_STARTED_BATTLE_1)
+        clearflag(FLAG_SETUP_BATTLE_1_NPCS)
+        trainerbattle_single(TRAINER_TIMMY, Battle1a_Intro_text, Battle1a_Lose_text, ShuckleIsland_EventScript_PostBattle1a)
+
+    }
+    else {
+
+        trainerbattle_single(TRAINER_TIMMY, Battle1a_Intro_Short_text, Battle1a_Lose_text, ShuckleIsland_EventScript_PostBattle1a)
+
+    }
+
+}
+
+script ShuckleIsland_EventScript_PostBattle1a {
+
+    lockall
+    special(HealPlayerParty)
+    msgbox(Battle1a_PostBattle_text)
+    givemon(SPECIES_SHEDINJA, 30, ITEM_CUSTAP_BERRY, ITEM_POKE_BALL, NATURE_BRAVE, 0, 2, 0, 252, 0, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_BUG_BITE, MOVE_NONE, MOVE_NONE, MOVE_NONE)
+    playfanfare(MUS_OBTAIN_ITEM)
+    msgbox("You received Timmy's Shedinja\.\nbut you don't feel great about it.")
+    waitfanfare
+    applymovement(LIL_BRO_ID, moves(walk_right, face_up))
+    waitmovement
+    msgbox(Battle1a_PostBattle2_text)
+    waitmessage
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(face_right))
+    applymovement(LIL_BRO_ID, moves(walk_fast_right * 8))
+    msgbox("WAAAAAAH!")
+    waitmovement
+    removeobject(LIL_BRO_ID)
+    setflag(FLAG_WON_BATTLE_1A)
+    releaseall
+    call(ShuckleIsland_EventScript_Battle1b)
+
+}
+
+script ShuckleIsland_EventScript_Battle1b {
+
+    lockall
+    applymovement(BIG_BRO_ID, moves(walk_down * 2, face_left))
+    waitmovement
+    setvar(VAR_SHUCKLE_ISLAND_STATE, 2)
+    releaseall
+    trainerbattle_single(TRAINER_JOHNNY, Battle1b_Intro_text, Battle1b_Lose_text, ShuckleIsland_EventScript_PostBattle1b)
+
+}
+
+script ShuckleIsland_EventScript_PostBattle1b {
+
+    lockall
+    special(HealPlayerParty)
+    msgbox(Battle1b_PostBattle_text)
+    indexspeciesinparty(SPECIES_SHEDINJA)
+    if (var(VAR_RESULT) == 0) {
+
+        takemon(0)
+
+    }
+    elif (var(VAR_RESULT) == 1) {
+
+        takemon(1)
+
+    }
+    givemon(SPECIES_GALLADE, 28, ITEM_NONE, ITEM_POKE_BALL, NATURE_LONELY, 0, 0, 0, 0, 0, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_SKILL_SWAP, MOVE_MIMIC, MOVE_NONE, MOVE_NONE)
+    playfanfare(MUS_OBTAIN_ITEM)
+    msgbox("You returned Timmy's Shedinja\nand received Johnny's Gallade!")
+    waitfanfare
+    applymovement(BIG_BRO_ID, moves(face_right))
+    waitmovement
+    msgbox("HEY TIMMY, I GOT YOUR SHEDINJA BACK!", MSGBOX_AUTOCLOSE)
+    applymovement(BIG_BRO_ID, moves(walk_right * 3))
+    waitmovement
+    msgbox("I should probably teach him how to\nproperly choose held items sometime\.", MSGBOX_AUTOCLOSE)
+    applymovement(BIG_BRO_ID, moves(walk_right * 5))
+    waitmovement
+    removeobject(BIG_BRO_ID)
+    setflag(FLAG_WON_BATTLE_1B)
+    setmetatile(44, 9, 0x2FC, TRUE)
+    setmetatile(45, 9, 0x2FD, TRUE)
+    setmetatile(44, 10, 0x0AB, TRUE)
+    setmetatile(45, 10, 0x0AC, TRUE)
+    special(DrawWholeMapView)
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_BATTLE_2)
+    releaseall
+
+}
+
+script ShuckleIsland_EventScript_setBattle2NPCs{
+
+    if(!(flag(FLAG_STARTED_BATTLE_2))) {
+
+        setflag(FLAG_SETUP_BATTLE_2_NPCS)
+        setmetatile(44, 9, 0x2FC, TRUE)
+        setmetatile(45, 9, 0x2FD, TRUE)
+        setmetatile(44, 10, 0x0AB, TRUE)
+        setmetatile(45, 10, 0x0AC, TRUE)
+        special(DrawWholeMapView)
+
+    }
+    elif (flag(0x6E1)) {
+
+        setflag(FLAG_SETUP_BATTLE_2_NPCS)
+
+    }
+    else{
+
+        clearflag(FLAG_SETUP_BATTLE_2_NPCS)
+        removeitemfrommon(0)
+        removeitemfrommon(1)
+        removeitem(VAR_BATTLE2_BERRY)
+        giveitemnojingle(VAR_BATTLE2_BERRY, 1)
+        setmetatile(44, 9, 0x2FC, TRUE)
+        setmetatile(45, 9, 0x2FD, TRUE)
+        setmetatile(44, 10, 0x0AB, TRUE)
+        setmetatile(45, 10, 0x0AC, TRUE)
+        special(DrawWholeMapView)
+
+    }
+
+    if (var(VAR_SHUCKLE_ISLAND_STATE) == 4) {
+
+        setvar(VAR_SHUCKLE_ISLAND_STATE, 3)
+
+    }
+
+}
+
+script ShuckleIsland_EventScript_FocusPunchTutor {
+
+    lock
+
+    if(!flag(FLAG_SPOKE_FOCUS_PUNCH_TUTOR)) {
+
+        setflag(FLAG_SPOKE_FOCUS_PUNCH_TUTOR)
+        msgbox(FocusPunchTutorIntro1_text)
+        faceplayer
+        msgbox(FocusPunchTutorIntro2_text)
+
+    }
+
+    if(!flag(FLAG_FOCUS_PUNCH)) {
+
+        faceplayer
+        msgbox("Now then, should I teach Focus Punch\nto one of your Pokémon?", MSGBOX_YESNO)
+
+        if (var(VAR_RESULT) == YES) {
+
+            msgbox("Alright, which Pokémon\nshould learn Focus Punch?")
+            setvar(VAR_0x8005, MOVE_FOCUS_PUNCH)
+            special(ChooseMonForMoveTutor)
+            waitstate
+
+            if (var(VAR_RESULT) == 0) {
+
+                msgbox("Alright, well you know where to find me\nif you change your mind.\pNot like we're going anywhere\.")
+
+            }
+            else {
+
+                setflag(FLAG_FOCUS_PUNCH)
+                msgbox("Now give those girls a solid punching!\pEr\.I mean their Pokémon\.")
+
+            }
+
+        }
+        else {
+
+            msgbox("Alright, well you know where to find me\nif you change your mind.\pNot like we're going anywhere\.")
+
+        }
+
+    }
+    elif(flag(FLAG_WON_BATTLE_2)) {
+
+        faceplayer
+        msgbox(FocusPunchTutorPostBattle2_text)
+
+    }
+    else{
+
+        faceplayer
+        msgbox("Now give those girls a solid punching!\pEr\.I mean their Pokémon\.")
+
+    }
+
+    applymovement(FOCUS_PUNCH_ID, moves(face_right))
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_berryGuy2 {
+
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_BERRY_GUY_2)) {
+
+        setflag(FLAG_SPOKE_BERRY_GUY_2)
+        msgbox(berryGuyIntro2_text)
+
+    }
+
+    if(!flag(FLAG_RECEIVED_BERRY_2)) {
+
+        msgbox(berryGuyPresentOptions_text)
+
+        dynmultipush("Liechi Berry", ITEM_LIECHI_BERRY)
+        dynmultipush("Ganlon Berry", ITEM_GANLON_BERRY)
+        dynmultipush("Salac Berry", ITEM_SALAC_BERRY)
+        dynmultipush("Petaya Berry", ITEM_PETAYA_BERRY)
+        dynmultipush("Apicot Berry", ITEM_APICOT_BERRY)
+        dynmultipush("Lansat Berry", ITEM_LANSAT_BERRY)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back when you know\nwhich berry you want!")
+
+        }
+        else {
+
+            copyvar(VAR_BATTLE2_BERRY, VAR_RESULT)
+            giveitem(VAR_BATTLE2_BERRY, 1)
+            setflag(FLAG_RECEIVED_BERRY_2)
+
+        }
+    }
+    else {
+
+        msgbox("I hope you make good use of that berry!")
+
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_resetNPC2 {
+
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_RESET_NPC)) {
+
+        setflag(FLAG_SPOKE_RESET_NPC)
+        msgbox(resetNPCIntro_text)
+
+    }
+
+    if(!(flag(FLAG_RECEIVED_BERRY_2) || flag(FLAG_FOCUS_PUNCH))) {
+
+        msgbox(resetNPCNothingToReset_text)
+
+    }
+    else {
+
+        msgbox("What would you like to reset?\n(Press B to exit)")
+
+        if(flag(FLAG_RECEIVED_BERRY_2)) {
+
+            dynmultipush("Reset Berry", 0)
+
+        }
+
+        if(flag(FLAG_FOCUS_PUNCH)) {
+
+            dynmultipush("Reset Focus Punch", 1)
+
+        }
+
+        if(flag(FLAG_RECEIVED_BERRY_2) && flag(FLAG_FOCUS_PUNCH)) {
+
+            dynmultipush("Reset All", 2)
+
+        }
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back if you would ever\nlike to reset your actions!")
+
+        }
+        else {
+
+            msgbox("One moment while I reset your actions.", MSGBOX_AUTOCLOSE)
+            fadescreen(FADE_TO_BLACK)
+
+            if(var(VAR_RESULT) == 0) {
+
+                call(ResetBerry_2)
+
+            }
+            elif(var(VAR_RESULT) == 1) {
+
+                call(ResetFocusPunch)
+
+            }
+            elif(var(VAR_RESULT) == 2) {
+
+                call(ResetBerry_2)
+                call(ResetFocusPunch)
+
+            }
+
+            fadescreen(FADE_FROM_BLACK)
+            msgbox("Your actions have been reset!")
+
+        }
+
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_hintNPC2 {
+
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+    
+    dynmultipush("Small Hint", 1)
+    dynmultipush("Medium Hint", 2)
+    dynmultipush("Large Hint", 3)
+
+    if (flag(FLAG_SM_HINT_BATTLE_2) && flag(FLAG_MED_HINT_BATTLE_2) && flag(FLAG_LRG_HINT_BATTLE_2)) {
+
+        dynmultipush("Solution", 4)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+            msgbox(hintNPCRefusedHint_text)
+
+        }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        msgbox(hintNPCBattle2SmallHint_text)
+
+        if (!flag(FLAG_SM_HINT_BATTLE_2)) {
+
+            setflag(FLAG_SM_HINT_BATTLE_2)
+            addvar(VAR_NUM_SMALL_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+        msgbox(hintNPCBattle2MedHint_text)
+
+        if (!flag(FLAG_MED_HINT_BATTLE_2)) {
+
+            setflag(FLAG_MED_HINT_BATTLE_2)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 3) {
+
+        msgbox(hintNPCBattle2LargeHint_text)
+
+        if (!flag(FLAG_LRG_HINT_BATTLE_2)) {
+
+            setflag(FLAG_LRG_HINT_BATTLE_2)
+            addvar(VAR_NUM_LARGE_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 4) {
+
+        if (!flag(FLAG_SOLUTION_BATTLE_2)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_BATTLE_2)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/cGvrpLpmC9A")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_SOLUTION_BATTLE_2)) {
+
+                setflag(FLAG_SOLUTION_BATTLE_2)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_NewMechNPC2 {
+    
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_NEW_MECH_NPC)) {
+
+        setflag(FLAG_SPOKE_NEW_MECH_NPC)
+        msgbox(newMechNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what new mechanics do\nyou want explained? (Press B to exit)")
+
+    dynmultipush("Minun AI", 0)
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("Stop by if you ever want\nthe new mechanics explained again!")
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox(minunAI_text)
+
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIsland_EventScript_Battle2_Amy {
+
+    lockall
+    faceplayer
+
+    if (flag(FLAG_WON_BATTLE_2)) {
+
+        msgbox(Battle2_Post_Battle_text, MSGBOX_AUTOCLOSE)
+        releaseall
+
+    }
+    else {
+
+        setvar(VAR_SHUCKLE_ISLAND_STATE, 4)
+        releaseall
+
+        if (!flag(FLAG_STARTED_BATTLE_2)) {
+
+            setflag(FLAG_STARTED_BATTLE_2)
+            clearflag(FLAG_SETUP_BATTLE_2_NPCS)
+            trainerbattle_double(TRAINER_AMY_AND_LIV_1, Battle2_Intro_text, Battle2_Lose_text, Not_Enough_text, ShuckleIsland_EventScript_PostBattle2)
+
+        }
+        else {
+
+            trainerbattle_double(TRAINER_AMY_AND_LIV_1, Battle2_Amy_Intro_text, Battle2_Lose_text, Not_Enough_text, ShuckleIsland_EventScript_PostBattle2)
+
+        }
+
+    }
+
+}
+
+script ShuckleIsland_EventScript_Battle2_Liv {
+
+    lockall
+    faceplayer
+
+    if (flag(FLAG_WON_BATTLE_2)) {
+
+        msgbox(Battle2_Post_Battle_text, MSGBOX_AUTOCLOSE)
+        releaseall
+
+    }
+    else {
+
+        setvar(VAR_SHUCKLE_ISLAND_STATE, 4)
+        releaseall
+
+        if (!flag(FLAG_STARTED_BATTLE_2)) {
+
+            setflag(FLAG_STARTED_BATTLE_2)
+            clearflag(FLAG_SETUP_BATTLE_2_NPCS)
+            trainerbattle_double(TRAINER_AMY_AND_LIV_1, Battle2_Intro_text, Battle2_Lose_text, Not_Enough_text, ShuckleIsland_EventScript_PostBattle2)
+
+        }
+        else {
+
+            trainerbattle_double(TRAINER_AMY_AND_LIV_1, Battle2_Liv_Intro_text, Battle2_Lose_text, Not_Enough_text, ShuckleIsland_EventScript_PostBattle2)
+
+        }
+
+    }
+
+}
+
+script ShuckleIsland_EventScript_PostBattle2 {
+
+    lockall
+    special(HealPlayerParty)
+    setmetatile(44, 9, 0x11C, FALSE)
+    setmetatile(45, 9, 0x11C, FALSE)
+    setmetatile(44, 10, 0x124, FALSE)
+    setmetatile(45, 10, 0x124, FALSE)
+    special(DrawWholeMapView)
+    setflag(FLAG_WON_BATTLE_2)
+    setflag(FLAG_SETUP_BATTLE_3_NPCS)
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_CAVE_ICE_F1)
+    releaseall
+
+
+}
+
+script ShuckleIsland_EventScript_Brothers {
+
+    lockall
+
+    if (flag(FLAG_SAILOR_DIED) && !flag(FLAG_TEMP_1E)) {
+
+        setflag(FLAG_TEMP_1E)
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("So, Timmy? What did you end up doing\nwith that Lagging Tail?")
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("I couldn't find a good use for it,\nso I gave the tail to a sailor.\pI thought he would look good with it.")
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Well, did he?")
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("No, he didn't. But don't worry.\pI don't think anyone will have to\nsee that ugly tail ever again!")
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Whatever you say, Timmy\.")
+
+    }
+    elif (!flag(FLAG_TEMP_1A) || flag(FLAG_TEMP_1D)) {
+
+        setflag(FLAG_TEMP_1A)
+        clearflag(FLAG_TEMP_1B)
+        clearflag(FLAG_TEMP_1C)
+        clearflag(FLAG_TEMP_1D)
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Hey, did you actually give away your\nGallade just to get my Shedinja back?")
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Kind of. It was an extra Gallade I had\nthat I didn't even EV train.")
+        applymovement(LIL_BRO2_ID, moves(emote_exclamation_mark, delay_16 * 2))
+        playse(SE_PIN)
+        waitse
+        msgbox("Wow, you're training an Eevee?\nWhat do you want it to evolve into?\pBased on all those pictures you have,\nI guess you want a Vaporeon?")
+        applymovement(BIG_BRO2_ID, moves(jump_in_place_right, delay_16 * 2))
+        playse(SE_LEDGE)
+        waitse
+        msgbox("Timmy! I told you to stay out\nof my private drawer!")
+
+    }
+    elif (!flag(FLAG_TEMP_1B)) {
+
+        setflag(FLAG_TEMP_1B)
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("So now do you see why it could be good\nto give your Shedinja a choice item?")
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("No! Why would I want to lock my Shedinja\ninto only using a single move?")
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Timmy, your Shedinja\nonly knows Bug Bite\.")
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Ok! I'll give my Shedinja Choice Specs.\nThanks, Johnny!")
+
+    }
+    elif (!flag(FLAG_TEMP_1C)) {
+
+        setflag(FLAG_TEMP_1C)
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("So, now do you understand why your\nShedinja shouldn't hold a Custap Berry?")
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Because it doesn't like\nthe sweet flavor of the berry?")
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Well, that's technically true,\nbut it's not the reason-")
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Haha! I got something right!")
+
+    }
+    else {
+
+        setflag(FLAG_TEMP_1D)
+        clearflag(FLAG_TEMP_1E)
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Do you think they got the\nTimmy, Johnny, Spike reference?")
+        applymovement(LIL_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Probably not. I don't even get it!")
+        applymovement(BIG_BRO2_ID, moves(walk_in_place_right, delay_16 * 2))
+        waitmovement
+        msgbox("Yeah, and they're probably\ntoo lazy to look it up.\pLet's just hope they're not as lazy\nabout looking up things on Bulbapedia.")
+        applymovement(LIL_BRO2_ID, moves(face_down))
+        applymovement(BIG_BRO2_ID, moves(face_down, delay_16 * 8))
+        waitmovement
+        applymovement(LIL_BRO2_ID, moves(face_right))
+        applymovement(BIG_BRO2_ID, moves(face_right))
+        waitmovement
+
+    }
+
+    releaseall
+
+}
+
+script ResetBerry_1 {
+
+    clearflag(FLAG_RECEIVED_BERRY_1)
+    removeitemfrommon(0)
+    removeitem(VAR_BATTLE1_BERRY)
+    setvar(VAR_BATTLE1_BERRY, 0)
+
+}
+
+script ResetTM_1 {
+
+    clearflag(FLAG_RECEIVED_TM_1)
+    removeitemfrommon(0)
+    removeallitem(ITEM_TM17)
+    removeallitem(ITEM_TM56)
+    removeallitem(ITEM_TM83)
+    setmonmove(0, 0, MOVE_RECYCLE)
+    setmonmove(0, 1, MOVE_DEFENSE_CURL)
+    setmonmove(0, 2, MOVE_NONE)
+    setmonmove(0, 3, MOVE_NONE)
+    removeitem(VAR_BATTLE1_BERRY)
+    GiveItemToMon(0, VAR_BATTLE1_BERRY)
+
+}
+
+script ResetBerry_2 {
+
+    clearflag(FLAG_RECEIVED_BERRY_2)
+    removeitemfrommon(0)
+    removeitemfrommon(1)
+    removeitem(VAR_BATTLE2_BERRY)
+    setvar(VAR_BATTLE2_BERRY, 0)
+
+}
+
+script ResetFocusPunch {
+
+    clearflag(FLAG_FOCUS_PUNCH)
+
+    indexspeciesinparty(SPECIES_MUNCHLAX)
+        if (var(VAR_RESULT) == 0) {
+
+            setmonmove(0, 0, MOVE_RECYCLE)
+            setmonmove(0, 1, MOVE_DEFENSE_CURL)
+            setmonmove(0, 2, MOVE_NATURAL_GIFT)
+            setmonmove(0, 3, MOVE_NONE)
+
+            setmonmove(1, 0, MOVE_SKILL_SWAP)
+            setmonmove(1, 1, MOVE_MIMIC)
+            setmonmove(1, 2, MOVE_NONE)
+            setmonmove(1, 3, MOVE_NONE)
+
+        }
+        elif (var(VAR_RESULT) == 1) {
+
+            setmonmove(1, 0, MOVE_RECYCLE)
+            setmonmove(1, 1, MOVE_DEFENSE_CURL)
+            setmonmove(1, 2, MOVE_NATURAL_GIFT)
+            setmonmove(1, 3, MOVE_NONE)
+
+            setmonmove(0, 0, MOVE_SKILL_SWAP)
+            setmonmove(0, 1, MOVE_MIMIC)
+            setmonmove(0, 2, MOVE_NONE)
+            setmonmove(0, 3, MOVE_NONE)
+
+        }
+
+}
+
+text Munchlax_text {
+
+    "Munchlax looks tired and unsettled,\n"
+	"as if it were being chased.\p"
+	"It seems to feel safe with you, though.\p"
+	"In fact\."
+
+}
+
+text Sign1_text {
+
+    "Escape From Shuckle Island\n"
+    "Mechanics and Tips:\p"
+    "1) All mechanics, movesets, types, etc.\n"
+    "follow Gen IV rules.\p"
+    "2) ALL forms of randomness\n"
+    "have been removed.\p"
+    "This includes: opponent move selection,\n"
+    "move accuracies, secondary effects,\l"
+    "move/effect durations, and more!\p"
+    "3) Most battles use custom trainer AI.\p"
+    "Where necessary, an NPC will explain\n"
+    "the AI behavior for the nearby battle.\p"
+    "4) Battles do not award EXP or EVs.\p"
+    "Fixed EV and IV values can be viewed on\n"
+    "the skills summary page by pressing A.\p"
+    "5) All damage rolls deal maximum damage.\p"
+    "This can be helpful if you ever\n"
+    "want to run a damage calculation!\p"
+    "6) Save states are never required.\n"
+    "An NPC can reset any choices you make.\p"
+    "7) When stuck, look up Gen IV mechanics\n"
+    "for all relevant moves on Bulbapedia."
+
+}
+
+text Sign2_text {
+
+    "There are no hidden items in this game.\p"
+    "But feel free to waste your time\n"
+    "by pressing A on everything!"
+
+}
+
+text fatMan_text {
+
+    "Hmm, your Munchlax\.\n"
+    "It has such a strange ability!\p"
+    "I've only ever seen Munchlax with\n"
+    "Pickup or Thick Fat before.\p"
+    "Could this be the Munchlax\n"
+    "Team Shuckle is after?"
+
+}
+
+text berryGuyIntro_text {
+
+    "I'm just a simple a berry salesman\n"
+    "trying to leave this island,\l"
+    "but two brothers won't let anyone pass!\p"
+    "I'll let you take a berry from my supply\n"
+    "if you think it will aid you in battle."
+
+}
+
+text berryGuyShortIntro_text {
+
+    "I'm just a simple a berry salesman\n"
+    "trying to leave this island,\l"
+    "but two brothers won't let anyone pass!\p"
+    "I'll let you take a berry from my supply\n"
+    "if you think it will aid you in battle."
+
+}
+
+text berryGuyPresentOptions_text {
+
+    "Take a berry, but choose carefully!\n"
+    "You can only take one. (Press B to exit)"
+
+}
+
+text TMGuyIntro_text {
+
+    "Hey there! I'm a wandering TM salesman.\p"
+    "I can give you a TM to help you defeat\n"
+    "the brothers blocking the nearby path."
+
+}
+
+text TMGuyShortIntro_text {
+
+    "Hey there! I'm a wandering TM salesman.\p"
+    "I can give you a TM to help you defeat\n"
+    "the brothers blocking the nearby path."
+
+}
+
+text TMGuyPresentOptions_text {
+
+    "Take a TM, but choose carefully!\n"
+    "You can only take one. (Press B to exit)"
+
+}
+
+text resetNPCIntro_text {
+
+    "Do you find yourself wishing you could\n"
+    "redo one of your previous choices?\p"
+    "If so, I can help! I can reset various\n"
+    "actions you've made with other NPCs."
+
+}
+
+text resetNPCNothingToReset_text {
+
+    "Oh, it seems you haven't made any\n"
+    "resettable choices yet\.\p"
+    "Don't worry about making mistakes.\n"
+    "Just try something!\p"
+    "You can always come back here\n"
+    "and reset whenever you want."
+
+}
+
+text hintNPCIntro_text {
+
+    "Solving puzzles can be difficult, right?\p"
+    "If you ever find yourself stuck and in\n"
+    "need of a hint, please come talk to me."
+
+}
+
+text hintNPCRefusedHint_text {
+
+    "Don't be shy about taking hints.\p"
+    "You may even end up saving time\n"
+    "if you're truly stuck on a puzzle!"
+
+}
+
+text hintNPCAboutHints_text {
+
+    "Each puzzle provides hints that add to\n"
+    "your final completion time (your score).\p"
+    "Small hints provide a small nudge\n"
+    "in the right direction\l"
+    "and add 2 minutes to your final time.\p"
+    "Medium hints strongly point towards\n"
+    "part of the solution\l"
+    "and add 10 minutes to your final time.\p"
+    "Large hints explicitly reveal\n"
+    "part of the solution\l"
+    "and add 20 minutes to your final time.\p"
+    "The complete solution to a battle will\n"
+    "never be fully covered by all 3 hints.\p"
+    "If all hints are used, you can view\n"
+    "a solution, adding 1 hour to your time."
+
+}
+
+text hintNPCBattle1SmallHint_text {
+
+    "You can defeat the first brother\n"
+    "with either of the two TMs.\p"
+    "However, only one TM allows you to\n"
+    "defeat the second brother."
+
+}
+
+text hintNPCBattle1MedHint_text {
+
+    "Recycle has unique mechanics in Gen IV.\p"
+    "There are ways a Pokémon can recycle a\n"
+    "berry it neither held nor consumed!"
+
+}
+
+text hintNPCBattle1LargeHint_text {
+
+    "The older brother's Shedinja must\n"
+    "be defeated by using Natural Gift\l"
+    "while holding a Custap berry."
+
+}
+
+text hintNPCSolution_text {
+
+    "If you're truly stuck, I can provide\n"
+    "a link to a solution video.\p"
+    "This will add 1 hour to your final time.\n"
+    "Do you still want to see the solution?"
+
+}
+
+text newMechNPCIntro_text {
+
+    "Throughout this escape room, there are\n"
+    "some minor changes to game mechanics.\p"
+    "I'll provide information about these\n"
+    "changes as well as custom trainer AI."
+
+}
+
+text Battle1a_Intro_text {
+
+    "Nobody is getting through while\n"
+    "me and my brother are on guard!\p"
+    "Good thing I just powered up my\n"
+    "Shedinja by giving it a tail!\p"
+    "Now, prepare to lose, mister!"
+
+}
+
+text Battle1a_Lose_text {
+
+    "WAAAAAAH!\n"
+    "Why didn't the tail work?"
+
+}
+
+text Battle1a_Intro_Short_text {
+
+    "By giving it a tail,\n"
+    "I've made my Shedinja unstoppable!"
+
+}
+
+text Battle1a_PostBattle_text {
+
+    "Sniff\.sniff\.\n"
+    "I knew that tail was a stupid idea!\p"
+    "I don't even want my Shedinja anymore,\n"
+    "so just take it!\p" 
+    "I even gave it a berry that I'm sure\n"
+    "it can use super well."
+
+}
+
+text Battle1a_PostBattle2_text {
+
+    "HEY BIG BRO!\p"
+    "You can have my stupid tail.\n"
+    "But don't give it to your Shedinja!\p"
+    "Now go and teach this meanie a lesson!"
+    
+}
+
+text Battle1b_Intro_text {
+
+    "Are you picking on my little bro?\p"
+    "Well if you mess with my brother,\n"
+    "you have to deal with me!\p"
+    "FOR TIMMY!"
+
+}
+
+text Battle1b_Lose_text {
+
+    "Wow, you really are a Spike!"
+
+}
+
+text Battle1b_PostBattle_text {
+
+    "Hey man, I'm just trying to\n"
+    "look out for my brother, ok?\p"
+    "I'm sure he didn't mean to give you\n"
+    "his Shedinja, so can I have it back?\p"
+    "I'll even give you my Gallade in return."
+
+}
+
+text FocusPunchTutorIntro1_text {
+
+    "FOCUS\.\p"
+    "...\p"
+    "\.PUNCH!\p"
+    "Hmm, maybe I needed to focus more?"
+
+}
+
+text FocusPunchTutorIntro2_text {
+
+    "Can you show me the power of\n"
+    "Focus Punch so I can clear the path?\p"
+    "Maybe you can use Focus Punch\n"
+    "on those girls to the south.\p"
+    "What? No! I'm not asking you to\n"
+    "punch small children!\p"
+    "Use Focus Punch to help\n"
+    "defeat them in a Pokémon battle!"
+
+}
+
+text FocusPunchTutorPostBattle2_text {
+
+    "I was able to clear the path after\n"
+    "watching you pummel those girls!\p"
+    "Don't worry, I let everyone know\n"
+    "it was all thanks to you\l"
+    "throwing Focus Punches at children!"
+
+}
+
+text berryGuyIntro2_text {
+
+    "Unbelievable!\p"
+    "That TM salesman charged straight for\n"
+    "the cave and triggered a rockslide!\p"
+    "If you think it would help here,\n"
+    "I could let you use another berry."
+
+}
+
+text hintNPCBattle2SmallHint_text {
+
+    "Start with the basics: which Pokémon\n"
+    "should learn Focus Punch?\p"
+    "Can you win if Munchlax holds a berry?\n"
+    "Also, which enemy must you KO first?"
+
+}
+
+text hintNPCBattle2MedHint_text {
+
+    "You'll never win this battle with\n"
+    "Focus Punch's low priority.\p"
+    "Is there any way to use Focus Punch\n"
+    "with normal priority, even once?"
+
+}
+
+text hintNPCBattle2LargeHint_text {
+
+    "Gallade's first move must be\n"
+    "using Skill Swap on Munchlax.\p"
+    "This will use a new move and change the\n"
+    "HP at which Gallade consumes its berry\l"
+    "(two berries give valid solutions)."
+
+}
+
+text Battle2_Post_Battle_text {
+
+    "Wow, I guess you really like\n"
+    "picking on children, huh?"
+
+}
+
+text Battle2_Intro_text {
+
+    "Hey, we've heard about you!\n"
+    "You bullied our friend Timmy!\p"
+    "We'll show you not to mess with\n"
+    "the kids of Shuckle Island!"
+
+}
+
+text Battle2_Lose_text {
+
+    "WEE-OOO-WEE-OOO! ALERT! ALERT!\n"
+    "WE HAVE A VERIFIED CHILD BEATER HERE!"
+
+}
+
+text Not_Enough_text {
+
+    "Uhh\.you shouldn't be able to see this.\p"
+    "You must have broken something, so you\n"
+    "should let the dev know what happened."
+
+}
+
+text Battle2_Amy_Intro_text {
+
+    "Hah! You're neither fast nor\n"
+    "defensive enough to outlast my Minun!"
+
+}
+
+text Battle2_Liv_Intro_text {
+
+    "Yeah, that's the Munchlax that\n"
+    "bullied Timmy. Plusle, attack!"
+
+}
+
+text minunAI_text {
+
+    "Minun will always use Last Resort to\n"
+    "target Gallade, if it can do so.\p"
+    "Minun will then prioritize using Encore\n"
+    "to lock an enemy into Focus Punch.\p"
+    "Otherwise, Minun will use Helping Hand."
+
+}

@@ -224,8 +224,12 @@ Text_CantSmash:
 EventScript_StrengthBoulder::
 	lockall
 	goto_if_set FLAG_SYS_USE_STRENGTH, EventScript_CheckActivatedBoulder
-	checkfieldmove FIELD_MOVE_STRENGTH, TRUE
-	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_CantStrength
+@ Start qol_field_moves
+	//checkfieldmove FIELD_MOVE_STRENGTH, TRUE
+	checkitem ITEM_STRENGTH_TOOL,1
+    goto_if_eq VAR_RESULT, TRUE, EventScript_UseStrengthTool
+@ End qol_field_moves
+	goto_if_eq VAR_RESULT, FALSE, EventScript_CantStrength
 	setfieldeffectargument 0, VAR_RESULT
 	msgbox Text_WantToStrength, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_CancelStrength
@@ -239,6 +243,7 @@ EventScript_UseStrength::
 	lockall
 	dofieldeffect FLDEFF_USE_STRENGTH
 	waitstate
+	call_if_set FLAG_SYS_USE_STRENGTH, EventScript_PushBoulderScript @ qol_field_moves
 	goto EventScript_ActivateStrength
 	end
 
@@ -254,6 +259,7 @@ EventScript_CantStrength::
 	end
 
 EventScript_CheckActivatedBoulder::
+	bufferitemname STR_VAR_2, ITEM_STRENGTH_TOOL @ qol_field_moves
 	msgbox Text_StrengthActivated, MSGBOX_DEFAULT
 	releaseall
 	end
@@ -278,8 +284,8 @@ Text_CantStrength:
 	.string "may be able to push it aside.$"
 
 Text_StrengthActivated:
-	.string "STRENGTH made it possible to move\n"
-	.string "boulders around.$"
+	.string "The {STR_VAR_2} made it possible\n" @ qol_field_moves
+	.string "to move boulders around.$"
 
 EventScript_UseWaterfall::
 	lockall

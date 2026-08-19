@@ -409,6 +409,15 @@ extern const u8 EventScript_UseDig[];
 extern const u8 EventScript_UseCutGrass[];
 extern const u8 EventScript_UseDefog[];
 
+//Start qol_field_moves
+extern const u8 EventScript_UseSurfMove[];
+extern const u8 EventScript_UseSurfTool[];
+extern const u8 EventScript_UseSurfFieldEffect[];
+extern const u8 EventScript_UseStrengthTool[];
+//End qol_field_moves
+extern const u8 EventScript_PushBoulderScript[];
+
+
 //player pc
 extern const u8 LittlerootTown_BrendansHouse_2F_EventScript_TurnOffPlayerPC[];
 extern const u8 LittlerootTown_MaysHouse_2F_EventScript_TurnOffPlayerPC[];

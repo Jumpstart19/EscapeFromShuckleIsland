@@ -1547,6 +1547,10 @@ const u32 gBattleAnimBgTilemap_GrassyTerrain[] = INCBIN_U32("graphics/battle_ani
 const u32 gBattleAnimBgImage_MistyTerrain[] = INCBIN_U32("graphics/battle_anims/backgrounds/misty_terrain.4bpp.smol");
 const u16 gBattleAnimBgPalette_MistyTerrain[] = INCBIN_U16("graphics/battle_anims/backgrounds/misty_terrain.gbapal");
 const u32 gBattleAnimBgTilemap_MistyTerrain[] = INCBIN_U32("graphics/battle_anims/backgrounds/misty_terrain.bin.smolTM");
+
+const u32 gBattleAnimBgImage_CosmicTerrain[] = INCBIN_U32("graphics/battle_anims/backgrounds/cosmic_terrain.4bpp.smol");
+const u16 gBattleAnimBgPalette_CosmicTerrain[] = INCBIN_U16("graphics/battle_anims/backgrounds/cosmic_terrain.gbapal");
+const u32 gBattleAnimBgTilemap_CosmicTerrain[] = INCBIN_U32("graphics/battle_anims/backgrounds/cosmic_terrain.bin.smolTM");
 #endif
 
 const u32 gBattleAnimBgImage_Nightmare[] = INCBIN_U32("graphics/battle_anims/backgrounds/nightmare.4bpp.smol");
@@ -2096,8 +2100,9 @@ const u16 gTitleScreenBgPalettes[]         = INCBIN_U16("graphics/title_screen/p
                                                         "graphics/title_screen/rayquaza_and_clouds.gbapal");
 const u16 gTitleScreenEmeraldVersionPal[]  = INCBIN_U16("graphics/title_screen/emerald_version.gbapal");
 const u32 gTitleScreenCloudsTilemap[]      = INCBIN_U32("graphics/title_screen/clouds.bin.smolTM");
-const u32 gTitleScreenPokemonLogoGfx[]     = INCBIN_U32("graphics/title_screen/pokemon_logo.8bpp.smol");
+const u32 gTitleScreenPokemonLogoGfx[]     = INCBIN_U32("graphics/title_screen/escape_from_logo_test2.8bpp.smol");
 const u32 gTitleScreenEmeraldVersionGfx[]  = INCBIN_U32("graphics/title_screen/emerald_version.8bpp.smol");
+const u16 gTitleScreenLogoPal[]            = INCBIN_U16("graphics/title_screen/pokemon_logo.gbapal");
 const u16 gTitleScreenPressStartPal[]      = INCBIN_U16("graphics/title_screen/press_start.gbapal");
 const u32 gTitleScreenPressStartGfx[]      = INCBIN_U32("graphics/title_screen/press_start.4bpp.smol");
 const u32 gTitleScreenPokemonLogoTilemap[] = INCBIN_U32("graphics/title_screen/pokemon_logo.bin.smolTM");
@@ -2120,4 +2125,4 @@ const u16 gBattleIcons_Pal1[] = INCBIN_U16("graphics/types/battle_icons1.gbapal"
 const u16 gBattleIcons_Pal2[] = INCBIN_U16("graphics/types/battle_icons2.gbapal");
 
 //New Summary Pages
-const u32 gSummaryPage_Traits_Tilemap[]      = INCBIN_U32("graphics/summary_screen/page_traits.bin.lz");
+const u32 gSummaryPage_Traits_Tilemap[]      = INCBIN_U32("graphics/summary_screen/page_traits.bin.smolTM");

@@ -310,6 +310,26 @@ static const struct SpriteFrameImage sPicTable_MauvilleOldMan2[] = {
     overworld_ascending_frames(gObjectEventPic_MauvilleOldMan2, 2, 4),
 };
 
+static const struct SpriteFrameImage sPicTable_Munchlax[] = {
+    overworld_ascending_frames(gObjectEventPic_Munchlax_SI, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_ShuckleGruntM[] = {
+    overworld_ascending_frames(gObjectEventPic_ShuckleGruntM, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_ShuckleAdminPetrel[] = {
+    overworld_ascending_frames(gObjectEventPic_ShuckleAdminPetrel, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_ShuckleGruntF[] = {
+    overworld_ascending_frames(gObjectEventPic_ShuckleGruntF, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_ShuckleLeaderGiovanni[] = {
+    overworld_ascending_frames(gObjectEventPic_ShuckleLeaderGiovanni, 2, 4),
+};
+
 static const struct SpriteFrameImage sPicTable_UnusedNatuDoll[] = {
     obj_frame_tiles(gObjectEventPic_UnusedNatuDoll),
 };
@@ -808,6 +828,10 @@ static const struct SpriteFrameImage sPicTable_BallCushion[] = {
     obj_frame_tiles(gObjectEventPic_BallCushion),
 };
 
+static const struct SpriteFrameImage sPicTable_InvisibleCushion[] = {
+    obj_frame_tiles(gObjectEventPic_InvisibleCushion),
+};
+
 static const struct SpriteFrameImage sPicTable_GrassCushion[] = {
     obj_frame_tiles(gObjectEventPic_GrassCushion),
 };
@@ -858,6 +882,34 @@ static const struct SpriteFrameImage sPicTable_BigRegiceDoll[] = {
 
 static const struct SpriteFrameImage sPicTable_BigRegisteelDoll[] = {
     obj_frame_tiles(gObjectEventPic_BigRegisteelDoll),
+};
+
+static const struct SpriteFrameImage sPicTable_Regirock2[] = {
+    obj_frame_tiles(gObjectEventPic_Regirock2),
+};
+
+static const struct SpriteFrameImage sPicTable_Regice2[] = {
+    obj_frame_tiles(gObjectEventPic_Regice2),
+};
+
+static const struct SpriteFrameImage sPicTable_Registeel2[] = {
+    obj_frame_tiles(gObjectEventPic_Registeel2),
+};
+
+static const struct SpriteFrameImage sPicTable_Regigigas[] = {
+    obj_frame_tiles(gObjectEventPic_Regigigas2),
+};
+
+static const struct SpriteFrameImage sPicTable_Sableye[] = {
+    obj_frame_tiles(gObjectEventPic_Sableye2),
+};
+
+static const struct SpriteFrameImage sPicTable_Hariyama[] = {
+    obj_frame_tiles(gObjectEventPic_Hariyama2),
+};
+
+static const struct SpriteFrameImage sPicTable_Shuckle22[] = {
+    obj_frame_tiles(gObjectEventPic_Shuckle22),
 };
 
 static const struct SpriteFrameImage sPicTable_LatiasLatios[] = {

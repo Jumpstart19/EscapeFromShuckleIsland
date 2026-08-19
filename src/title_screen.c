@@ -30,11 +30,11 @@ enum {
 };
 
 #define VERSION_BANNER_RIGHT_TILEOFFSET 64
-#define VERSION_BANNER_LEFT_X 98
-#define VERSION_BANNER_RIGHT_X 162
+#define VERSION_BANNER_LEFT_X 157
+#define VERSION_BANNER_RIGHT_X 221
 #define VERSION_BANNER_Y 2
-#define VERSION_BANNER_Y_GOAL 66
-#define START_BANNER_X 128
+#define VERSION_BANNER_Y_GOAL 70
+#define START_BANNER_X 183
 
 #define CLEAR_SAVE_BUTTON_COMBO (B_BUTTON | SELECT_BUTTON | DPAD_UP)
 #define RESET_RTC_BUTTON_COMBO (B_BUTTON | SELECT_BUTTON | DPAD_LEFT)
@@ -106,6 +106,23 @@ const u16 gTitleScreenAlphaBlend[64] =
     [32 ... 63] = BLDALPHA_BLEND(0, 16)
 };
 
+/*static const struct OamData sLogoOamData =
+{
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = FALSE,
+    .bpp = ST_OAM_8BPP,
+    .shape = SPRITE_SHAPE(240x56),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(240x56),
+    .tileNum = 0,
+    .priority = 0,
+    .paletteNum = 0,
+    .affineParam = 0,
+};
+*/
 static const struct OamData sVersionBannerLeftOamData =
 {
     .y = DISPLAY_HEIGHT,
@@ -162,6 +179,17 @@ static const union AnimCmd *const sVersionBannerRightAnimTable[] =
     sVersionBannerRightAnimSequence,
 };
 
+/*static const struct SpriteTemplate sLogoSpriteTemplate =
+{
+    .tileTag = TAG_VERSION,
+    .paletteTag = TAG_VERSION,
+    .oam = &sLogoOamData,
+    .anims = sVersionBannerLeftAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_VersionBannerLeft,
+};
+*/
 static const struct SpriteTemplate sVersionBannerLeftSpriteTemplate =
 {
     .tileTag = TAG_VERSION,
@@ -184,6 +212,16 @@ static const struct SpriteTemplate sVersionBannerRightSpriteTemplate =
     .callback = SpriteCB_VersionBannerRight,
 };
 
+/*static const struct CompressedSpriteSheet sSpriteSheet_Logo[] =
+{
+    {
+        .data = gTitleScreenPokemonLogoGfx,
+        .size = 0x1000,
+        .tag = TAG_VERSION
+    },
+    {},
+};
+*/
 static const struct CompressedSpriteSheet sSpriteSheet_EmeraldVersion[] =
 {
     {
@@ -513,7 +551,6 @@ static void SpriteCB_PokemonLogoShine(struct Sprite *sprite)
         DestroySprite(sprite);
     }
 }
-
 static void SpriteCB_PokemonLogoShine_Fast(struct Sprite *sprite)
 {
     if (sprite->x < DISPLAY_WIDTH + 32)
@@ -610,9 +647,11 @@ void CB2_InitTitleScreen(void)
         ResetSpriteData();
         FreeAllSpritePalettes();
         gReservedSpritePaletteCount = 9;
+        //LoadCompressedSpriteSheet(&sSpriteSheet_Logo[0]);
         LoadCompressedSpriteSheet(&sSpriteSheet_EmeraldVersion[0]);
         LoadCompressedSpriteSheet(&sSpriteSheet_PressStart[0]);
-        LoadCompressedSpriteSheet(&sPokemonLogoShineSpriteSheet[0]);
+        //LoadCompressedSpriteSheet(&sPokemonLogoShineSpriteSheet[0]);
+        //LoadPalette(gTitleScreenLogoPal, OBJ_PLTT_ID(1), PLTT_SIZE_8BPP);
         LoadPalette(gTitleScreenEmeraldVersionPal, OBJ_PLTT_ID(0), PLTT_SIZE_4BPP);
         LoadSpritePalette(&sSpritePalette_PressStart[0]);
         gMain.state = 2;
@@ -624,7 +663,7 @@ void CB2_InitTitleScreen(void)
         gTasks[taskId].tCounter = 256;
         gTasks[taskId].tSkipToNext = FALSE;
         gTasks[taskId].tPointless = -16;
-        gTasks[taskId].tBg2Y = -32;
+        gTasks[taskId].tBg2Y = 0;
         gMain.state = 3;
         break;
     }
@@ -635,10 +674,10 @@ void CB2_InitTitleScreen(void)
         break;
     case 4:
         PanFadeAndZoomScreen(DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, 0x100, 0);
-        SetGpuReg(REG_OFFSET_BG2X_L, -29 * 256);
-        SetGpuReg(REG_OFFSET_BG2X_H, -1);
-        SetGpuReg(REG_OFFSET_BG2Y_L, -32 * 256);
-        SetGpuReg(REG_OFFSET_BG2Y_H, -1);
+        //SetGpuReg(REG_OFFSET_BG2X_L, -29 * 256);
+        //SetGpuReg(REG_OFFSET_BG2X_H, -1);
+        //SetGpuReg(REG_OFFSET_BG2Y_L, -32 * 256);
+        //SetGpuReg(REG_OFFSET_BG2Y_H, -1);
         SetGpuReg(REG_OFFSET_WIN0H, 0);
         SetGpuReg(REG_OFFSET_WIN0V, 0);
         SetGpuReg(REG_OFFSET_WIN1H, 0);
@@ -684,11 +723,11 @@ static void MainCB2(void)
 static void Task_TitleScreenPhase1(u8 taskId)
 {
     // Skip to next phase when A, B, Start, or Select is pressed
-    if (JOY_NEW(A_B_START_SELECT) || gTasks[taskId].tSkipToNext)
-    {
-        gTasks[taskId].tSkipToNext = TRUE;
-        gTasks[taskId].tCounter = 0;
-    }
+    //if (JOY_NEW(A_B_START_SELECT) || gTasks[taskId].tSkipToNext)
+    //{
+    gTasks[taskId].tSkipToNext = TRUE;
+    gTasks[taskId].tCounter = 0;
+    //}
 
     if (gTasks[taskId].tCounter != 0)
     {
@@ -711,6 +750,9 @@ static void Task_TitleScreenPhase1(u8 taskId)
         SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(16, 0));
         SetGpuReg(REG_OFFSET_BLDY, 0);
 
+        // Create logo
+        //CreateSprite(&sLogoSpriteTemplate, 0, 0, 0);
+        
         // Create left side of version banner
         spriteId = CreateSprite(&sVersionBannerLeftSpriteTemplate, VERSION_BANNER_LEFT_X, VERSION_BANNER_Y, 0);
         gSprites[spriteId].sAlphaBlendIdx = ARRAY_COUNT(gTitleScreenAlphaBlend);
@@ -734,11 +776,11 @@ static void Task_TitleScreenPhase2(u8 taskId)
     u32 yPos;
 
     // Skip to next phase when A, B, Start, or Select is pressed
-    if (JOY_NEW(A_B_START_SELECT) || gTasks[taskId].tSkipToNext)
-    {
-        gTasks[taskId].tSkipToNext = TRUE;
-        gTasks[taskId].tCounter = 0;
-    }
+    //if (JOY_NEW(A_B_START_SELECT) || gTasks[taskId].tSkipToNext)
+    //{
+    gTasks[taskId].tSkipToNext = TRUE;
+    gTasks[taskId].tCounter = 0;
+    //}
 
     if (gTasks[taskId].tCounter != 0)
     {
@@ -859,11 +901,18 @@ static void UpdateLegendaryMarkingColor(u8 frameNum)
     if ((frameNum % 4) == 0) // Change color every 4th frame
     {
         s32 intensity = Cos(frameNum, Q_8_8(0.5)) + Q_8_8(0.5);
-        u32 r = 31 - Q_8_8_TO_INT(intensity * 31);
-        u32 g = 31 - Q_8_8_TO_INT(intensity * 22);
-        u32 b = 12;
+        u32 r = 5 + Q_8_8_TO_INT(intensity * 13);
+        u32 g = 1 + Q_8_8_TO_INT(intensity * 5);
+        u32 b = 15 - Q_8_8_TO_INT(intensity * 8);
 
         u16 color = RGB(r, g, b);
-        LoadPalette(&color, BG_PLTT_ID(14) + 15, sizeof(color));
+        LoadPalette(&color, BG_PLTT_ID(14) + 14, sizeof(color));
+
+        u32 r2 = 6 + Q_8_8_TO_INT(intensity * 16);
+        u32 g2 = 2 + Q_8_8_TO_INT(intensity * 8);
+        u32 b2 = 18 - Q_8_8_TO_INT(intensity * 9);
+
+        u16 color2 = RGB(r2, g2, b2);
+        LoadPalette(&color2, BG_PLTT_ID(14) + 13, sizeof(color2));
    }
 }

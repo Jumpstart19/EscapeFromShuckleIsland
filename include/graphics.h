@@ -1514,6 +1514,11 @@ extern const u32 gItemIcon_FameChecker[];
 extern const u16 gItemIconPalette_FameChecker[];
 extern const u32 gItemIcon_TeachyTV[];
 extern const u16 gItemIconPalette_TeachyTV[];
+extern const u32 gItemIcon_PowerGlove[];
+extern const u16 gItemIconPalette_PowerGlove[];
+extern const u32 gItemIcon_Surfboard[];
+extern const u16 gItemIconPalette_Surfboard[];
+
 // Story Key Items
 extern const u32 gItemIcon_SSTicket[];
 extern const u16 gItemIconPalette_SSTicket[];
@@ -1998,6 +2003,7 @@ extern const u32 gTitleScreenCloudsTilemap[];
 extern const u16 gTitleScreenBgPalettes[];
 extern const u16 gTitleScreenPressStartPal[];
 extern const u16 gTitleScreenEmeraldVersionPal[];
+extern const u16 gTitleScreenLogoPal[];
 
 // Battle Dome
 extern const u32 gDomeTourneyInfoCard_Gfx[];
@@ -2932,6 +2938,9 @@ extern const u32 gBattleAnimBgTilemap_BoltStrike[];
 extern const u32 gBattleAnimBgImage_ClangorousSoulblaze[];
 extern const u16 gBattleAnimBgPalette_ClangorousSoulblaze[];
 extern const u32 gBattleAnimBgTilemap_ClangorousSoulblaze[];
+extern const u32 gBattleAnimBgImage_CosmicTerrain[];
+extern const u16 gBattleAnimBgPalette_CosmicTerrain[];
+extern const u32 gBattleAnimBgTilemap_CosmicTerrain[];
 extern const u16 gBattleAnimBgPalette_DynamaxCannon[];
 extern const u32 gBattleAnimBgImage_ElectricTerrain[];
 extern const u16 gBattleAnimBgPalette_ElectricTerrain[];

@@ -555,5 +555,9 @@
 #define NUM_PHONEME_SONGS           (LAST_PHONEME_SONG - FIRST_PHONEME_SONG + 1)
 #define PHONEME_ID(song)            ((song) - FIRST_PHONEME_SONG)
 #define PHONEME_ID_NONE             0xFF
+#define MUS_ABILITY_OVERLOAD        610
+#define MUS_LAST_STAND              611
+#define MUS_VS_BIG_BLUE             612
+#define MUS_VS_JUMPSTART            613
 
 #endif  // GUARD_CONSTANTS_SONGS_H

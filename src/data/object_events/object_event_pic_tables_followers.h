@@ -1862,6 +1862,9 @@ static const struct SpriteFrameImage sPicTable_Overqwil[] = {
 static const struct SpriteFrameImage sPicTable_Shuckle[] = {
     overworld_ascending_frames(gObjectEventPic_Shuckle, 4, 4),
 };
+static const struct SpriteFrameImage sPicTable_Shuckle2[] = {
+    overworld_ascending_frames(gObjectEventPic_Shuckle2, 8, 8),
+};
 #endif //P_FAMILY_SHUCKLE
 
 #if P_FAMILY_HERACROSS

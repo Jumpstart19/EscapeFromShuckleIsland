@@ -186,6 +186,90 @@
       "y": 52,
       "respawn_map": "MAP_BATTLE_FRONTIER_POKEMON_CENTER_1F",
       "respawn_npc": "LOCALID_FRONTIER_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_BATTLE_1",
+      "map": "MAP_SHUCKLE_ISLAND",
+      "x": 16,
+      "y": 17
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_BATTLE_2",
+      "map": "MAP_SHUCKLE_ISLAND",
+      "x": 40,
+      "y": 11
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_BATTLE3",
+      "map": "MAP_SHUCKLE_ISLAND_CAVE_ICE_F1",
+      "x": 17,
+      "y": 17
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_CAVE_ICE_F1",
+      "map": "MAP_SHUCKLE_ISLAND_CAVE_ICE_F1",
+      "x": 13,
+      "y": 17
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_SOUTH",
+      "map": "MAP_SHUCKLE_ISLAND_SOUTH",
+      "x": 35,
+      "y": 4
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_REMOTE",
+      "map": "MAP_SHUCKLE_ISLAND_REMOTE",
+      "x": 17,
+      "y": 9
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F",
+      "map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F",
+      "x": 68,
+      "y": 14
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F_2",
+      "map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F",
+      "x": 7,
+      "y": 12
+    },
+    {
+      "id": "HEAL_LOCATION_BATTLE_5",
+      "map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F",
+      "x": 69,
+      "y": 14
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F_3",
+      "map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F",
+      "x": 70,
+      "y": 14
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F",
+      "map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F",
+      "x": 15,
+      "y": 38
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F_2",
+      "map": "MAP_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F",
+      "x": 14,
+      "y": 38
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_ESCAPE_HOUSE",
+      "map": "MAP_SHUCKLE_ISLAND_ESCAPE_HOUSE",
+      "x": 4,
+      "y": 6
+    },
+    {
+      "id": "HEAL_LOCATION_SHUCKLE_ISLAND_ESCAPE_HOUSE_2",
+      "map": "MAP_SHUCKLE_ISLAND_ESCAPE_HOUSE",
+      "x": 5,
+      "y": 5
     }
   ]
 }

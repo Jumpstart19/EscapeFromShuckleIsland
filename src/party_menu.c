@@ -7437,6 +7437,30 @@ void OpenPartyMenuInBattle(u8 partyAction)
     UpdatePartyToBattleOrder();
 }
 
+void ShowOpponentPartyMenuInBattle()
+{
+    u32 index;
+
+    if (!IsDoubleBattle())
+    {
+        index = gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)];
+    }
+    else
+    {
+        if (IsBattlerAlive(B_POSITION_PLAYER_LEFT))
+        {
+            index = gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)];
+        }
+        else
+        {
+            index = gBattlerPartyIndexes[GetBattlerAtPosition(B_POSITION_OPPONENT_RIGHT)];
+        }
+    }
+
+    ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gEnemyParty, index, gEnemyPartyCount - 1, CB2_SetUpReshowBattleScreenAfterMenu);
+    ReshowBattleScreenDummy();
+}
+
 void ChooseMonForInBattleItem(void)
 {
     InitPartyMenu(PARTY_MENU_TYPE_IN_BATTLE, GetPartyLayoutFromBattleType(), PARTY_ACTION_USE_ITEM, FALSE, PARTY_MSG_USE_ON_WHICH_MON, Task_HandleChooseMonInput, CB2_ReturnToBagMenu);

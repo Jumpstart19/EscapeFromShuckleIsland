@@ -239,7 +239,7 @@ enum RandomTag
 #define RandomPercentage(tag, t) \
     ({ \
         u32 r; \
-        if (t <= 0) \
+        if (t < 100) \
         { \
             r = FALSE; \
         } \

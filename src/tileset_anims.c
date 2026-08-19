@@ -39,6 +39,7 @@ static void TilesetAnim_Underwater(u16);
 static void TilesetAnim_SootopolisGym(u16);
 static void TilesetAnim_Cave(u16);
 static void TilesetAnim_EliteFour(u16);
+static void TilesetAnim_Facility(u16);
 static void TilesetAnim_MauvilleGym(u16);
 static void TilesetAnim_BikeShop(u16);
 static void TilesetAnim_BattlePyramid(u16);
@@ -73,6 +74,7 @@ static void QueueAnimTiles_MauvilleGym_ElectricGates(u16);
 static void QueueAnimTiles_SootopolisGym_Waterfalls(u16);
 static void QueueAnimTiles_EliteFour_GroundLights(u16);
 static void QueueAnimTiles_EliteFour_WallLights(u16);
+static void QueueAnimTiles_Facility_GroundLights(u16);
 
 const u16 gTilesetAnims_General_Flower_Frame1[] = INCBIN_U16("data/tilesets/primary/general/anim/flower/1.4bpp");
 const u16 gTilesetAnims_General_Flower_Frame0[] = INCBIN_U16("data/tilesets/primary/general/anim/flower/0.4bpp");
@@ -466,6 +468,14 @@ const u16 *const gTilesetAnims_EliteFour_FloorLight[] = {
     gTilesetAnims_EliteFour_FloorLight_Frame1
 };
 
+const u16 gTilesetAnims_Facility_FloorLight_Frame0[] = INCBIN_U16("data/tilesets/secondary/facility/anim/floor_light/0.4bpp");
+const u16 gTilesetAnims_Facility_FloorLight_Frame1[] = INCBIN_U16("data/tilesets/secondary/facility/anim/floor_light/1.4bpp");
+
+const u16 *const gTilesetAnims_Facility_FloorLight[] = {
+    gTilesetAnims_Facility_FloorLight_Frame0,
+    gTilesetAnims_Facility_FloorLight_Frame1
+};
+
 const u16 gTilesetAnims_MauvilleGym_ElectricGates_Frame0[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/electric_gates/0.4bpp");
 const u16 gTilesetAnims_MauvilleGym_ElectricGates_Frame1[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/electric_gates/1.4bpp");
 const u16 tileset_anims_space_6[16] = {};
@@ -664,7 +674,7 @@ static void QueueAnimTiles_General_Water(u16 timer)
 static void QueueAnimTiles_General_SandWaterEdge(u16 timer)
 {
     u16 i = timer % ARRAY_COUNT(gTilesetAnims_General_SandWaterEdge);
-    AppendTilesetAnimToBuffer(gTilesetAnims_General_SandWaterEdge[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(464)), 10 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(gTilesetAnims_General_SandWaterEdge[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(464)), 14 * TILE_SIZE_4BPP);
 }
 
 static void QueueAnimTiles_General_Waterfall(u16 timer)
@@ -804,6 +814,13 @@ void InitTilesetAnim_EliteFour(void)
     sSecondaryTilesetAnimCounter = 0;
     sSecondaryTilesetAnimCounterMax = 128;
     sSecondaryTilesetAnimCallback = TilesetAnim_EliteFour;
+}
+
+void InitTilesetAnim_Facility(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = 128;
+    sSecondaryTilesetAnimCallback = TilesetAnim_Facility;
 }
 
 void InitTilesetAnim_MauvilleGym(void)
@@ -1083,6 +1100,13 @@ static void TilesetAnim_EliteFour(u16 timer)
         QueueAnimTiles_EliteFour_WallLights(timer / 8);
 }
 
+static void TilesetAnim_Facility(u16 timer)
+{
+    if (timer % 64 == 1)
+        QueueAnimTiles_Facility_GroundLights(timer / 64);
+}
+
+
 static void TilesetAnim_BikeShop(u16 timer)
 {
     if (timer % 4 == 0)
@@ -1133,6 +1157,12 @@ static void QueueAnimTiles_EliteFour_GroundLights(u16 timer)
 {
     u16 i = timer % ARRAY_COUNT(gTilesetAnims_EliteFour_FloorLight);
     AppendTilesetAnimToBuffer(gTilesetAnims_EliteFour_FloorLight[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 480)), 4 * TILE_SIZE_4BPP);
+}
+
+static void QueueAnimTiles_Facility_GroundLights(u16 timer)
+{
+    u16 i = timer % ARRAY_COUNT(gTilesetAnims_Facility_FloorLight);
+    AppendTilesetAnimToBuffer(gTilesetAnims_Facility_FloorLight[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 444)), 4 * TILE_SIZE_4BPP);
 }
 
 static void QueueAnimTiles_MauvilleGym_ElectricGates(u16 timer)

@@ -1,0 +1,35 @@
+{
+  "id": "MAP_SHUCKLE_ISLAND_REMOTE_CAVE_B2F",
+  "name": "ShuckleIslandRemoteCave_B2F",
+  "layout": "LAYOUT_SHUCKLE_ISLAND_REMOTE_CAVE_B2F",
+  "music": "MUS_MT_PYRE",
+  "region_map_section": "MAPSEC_SHUCKLE_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 4,
+      "y": 5,
+      "elevation": 3,
+      "dest_map": "MAP_SHUCKLE_ISLAND_SOUTH_CAVE_ICE",
+      "dest_warp_id": "3"
+    },
+    {
+      "x": 8,
+      "y": 5,
+      "elevation": 3,
+      "dest_map": "MAP_SHUCKLE_ISLAND_REMOTE_CAVE",
+      "dest_warp_id": "1"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

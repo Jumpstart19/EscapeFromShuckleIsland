@@ -1,0 +1,749 @@
+mapscripts ShuckleIslandSouthCaveIce_MapScripts {
+
+    MAP_SCRIPT_ON_TRANSITION : ShuckleIslandSouthCaveIce_EventScript_SetFlags
+
+    MAP_SCRIPT_ON_LOAD: ShuckleIslandSouthCaveIce_EventScript_OnLoad
+
+}
+
+const BOULDER_1_ID = 1
+const BOULDER_2_ID = 2
+const SWITCH_ROCK_1_ID = 3
+const PUZZLE_1_CLEAR_BOULDER_ID = 4
+const BOULDER_3_ID = 5
+const PUZZLE_2_CLEAR_BOULDER_1_ID = 6
+const PUZZLE_2_CLEAR_BOULDER_2_ID = 7
+const HINT_NPC_PUZZLE_1 = 8
+const HINT_NPC_PUZZLE_2 = 9
+const SWITCH_ROCK_2_ID = 10
+const BOULDER_HINT_1_ID = 11
+const BRENDAN_HINT_1_ID = 12
+const BRENDAN_HINT_2_ID = 13
+const BOULDER_1_HINT_2_ID = 14
+const BOULDER_2_HINT_2_ID = 15
+const MAY_HINT_1_ID = 16
+const MAY_HINT_2_ID = 17
+
+script ShuckleIslandSouthCaveIce_EventScript_SetFlags {
+
+    setflag(FLAG_DONT_REMOVE_OFFSCREEN_OBJECT)
+    setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_OBJECTS)
+    setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_BRENDAN)
+    setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_MAY)
+
+}
+
+script ShuckleIslandSouthCaveIce_EventScript_OnLoad {
+
+    if (var(VAR_ICE_CAVE_BOULDER_1) != 10) {
+
+        setmetatile(38, 4, 0x396, TRUE)
+
+    }
+    
+    if (var(VAR_ICE_CAVE_BOULDER_2) != 10) {
+
+        setmetatile(58, 5, 0x396, TRUE)
+        setmetatile(59, 5, 0x396, TRUE)
+
+    }
+
+
+}
+
+script ShuckleIslandSouthCaveIce_EventScript_Switch1 {
+
+    lockall
+    checkobjectat(31,9)
+
+    if (var(VAR_RESULT) == TRUE) {
+
+        setmetatile(38, 4, 0x381, FALSE)
+        playse(SE_ICE_BREAK)
+        special(DrawWholeMapView)
+        waitse
+        setvar(VAR_ICE_CAVE_BOULDER_1, 10)
+        setflag(FLAG_ICE_STRENGTH_PUZZLE_1)
+        clearflag(FLAG_REMOVE_ICE_STRENGTH_PUZZLE_1_CLEAR_BOULDER)
+        clearflag(FLAG_CLEAR_HINT_NPC_ICE_PUZZLE_2)
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandSouthCaveIce_EventScript_Switch2 {
+
+    lockall
+    checkobjectat(52,8)
+
+    if (var(VAR_RESULT) == TRUE) {
+    
+        checkobjectat(52,11)
+        
+        if (var(VAR_RESULT) == TRUE) {
+
+            setmetatile(58, 5, 0x381, FALSE)
+            setmetatile(59, 5, 0x381, FALSE)
+            playse(SE_ICE_BREAK)
+            special(DrawWholeMapView)
+            waitse
+            setvar(VAR_ICE_CAVE_BOULDER_2, 10)
+            setflag(FLAG_ICE_STRENGTH_PUZZLE_2)
+            clearflag(FLAG_REMOVE_ICE_STRENGTH_PUZZLE_2_CLEAR_BOULDER)
+            setflag(FLAG_CLEAR_HINT_NPC_ICE_PUZZLE_2)
+            setflag(FLAG_SETUP_BATTLE_4_NPCS)
+            setflag(FLAG_CLEAR_PETREL_BERRY_DISGUISE)
+            setflag(FLAG_CLEAR_PETREL_FEMALE_DISGUISE)
+            setflag(FLAG_CLEAR_PETREL_NO_DISGUISE)
+
+        }
+    
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandSouthCaveIce_EventScript_hintNPCIcePuzzle1 {
+
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+    
+    dynmultipush("Medium Hint", 1)
+
+    if (flag(FLAG_MED_HINT_ICE_PUZZLE_1)) {
+
+        dynmultipush("Solution", 2)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox(hintNPCRefusedHint_text)
+
+    }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        if (!flag(FLAG_MED_HINT_ICE_PUZZLE_1)) {
+
+            setflag(FLAG_MED_HINT_ICE_PUZZLE_1)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+        fadescreen(FADE_TO_BLACK)
+        closemessage
+        special(SpawnCameraObject)
+        clearflag(FLAG_CLEAR_ICE_PUZZLE_HINT_OBJECTS)
+        addobject(BOULDER_HINT_1_ID)
+        checkplayergender
+        if (var(VAR_RESULT) == MALE) {
+
+            clearflag(FLAG_CLEAR_ICE_PUZZLE_HINT_BRENDAN)
+            addobject(BRENDAN_HINT_1_ID)
+
+        }
+        elif (var(VAR_RESULT) == FEMALE) {
+
+            clearflag(FLAG_CLEAR_ICE_PUZZLE_HINT_MAY)
+            addobject(MAY_HINT_1_ID)
+
+        }
+        setflag(FLAG_ICE_STRENGTH_PUZZLE_1)
+        removeobject(BOULDER_1_ID)
+        getplayerxy(VAR_TEMP_8, VAR_TEMP_9)
+        if (var(VAR_TEMP_8) == 7)
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_down * 3, walk_faster_right * 17))
+
+        }
+        else
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_down * 4, walk_faster_right * 16))
+
+        }
+        waitmovement
+        call(ClearRedIce2NoSound)
+        call(ClearGreenIce2NoSound)
+        call(SetOrangeIce2NoSound)
+        fadescreen(FADE_FROM_BLACK)
+
+        msgbox("Can you get the puzzle to this state?")
+        waitmessage
+
+        fadescreen(FADE_TO_BLACK)
+        setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_OBJECTS)
+        setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_BRENDAN)
+        setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_MAY)
+        removeobject(BOULDER_HINT_1_ID)
+        removeobject(BRENDAN_HINT_1_ID)
+        removeobject(MAY_HINT_1_ID)
+        clearflag(FLAG_ICE_STRENGTH_PUZZLE_1)
+        addobject(BOULDER_1_ID)
+        if (var(VAR_TEMP_8) == 7)
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_up * 3, walk_faster_left * 17))
+
+        }
+        else
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_up * 4, walk_faster_left * 16))
+
+        }
+        waitmovement
+        call(ClearOrangeIce2NoSound)
+        call(SetRedIce2NoSound)
+        special(RemoveCameraObject)
+        closemessage
+        fadescreen(FADE_FROM_BLACK)
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+
+        if (!flag(FLAG_SOLUTION_ICE_PUZZLE_1)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_ICE_1)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/RO2lxSzn1xk")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_ICE_STRENGTH_PUZZLE_1)) {
+
+                msgbox("Would you also like me to auto-solve\nthe puzzle for you?", MSGBOX_YESNO)
+
+                if (var(VAR_RESULT) == 1) {
+
+                    setmetatile(38, 4, 0x381, FALSE)
+                    playse(SE_ICE_BREAK)
+                    waitse
+                    setvar(VAR_ICE_CAVE_BOULDER_1, 10)
+                    clearflag(FLAG_REMOVE_ICE_STRENGTH_PUZZLE_1_CLEAR_BOULDER)
+                    removeobject(BOULDER_1_ID)
+                    special(DrawWholeMapView)
+                    setflag(FLAG_ICE_STRENGTH_PUZZLE_1)
+                    clearflag(FLAG_CLEAR_HINT_NPC_ICE_PUZZLE_2)
+
+                    msgbox("Alright! I've cleared the rock\nblocking the next puzzle for you.")
+
+                }
+
+            }
+
+            if (!flag(FLAG_SOLUTION_ICE_PUZZLE_1)) {
+
+                setflag(FLAG_SOLUTION_ICE_PUZZLE_1)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIslandSouthCaveIce_EventScript_hintNPCIcePuzzle2 {
+
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+    
+    dynmultipush("Medium Hint", 1)
+
+    if (flag(FLAG_MED_HINT_ICE_PUZZLE_2)) {
+
+        dynmultipush("Solution", 2)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox(hintNPCRefusedHint_text)
+
+    }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        if (!flag(FLAG_MED_HINT_ICE_PUZZLE_2)) {
+
+            setflag(FLAG_MED_HINT_ICE_PUZZLE_2)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+        fadescreen(FADE_TO_BLACK)
+        closemessage
+        special(SpawnCameraObject)
+        clearflag(FLAG_CLEAR_ICE_PUZZLE_HINT_OBJECTS)
+        addobject(BOULDER_1_HINT_2_ID)
+        addobject(BOULDER_2_HINT_2_ID)
+        checkplayergender
+        if (var(VAR_RESULT) == MALE) {
+
+            clearflag(FLAG_CLEAR_ICE_PUZZLE_HINT_BRENDAN)
+            addobject(BRENDAN_HINT_2_ID)
+
+        }
+        elif (var(VAR_RESULT) == FEMALE) {
+
+            clearflag(FLAG_CLEAR_ICE_PUZZLE_HINT_MAY)
+            addobject(MAY_HINT_2_ID)
+
+        }
+        addobject(BRENDAN_HINT_2_ID)
+        setflag(FLAG_ICE_STRENGTH_PUZZLE_2)
+        removeobject(BOULDER_2_ID)
+        removeobject(BOULDER_3_ID)
+        getplayerxy(VAR_TEMP_8, VAR_TEMP_9)
+        if (var(VAR_TEMP_9) == 4)
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_down * 6, walk_faster_right * 9))
+
+        }
+        elif (var(VAR_TEMP_8) == 38)
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_down * 7, walk_faster_right * 8))
+
+        }
+        else
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_down * 7, walk_faster_right * 10))
+
+        }
+        waitmovement
+        call(ClearRedIce2NoSound)
+        call(ClearOrangeIce2NoSound)
+        call(SetGreenIce2NoSound)
+        fadescreen(FADE_FROM_BLACK)
+
+        msgbox("Can you get the puzzle to this state?")
+        waitmessage
+
+        fadescreen(FADE_TO_BLACK)
+        setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_OBJECTS)
+        setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_BRENDAN)
+        setflag(FLAG_CLEAR_ICE_PUZZLE_HINT_MAY)
+        removeobject(BOULDER_1_HINT_2_ID)
+        removeobject(BOULDER_2_HINT_2_ID)
+        removeobject(BRENDAN_HINT_2_ID)
+        removeobject(MAY_HINT_2_ID)
+        clearflag(FLAG_ICE_STRENGTH_PUZZLE_2)
+        addobject(BOULDER_2_ID)
+        addobject(BOULDER_3_ID)
+        if (var(VAR_TEMP_9) == 4)
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_up * 6, walk_faster_left * 9))
+
+        }
+        elif (var(VAR_TEMP_8) == 38)
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_up * 7, walk_faster_left * 8))
+
+        }
+        else
+        {
+
+            applymovement(OBJ_EVENT_ID_CAMERA, moves(walk_faster_up * 7, walk_faster_left * 10))
+
+        }
+        waitmovement
+        call(ClearGreenIce2NoSound)
+        call(SetRedIce2NoSound)
+        special(RemoveCameraObject)
+        closemessage
+        fadescreen(FADE_FROM_BLACK)
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+
+        if (!flag(FLAG_SOLUTION_ICE_PUZZLE_2)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_ICE_2)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/hLiB4hj2E_0")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_ICE_STRENGTH_PUZZLE_2)) {
+
+                msgbox("Would you also like me to auto-solve\nthe puzzle for you?", MSGBOX_YESNO)
+
+                if (var(VAR_RESULT) == 1) {
+
+                    setmetatile(58, 5, 0x381, FALSE)
+                    setmetatile(59, 5, 0x381, FALSE)
+                    playse(SE_ICE_BREAK)
+                    waitse
+                    setvar(VAR_ICE_CAVE_BOULDER_2, 10)
+                    clearflag(FLAG_REMOVE_ICE_STRENGTH_PUZZLE_2_CLEAR_BOULDER)
+                    removeobject(BOULDER_2_ID)
+                    removeobject(BOULDER_3_ID)
+                    special(DrawWholeMapView)
+                    setflag(FLAG_ICE_STRENGTH_PUZZLE_2)
+                    setflag(FLAG_SETUP_BATTLE_4_NPCS)
+                    setflag(FLAG_CLEAR_PETREL_BERRY_DISGUISE)
+                    setflag(FLAG_CLEAR_PETREL_FEMALE_DISGUISE)
+                    setflag(FLAG_CLEAR_PETREL_NO_DISGUISE)
+                    setflag(FLAG_CLEAR_HINT_NPC_ICE_PUZZLE_2)
+
+                    msgbox("Alright! I've cleared the rocks\nblocking the exit for you.")
+
+                }
+
+            }
+
+            if (!flag(FLAG_SOLUTION_ICE_PUZZLE_2)) {
+
+                setflag(FLAG_SOLUTION_ICE_PUZZLE_2)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIslandSouthCaveIce_EventScript_IceSwitch {
+
+    if(!flag(FLAG_TEMP_A)) {
+
+        setflag(FLAG_TEMP_A)
+        call(ClearRedIce2)
+        call(SetOrangeIce2)
+        
+
+    }
+    elif(!flag(FLAG_TEMP_B)) {
+
+        setflag(FLAG_TEMP_B)
+        call(ClearOrangeIce2)
+        call(SetGreenIce2)        
+
+    }
+    else {
+
+        clearflag(FLAG_TEMP_A)
+        clearflag(FLAG_TEMP_B)
+        call(ClearGreenIce2)
+        call(SetRedIce2)
+
+    }
+    
+
+}
+
+script ShuckleIslandSouthCaveIce_EventScript_SignWarp{
+
+    lock
+    msgbox(SignWarp_text, MSGBOX_SIGN)
+    release
+    end
+
+}
+
+script SetRedIce2 {
+
+    lockall
+    setmetatile(18, 10, 0x39C, FALSE)
+    setmetatile(26, 8, 0x39C, FALSE)
+    setmetatile(28, 9, 0x39C, FALSE)
+    setmetatile(12, 10, 0x39C, FALSE)
+    setmetatile(41, 11, 0x39C, FALSE)
+    setmetatile(43, 7, 0x39C, FALSE)
+    setmetatile(47, 6, 0x39C, FALSE)
+    setmetatile(48, 12, 0x39C, FALSE)
+
+    setmetatile(22, 9, 0x393, FALSE)
+    setmetatile(47, 9, 0x393, FALSE)
+
+    playse(SE_SWITCH)
+    special(DrawWholeMapView)
+    delay(30)
+    releaseall
+
+}
+
+script ClearRedIce2 {
+
+    lockall
+    setmetatile(18, 10, 0x397, FALSE)
+    setmetatile(26, 8, 0x397, FALSE)
+    setmetatile(28, 9, 0x397, FALSE)
+    setmetatile(12, 10, 0x397, FALSE)
+    setmetatile(41, 11, 0x397, FALSE)
+    setmetatile(43, 7, 0x397, FALSE)
+    setmetatile(47, 6, 0x397, FALSE)
+    setmetatile(48, 12, 0x397, FALSE)
+    releaseall
+
+}
+
+script SetOrangeIce2 {
+
+    lockall
+    setmetatile(18, 8, 0x39D, FALSE)
+    setmetatile(21, 12, 0x39D, FALSE)
+    setmetatile(11, 9, 0x39D, FALSE)
+    setmetatile(41, 7, 0x39D, FALSE)
+    setmetatile(43, 12, 0x39D, FALSE)
+    setmetatile(49, 8, 0x39D, FALSE)
+    setmetatile(47, 12, 0x39D, FALSE)
+
+    setmetatile(22, 9, 0x394, FALSE)
+    setmetatile(47, 9, 0x394, FALSE)
+
+    playse(SE_SWITCH)
+    special(DrawWholeMapView)
+    delay(30)
+    releaseall
+
+}
+
+script ClearOrangeIce2 {
+
+    lockall
+    setmetatile(18, 8, 0x35F, FALSE)
+    setmetatile(21, 12, 0x35F, FALSE)
+    setmetatile(11, 9, 0x35F, FALSE)
+    setmetatile(41, 7, 0x35F, FALSE)
+    setmetatile(43, 12, 0x35F, FALSE)
+    setmetatile(49, 8, 0x35F, FALSE)
+    setmetatile(47, 12, 0x35F, FALSE)
+    releaseall
+
+}
+
+script SetGreenIce2 {
+
+    lockall
+    setmetatile(18, 12, 0x39B, FALSE)
+    setmetatile(26, 6, 0x39B, FALSE)
+    setmetatile(27, 10, 0x39B, FALSE)
+    setmetatile(44, 8, 0x39B, FALSE)
+    setmetatile(48, 6, 0x39B, FALSE)
+    setmetatile(49, 12, 0x39B, FALSE)
+
+    setmetatile(22, 9, 0x395, FALSE)
+    setmetatile(47, 9, 0x395, FALSE)
+
+    playse(SE_SWITCH)
+    special(DrawWholeMapView)
+    delay(30)
+    releaseall
+
+}
+
+script ClearGreenIce2 {
+
+    lockall
+    setmetatile(18, 12, 0x364, FALSE)
+    setmetatile(26, 6, 0x364, FALSE)
+    setmetatile(27, 10, 0x364, FALSE)
+    setmetatile(44, 8, 0x364, FALSE)
+    setmetatile(48, 6, 0x364, FALSE)
+    setmetatile(49, 12, 0x364, FALSE)
+    releaseall
+
+}
+
+script SetRedIce2NoSound {
+
+    setmetatile(18, 10, 0x39C, FALSE)
+    setmetatile(26, 8, 0x39C, FALSE)
+    setmetatile(28, 9, 0x39C, FALSE)
+    setmetatile(12, 10, 0x39C, FALSE)
+    setmetatile(41, 11, 0x39C, FALSE)
+    setmetatile(43, 7, 0x39C, FALSE)
+    setmetatile(47, 6, 0x39C, FALSE)
+    setmetatile(48, 12, 0x39C, FALSE)
+
+    setmetatile(22, 9, 0x393, FALSE)
+    setmetatile(47, 9, 0x393, FALSE)
+
+    special(DrawWholeMapView)
+
+}
+
+script ClearRedIce2NoSound {
+
+    setmetatile(18, 10, 0x397, FALSE)
+    setmetatile(26, 8, 0x397, FALSE)
+    setmetatile(28, 9, 0x397, FALSE)
+    setmetatile(12, 10, 0x397, FALSE)
+    setmetatile(41, 11, 0x397, FALSE)
+    setmetatile(43, 7, 0x397, FALSE)
+    setmetatile(47, 6, 0x397, FALSE)
+    setmetatile(48, 12, 0x397, FALSE)
+
+}
+
+script SetOrangeIce2NoSound {
+
+    setmetatile(18, 8, 0x39D, FALSE)
+    setmetatile(21, 12, 0x39D, FALSE)
+    setmetatile(11, 9, 0x39D, FALSE)
+    setmetatile(41, 7, 0x39D, FALSE)
+    setmetatile(43, 12, 0x39D, FALSE)
+    setmetatile(49, 8, 0x39D, FALSE)
+    setmetatile(47, 12, 0x39D, FALSE)
+
+    setmetatile(22, 9, 0x394, FALSE)
+    setmetatile(47, 9, 0x394, FALSE)
+
+    special(DrawWholeMapView)
+
+}
+
+script ClearOrangeIce2NoSound {
+
+    setmetatile(18, 8, 0x35F, FALSE)
+    setmetatile(21, 12, 0x35F, FALSE)
+    setmetatile(11, 9, 0x35F, FALSE)
+    setmetatile(41, 7, 0x35F, FALSE)
+    setmetatile(43, 12, 0x35F, FALSE)
+    setmetatile(49, 8, 0x35F, FALSE)
+    setmetatile(47, 12, 0x35F, FALSE)
+
+}
+
+script SetGreenIce2NoSound {
+
+    setmetatile(18, 12, 0x39B, FALSE)
+    setmetatile(26, 6, 0x39B, FALSE)
+    setmetatile(27, 10, 0x39B, FALSE)
+    setmetatile(44, 8, 0x39B, FALSE)
+    setmetatile(48, 6, 0x39B, FALSE)
+    setmetatile(49, 12, 0x39B, FALSE)
+
+    setmetatile(22, 9, 0x395, FALSE)
+    setmetatile(47, 9, 0x395, FALSE)
+
+    special(DrawWholeMapView)
+
+}
+
+script ClearGreenIce2NoSound {
+
+    setmetatile(18, 12, 0x364, FALSE)
+    setmetatile(26, 6, 0x364, FALSE)
+    setmetatile(27, 10, 0x364, FALSE)
+    setmetatile(44, 8, 0x364, FALSE)
+    setmetatile(48, 6, 0x364, FALSE)
+    setmetatile(49, 12, 0x364, FALSE)
+
+}
+
+text SignWarp_text{
+
+    "Use the warp panels below to\n"
+    "quickly reset the ice puzzle."
+
+}

@@ -310,6 +310,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FIELD),
         .abilities = { ABILITY_BLAZE, ABILITY_NONE, ABILITY_SPEED_BOOST },
+        .innates = {ABILITY_OVERGROW, ABILITY_TORRENT},
         .bodyColor = BODY_COLOR_RED,
         .speciesName = _("Torchic"),
         .cryId = CRY_TORCHIC,
@@ -2970,7 +2971,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #elif P_UPDATED_EXP_YIELDS >= GEN_5
         .expYield = 233,
     #else
-        .expYield = 208,
+        .expYield = 0,
     #endif
         .evYield_Attack = 3,
         .genderRatio = MON_MALE,
@@ -3505,7 +3506,8 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 55,
         .types = MON_TYPES(TYPE_NORMAL),
         .catchRate = 120,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 154 : 126,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
+        .innates = { ABILITY_VIGOROTH_AI },
         .evYield_Speed = 2,
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -3582,8 +3584,9 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #elif P_UPDATED_EXP_YIELDS >= GEN_5
         .expYield = 252,
     #else
-        .expYield = 210,
+        .expYield = 0,
     #endif
+        .innates = { ABILITY_SLAKING_AI },
         .evYield_HP = 3,
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -3816,7 +3819,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 30,
         .types = MON_TYPES(TYPE_BUG, TYPE_GHOST),
         .catchRate = 45,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 83 : 95,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_HP = 2,
         .genderRatio = MON_GENDERLESS,
         .eggCycles = 15,
@@ -4187,7 +4190,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 60,
         .types = MON_TYPES(TYPE_FIGHTING),
         .catchRate = 200,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 166 : 184,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_HP = 2,
         .itemRare = ITEM_KINGS_ROCK,
         .genderRatio = PERCENT_FEMALE(25),
@@ -4196,6 +4199,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .growthRate = GROWTH_FLUCTUATING,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_HUMAN_LIKE),
         .abilities = { ABILITY_THICK_FAT, ABILITY_GUTS, ABILITY_SHEER_FORCE },
+        .innates = { ABILITY_ANODYNE },
         .bodyColor = BODY_COLOR_BROWN,
         .speciesName = _("Hariyama"),
         .cryId = CRY_HARIYAMA,
@@ -4489,7 +4493,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #elif P_UPDATED_EXP_YIELDS >= GEN_5
         .expYield = 133,
     #else
-        .expYield = 138,
+        .expYield = 0,
     #endif
         .evYield_HP = 1,
         .evYield_Speed = 1,
@@ -4503,6 +4507,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #else
         .abilities = { ABILITY_CUTE_CHARM, ABILITY_NONE, ABILITY_WONDER_SKIN },
     #endif
+        .innates = { ABILITY_DELCATTY_AI },
         .bodyColor = BODY_COLOR_PURPLE,
         .speciesName = _("Delcatty"),
         .cryId = CRY_DELCATTY,
@@ -4564,7 +4569,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 65,
         .types = MON_TYPES(TYPE_DARK, TYPE_GHOST),
         .catchRate = 45,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 133 : 98,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_Attack = 1,
         .evYield_Defense = 1,
         .itemRare = ITEM_WIDE_LENS,
@@ -4578,6 +4583,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #else
         .abilities = { ABILITY_KEEN_EYE, ABILITY_NONE, ABILITY_PRANKSTER },
     #endif
+        .innates = { ABILITY_PRANKSTER },
         .bodyColor = BODY_COLOR_PURPLE,
         .speciesName = _("Sableye"),
         .cryId = CRY_SABLEYE,
@@ -5615,7 +5621,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 75,
         .types = MON_TYPES(TYPE_ELECTRIC),
         .catchRate = 200,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 142 : 120,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_Speed = 1,
         .itemRare = ITEM_CELL_BATTERY,
         .genderRatio = PERCENT_FEMALE(50),
@@ -5692,7 +5698,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 85,
         .types = MON_TYPES(TYPE_ELECTRIC),
         .catchRate = 200,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 142 : 120,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_Speed = 1,
         .itemRare = ITEM_CELL_BATTERY,
         .genderRatio = PERCENT_FEMALE(50),
@@ -7201,7 +7207,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 60,
         .types = MON_TYPES(TYPE_NORMAL),
         .catchRate = 255,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 126 : 85,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_SpAttack = 1,
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 15,
@@ -7213,6 +7219,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
     #else
         .abilities = { ABILITY_OWN_TEMPO, ABILITY_NONE, ABILITY_CONTRARY },
     #endif
+        .innates = { ABILITY_SPINDA_AI },
         .bodyColor = BODY_COLOR_BROWN,
         .noFlip = TRUE,
         .speciesName = _("Spinda"),
@@ -7750,7 +7757,7 @@ const struct SpeciesInfo gSpeciesInfoGen3[] =
         .baseSpDefense = 105,
         .types = MON_TYPES(TYPE_DRAGON, TYPE_FLYING),
         .catchRate = 45,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 172 : 188,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_SpDefense = 2,
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,

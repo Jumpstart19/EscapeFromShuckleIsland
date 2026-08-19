@@ -120,9 +120,12 @@ u16 GetCurrentMapMusic(void)
 
 void PlayNewMapMusic(u16 songNum)
 {
-    sCurrentMapMusic = songNum;
-    sNextMapMusic = 0;
-    sMapMusicState = 1;
+    if (sCurrentMapMusic != songNum)
+    {
+        sCurrentMapMusic = songNum;
+        sNextMapMusic = 0;
+        sMapMusicState = 1;
+    }
 }
 
 void StopMapMusic(void)

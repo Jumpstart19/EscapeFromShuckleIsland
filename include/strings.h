@@ -185,6 +185,8 @@ extern const u8 gText_Pokemon[];
 extern const u8 gText_InParty[];
 extern const u8 gText_InGameClockUsable[];
 
+extern const u8 gText_LastStandSlide[];
+
 // reset rtc screen texts
 extern const u8 gText_Day[];
 extern const u8 gText_Colon3[];
@@ -255,6 +257,7 @@ extern const u8 gText_YesNo[];
 // main menu/birch speech text
 extern const u8 gText_Birch_Welcome[];
 extern const u8 gText_ThisIsAPokemon[];
+extern const u8 gText_Birch_Pokemon[];
 extern const u8 gText_Birch_MainSpeech[];
 extern const u8 gText_Birch_AndYouAre[];
 extern const u8 gText_Birch_BoyOrGirl[];
@@ -2054,8 +2057,11 @@ extern const u8 gText_FindWordsWhichFit[];
 extern const u8 gText_TheTrainersImage[];
 extern const u8 gText_ApprenticePhrase[];
 extern const u8 gText_GoodSaying[];
+extern const u8 gText_RiddleQuestion[];
 extern const u8 gText_CombineTwoWordsOrPhrases2[];
 extern const u8 gText_ToTeachHerAGoodSaying[];
+extern const u8 gText_LookIntoEyes[];
+extern const u8 gText_ToFindAnswer[];
 extern const u8 gText_FansQuestion[];
 extern const u8 gText_TheImage[];
 extern const u8 gText_Questionnaire[];

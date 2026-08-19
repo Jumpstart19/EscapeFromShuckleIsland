@@ -46,7 +46,12 @@ static bool32 ShouldRunTrainerSlidePlayerLandsFirstSuperEffectiveHit(u32 battler
 static bool32 ShouldRunTrainerSlidePlayerLandsFirstSTABMove(u32 firstId, u32 lastId, enum TrainerSlideType slideId);
 static bool32 ShouldRunTrainerSlidePlayerLandsFirstDown(u32 firstId, u32 lastId);
 static bool32 ShouldRunTrainerSlideEnemyMonUnaffected(u32 firstId, u32 lastId, enum TrainerSlideType slideId);
+static bool32 ShouldRunTrainerSlideSecondSwitchIn(u32 firstId, u32 lastId, u32 battler);
+static bool32 ShouldRunTrainerSlideThirdSwitchIn(u32 firstId, u32 lastId, u32 battler);
+static bool32 ShouldRunTrainerSlideFourthSwitchIn(u32 firstId, u32 lastId, u32 battler);
+static bool32 ShouldRunTrainerSlideFifthSwitchIn(u32 firstId, u32 lastId, u32 battler);
 static bool32 ShouldRunTrainerSlideLastSwitchIn(u32 battler);
+static bool32 ShouldRunTrainerSlideFirstLossHP(u32 firstId, u32 lastId, u32 battler);
 static bool32 ShouldRunTrainerSlideLastHalfHP(u32 firstId, u32 lastId, u32 battler);
 static bool32 ShouldRunTrainerSlideLastLowHp(u32 firstId, u32 lastId, u32 battler);
 static void SetTrainerSlideParamters(u32 battler, u32* firstId, u32* lastId, u32* trainerId, u32* retValue);
@@ -56,6 +61,30 @@ static const u8* const sTrainerSlides[DIFFICULTY_COUNT][TRAINERS_COUNT][TRAINER_
 {
     [DIFFICULTY_NORMAL] =
     {
+        [TRAINER_GRUNT_AQUA_HIDEOUT_1] = 
+        {
+            [TRAINER_SLIDE_LAST_SWITCHIN] = COMPOUND_STRING("You can't drown out this song!\nTime to soak in the moment...and perish!{PAUSE_UNTIL_PRESS}")
+        },
+
+        [TRAINER_GRUNT_AQUA_HIDEOUT_2] = 
+        {
+            [TRAINER_SLIDE_FIRST_LOSS_HP] = COMPOUND_STRING("Th-that's impossible! You can't hurt my\nHariyama without damaging moves!{PAUSE_UNTIL_PRESS}")
+        },
+
+        [TRAINER_GIOVANNI_2] = 
+        {
+            [TRAINER_SLIDE_BEFORE_FIRST_TURN] = COMPOUND_STRING("Impressive, no?\pThis is what can be achieved when you\nawaken a Pokémon's true potential!{PAUSE_UNTIL_PRESS}")
+        },
+
+        [TRAINER_JUMPSTART] = 
+        {
+            [TRAINER_SLIDE_BEFORE_FIRST_TURN] = COMPOUND_STRING("Be aware: for this fight, any time your\nmove can miss, it will!\pAlso, can you defeat Stantler without\nGallade ever taking a hit?{PAUSE_UNTIL_PRESS}"),
+            [TRAINER_SLIDE_SECOND_MON_SWITCHIN] = COMPOUND_STRING("This battle's theme is smuggling moves.\nDid you bring the right one for Spinda?\pOh, and did you know Mimic can copy\nmoves that fail?\pAlso, Snorlax should get past my Spinda\nwith over 42 health!{PAUSE_UNTIL_PRESS}"),
+            [TRAINER_SLIDE_THIRD_MON_SWITCHIN] = COMPOUND_STRING("Heal Snorlax to ≥ 120 HP, and leave\nwith both Pokémon alive and awake!{PAUSE_UNTIL_PRESS}"),
+            [TRAINER_SLIDE_FOURTH_MON_SWITCHIN] = COMPOUND_STRING("Only one move allows you to win here\nassuming Gen VI+ accuracy.\pRight move on the right mon with max PP.\nDo you have it all?{PAUSE_UNTIL_PRESS}"),
+            [TRAINER_SLIDE_FIFTH_MON_SWITCHIN] = COMPOUND_STRING("You just chose which mon to let faint.\nDid you choose correctly?{PAUSE_UNTIL_PRESS}"),
+            [TRAINER_SLIDE_LAST_SWITCHIN] = COMPOUND_STRING("You're so close!\nJust one final push!{PAUSE_UNTIL_PRESS}")
+        },
     },
 };
 
@@ -184,9 +213,37 @@ static bool32 ShouldRunTrainerSlideEnemyMonUnaffected(u32 firstId, u32 lastId, e
     return (GetEnemyMonCount(firstId, lastId, TRUE) == GetEnemyMonCount(firstId, lastId, FALSE));
 }
 
+static bool32 ShouldRunTrainerSlideSecondSwitchIn(u32 firstId, u32 lastId, u32 battler)
+{
+    return ((GetEnemyMonCount(firstId, lastId, TRUE) == (GetEnemyMonCount(firstId, lastId, FALSE) - 1)));
+}
+
+static bool32 ShouldRunTrainerSlideThirdSwitchIn(u32 firstId, u32 lastId, u32 battler)
+{
+    return ((GetEnemyMonCount(firstId, lastId, TRUE) == (GetEnemyMonCount(firstId, lastId, FALSE) - 2)));
+}
+
+static bool32 ShouldRunTrainerSlideFourthSwitchIn(u32 firstId, u32 lastId, u32 battler)
+{
+    return ((GetEnemyMonCount(firstId, lastId, TRUE) == (GetEnemyMonCount(firstId, lastId, FALSE) - 3)));
+}
+
+static bool32 ShouldRunTrainerSlideFifthSwitchIn(u32 firstId, u32 lastId, u32 battler)
+{
+    return ((GetEnemyMonCount(firstId, lastId, TRUE) == (GetEnemyMonCount(firstId, lastId, FALSE) - 4)));
+}
+
 static bool32 ShouldRunTrainerSlideLastSwitchIn(u32 battler)
 {
     return !CanBattlerSwitch(battler);
+}
+
+static bool32 ShouldRunTrainerSlideFirstLossHP(u32 firstId, u32 lastId, u32 battler)
+{
+    if (GetEnemyMonCount(firstId, lastId, TRUE) != 1)
+        return FALSE;
+
+    return (BattlerHPPercentage(battler, LESS_THAN, 1));
 }
 
 static bool32 ShouldRunTrainerSlideLastHalfHP(u32 firstId, u32 lastId, u32 battler)
@@ -274,8 +331,23 @@ enum TrainerSlideTargets ShouldDoTrainerSlide(u32 battler, enum TrainerSlideType
         case TRAINER_SLIDE_ENEMY_MON_UNAFFECTED:
             shouldRun = ShouldRunTrainerSlideEnemyMonUnaffected(firstId, lastId, slideId);
             break;
+        case TRAINER_SLIDE_SECOND_MON_SWITCHIN:
+            shouldRun = ShouldRunTrainerSlideSecondSwitchIn(firstId, lastId, battler);
+            break;
+        case TRAINER_SLIDE_THIRD_MON_SWITCHIN:
+            shouldRun = ShouldRunTrainerSlideThirdSwitchIn(firstId, lastId, battler);
+            break;
+        case TRAINER_SLIDE_FOURTH_MON_SWITCHIN:
+            shouldRun = ShouldRunTrainerSlideFourthSwitchIn(firstId, lastId, battler);
+            break;
+        case TRAINER_SLIDE_FIFTH_MON_SWITCHIN:
+            shouldRun = ShouldRunTrainerSlideFifthSwitchIn(firstId, lastId, battler);
+            break;
         case TRAINER_SLIDE_LAST_SWITCHIN:
             shouldRun = ShouldRunTrainerSlideLastSwitchIn(battler);
+            break;
+        case TRAINER_SLIDE_FIRST_LOSS_HP:
+            shouldRun = ShouldRunTrainerSlideFirstLossHP(firstId, lastId, battler);
             break;
         case TRAINER_SLIDE_LAST_HALF_HP:
             shouldRun = ShouldRunTrainerSlideLastHalfHP(firstId, lastId, battler);

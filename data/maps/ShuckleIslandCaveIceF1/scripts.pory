@@ -1,0 +1,771 @@
+mapscripts ShuckleIslandCaveIceF1_MapScripts {
+
+    MAP_SCRIPT_ON_FRAME_TABLE [
+
+        VAR_SHUCKLE_ISLAND_ICE_CAVE_STATE, 2: ShuckleIslandCaveIceF1_EventScript_setBattle3NPCs
+
+    ]
+
+    MAP_SCRIPT_ON_TRANSITION : ShuckleIslandCaveIceF1_EventScript_setBattle3NPCs
+
+}
+
+const AIR_BALLOON_ID = 1
+const BERRY_MAN_ID = 2
+const RESET_ID = 3
+const HINT_ID = 4
+const NEW_MECH_ID = 5
+const SHUCKLE_GRUNT_ID = 6
+const SWITCH_ROCK_1_ID = 7
+const SWITCH_ROCK_2_ID = 8
+const SWITCH_ROCK_3_ID = 9
+const SWITCH_ROCK_4_ID = 10
+const UNNERVE_CAPSULE_ID = 11
+
+script ShuckleIslandCaveIceF1_EventScript_setBattle3NPCs {
+
+    if(!(flag(FLAG_STARTED_BATTLE_3))) {
+
+        setflag(FLAG_SETUP_BATTLE_3_NPCS)
+
+    }
+    elif (flag(0x502)) {
+
+        setflag(FLAG_SETUP_BATTLE_3_NPCS)
+
+    }
+    else{
+
+        clearflag(FLAG_SETUP_BATTLE_3_NPCS)
+        removeitemfrommon(0)
+        removeitemfrommon(1)
+        removeitem(VAR_BATTLE3_BERRY)
+        giveitemnojingle(VAR_BATTLE3_BERRY, 1)
+        if(flag(FLAG_RECEIVED_AIR_BALLOON)) {
+
+            removeitem(ITEM_AIR_BALLOON)
+            giveitemnojingle(ITEM_AIR_BALLOON, 1)
+
+        }
+        if(flag(FLAG_RECEIVED_UNNERVE_CAPSULE)) {
+
+            removeitem(ITEM_UNNERVE_CAPSULE)
+            giveitemnojingle(ITEM_UNNERVE_CAPSULE, 1)
+
+        }
+
+    }
+
+    if (var(VAR_SHUCKLE_ISLAND_ICE_CAVE_STATE) == 2) {
+
+        setvar(VAR_SHUCKLE_ISLAND_ICE_CAVE_STATE, 1)
+
+    }
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_giveAirBalloon {
+
+    lockall
+    giveitem(ITEM_AIR_BALLOON, 1)
+    removeobject(AIR_BALLOON_ID)
+    setflag(FLAG_RECEIVED_AIR_BALLOON)
+    releaseall
+    end
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_giveUnnerveCapsule {
+
+    lockall
+    giveitem(ITEM_UNNERVE_CAPSULE, 1)
+    removeobject(UNNERVE_CAPSULE_ID)
+    setflag(FLAG_RECEIVED_UNNERVE_CAPSULE)
+    releaseall
+    end
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_berryGuy3 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_MET_BERRY_GUY_ICE_CAVE)) {
+
+        setflag(FLAG_MET_BERRY_GUY_ICE_CAVE)
+        msgbox("Hmm? What am I doing here?\pWell, I'm just making sure you have\na berry, of course!")
+
+    }
+
+    if(!flag(FLAG_RECEIVED_BERRY_3)) {
+
+        msgbox(berryGuyPresentOptions_text)
+
+        dynmultipush("Liechi Berry", ITEM_LIECHI_BERRY)
+        dynmultipush("Ganlon Berry", ITEM_GANLON_BERRY)
+        dynmultipush("Salac Berry", ITEM_SALAC_BERRY)
+        dynmultipush("Petaya Berry", ITEM_PETAYA_BERRY)
+        dynmultipush("Apicot Berry", ITEM_APICOT_BERRY)
+        dynmultipush("Lansat Berry", ITEM_LANSAT_BERRY)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_SHOW_ITEM)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back when you know\nwhich berry you want!")
+
+        }
+        else {
+
+            copyvar(VAR_BATTLE3_BERRY, VAR_RESULT)
+            giveitem(VAR_BATTLE3_BERRY, 1)
+            setflag(FLAG_RECEIVED_BERRY_3)
+
+        }
+    }
+    else {
+
+        msgbox("I hope you make good use of that berry!")
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_resetNPC3 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_RESET_NPC)) {
+
+        setflag(FLAG_SPOKE_RESET_NPC)
+        msgbox(resetNPCIntro_text)
+
+    }
+
+    if(!(flag(FLAG_RECEIVED_BERRY_3))) {
+
+        msgbox(resetNPCNothingToReset_text)
+
+    }
+    else {
+
+        msgbox("What would you like to reset?\n(Press B to exit)")
+
+        if(flag(FLAG_RECEIVED_BERRY_3)) {
+
+            dynmultipush("Reset Berry", 0)
+
+        }
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back if you would ever\nlike to reset your actions!")
+
+        }
+        else {
+
+            msgbox("One moment while I reset your actions.", MSGBOX_AUTOCLOSE)
+            fadescreen(FADE_TO_BLACK)
+
+            if(var(VAR_RESULT) == 0) {
+
+                call(ResetBerry_3)
+
+            }
+
+            fadescreen(FADE_FROM_BLACK)
+            msgbox("Your actions have been reset!")
+
+        }
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_hintNPC3 {
+
+    lockall
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+    
+    dynmultipush("Small Hint", 1)
+    dynmultipush("Medium Hint", 2)
+    dynmultipush("Large Hint", 3)
+
+    if (flag(FLAG_SM_HINT_BATTLE_3) && flag(FLAG_MED_HINT_BATTLE_3) && flag(FLAG_LRG_HINT_BATTLE_3)) {
+
+        dynmultipush("Solution", 4)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+            msgbox(hintNPCRefusedHint_text)
+
+        }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        msgbox(hintNPCBattle3SmallHint_text)
+
+        if (!flag(FLAG_SM_HINT_BATTLE_3)) {
+
+            setflag(FLAG_SM_HINT_BATTLE_3)
+            addvar(VAR_NUM_SMALL_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+        msgbox(hintNPCBattle3MedHint_text)
+
+        if (!flag(FLAG_MED_HINT_BATTLE_3)) {
+
+            setflag(FLAG_MED_HINT_BATTLE_3)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 3) {
+
+        msgbox(hintNPCBattle3LargeHint_text)
+
+        if (!flag(FLAG_LRG_HINT_BATTLE_3)) {
+
+            setflag(FLAG_LRG_HINT_BATTLE_3)
+            addvar(VAR_NUM_LARGE_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 4) {
+
+        if (!flag(FLAG_SOLUTION_BATTLE_3)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_BATTLE_3)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/dYSb-NrPJVg")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_SOLUTION_BATTLE_3)) {
+
+                setflag(FLAG_SOLUTION_BATTLE_3)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_NewMechNPC3 {
+    
+    lock
+    faceplayer
+
+    if(!flag(FLAG_SPOKE_NEW_MECH_NPC)) {
+
+        setflag(FLAG_SPOKE_NEW_MECH_NPC)
+        msgbox(newMechNPCIntro_text)
+
+    }
+
+    call(NewMechNPC3Choices)
+
+    release
+    end
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_Battle3 {
+    
+    lockall
+    faceplayer
+    setvar(VAR_SHUCKLE_ISLAND_ICE_CAVE_STATE, 2)
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_CAVE_ICE_F1)
+
+    if (!flag(FLAG_STARTED_BATTLE_3)) {
+
+        setflag(FLAG_STARTED_BATTLE_3)
+        clearflag(FLAG_SETUP_BATTLE_3_NPCS)
+        releaseall
+        trainerbattle_single(TRAINER_GRUNT_AQUA_HIDEOUT_1, Battle3_Intro_text, Battle3_Lose_text, ShuckleIslandCaveIceF1_EventScript_PostBattle3)
+    
+    }
+    else {
+
+        clearflag(FLAG_SETUP_BATTLE_3_NPCS)
+        releaseall
+        trainerbattle_single(TRAINER_GRUNT_AQUA_HIDEOUT_1, Battle3_Short_text, Battle3_Lose_text, ShuckleIslandCaveIceF1_EventScript_PostBattle3)
+        
+    }
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_PostBattle3 {
+
+    lockall
+    special(HealPlayerParty)
+    msgbox(Battle3_PostBattle_text)
+    waitmessage
+    closemessage
+    applymovement(SHUCKLE_GRUNT_ID, moves(walk_right))
+    waitmovement
+    playse(SE_EXIT)
+    removeobject(SHUCKLE_GRUNT_ID)
+    waitse
+    setflag(FLAG_WON_BATTLE_3)
+    setvar(VAR_SHUCKLE_ISLAND_CAVE_STATE, 1)
+    clearflag(FLAG_SETUP_BATTLE_3_NPCS)
+    setflag(FLAG_HIDE_FISHERMAN)
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_SOUTH)
+    delay(30)
+    releaseall
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_SignIce{
+
+    lock
+    msgbox(SignIce_text, MSGBOX_SIGN)
+    release
+    end
+
+}
+
+script ShuckleIslandCaveIceF1_EventScript_IceSwitch {
+
+    if(!flag(FLAG_TEMP_A)) {
+
+        setflag(FLAG_TEMP_A)
+        call(ClearRedIce)
+        call(SetOrangeIce)
+        
+
+    }
+    elif(!flag(FLAG_TEMP_B)) {
+
+        setflag(FLAG_TEMP_B)
+        call(ClearOrangeIce)
+        call(SetGreenIce)        
+
+    }
+    else {
+
+        clearflag(FLAG_TEMP_A)
+        clearflag(FLAG_TEMP_B)
+        call(ClearGreenIce)
+        call(SetRedIce)
+
+    }
+    
+
+}
+
+script ResetBerry_3 {
+
+    clearflag(FLAG_RECEIVED_BERRY_3)
+    removeitemfrommon(0)
+    removeitemfrommon(1)
+    removeitem(VAR_BATTLE3_BERRY)
+    setvar(VAR_BATTLE3_BERRY, 0)
+    if(flag(FLAG_RECEIVED_AIR_BALLOON)) {
+
+        removeitem(ITEM_AIR_BALLOON)
+        giveitemnojingle(ITEM_AIR_BALLOON, 1)
+
+    }
+
+}
+
+script NewMechNPC3Choices {
+
+    msgbox("Now then, what new mechanics do\nyou want explained? (Press B to exit)")
+
+    dynmultipush("Second Abilities", 0)
+    dynmultipush("Upload", 1)
+    dynmultipush("Conversion 2", 2)
+    dynmultipush("Natural Gift", 3)
+
+    if(flag(FLAG_RECEIVED_AIR_BALLOON)) {
+
+        dynmultipush("Air Balloon", 4)
+    }
+    
+    if(flag(FLAG_RECEIVED_UNNERVE_CAPSULE)) {
+
+        dynmultipush("Unnerve Capsule", 5)
+
+    }
+
+    dynmultipush("Porygon-Z AI", 6)
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("Stop by if you ever want\nthe new mechanics explained again!")
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox(secondAbilities_text)
+        call(NewMechNPC3Choices)
+
+    }
+    elif (var(VAR_RESULT) == 1) {
+
+        msgbox(upload_text)
+        call(NewMechNPC3Choices)
+
+    }
+    elif (var(VAR_RESULT) == 2) {
+
+        msgbox(conversion2_text)
+        call(NewMechNPC3Choices)
+
+    }
+    elif (var(VAR_RESULT) == 3) {
+
+        msgbox("Natural Gift now makes contact.")
+        call(NewMechNPC3Choices)
+
+    }
+    elif (var(VAR_RESULT) == 4) {
+
+        msgbox(airBalloon_text)
+        call(NewMechNPC3Choices)
+
+    }
+    elif (var(VAR_RESULT) == 5) {
+
+        msgbox(unnerveCapsule_text)
+        call(NewMechNPC3Choices)
+
+    }
+    elif (var(VAR_RESULT) == 6) {
+
+        msgbox(porygonZAI_text)
+        call(NewMechNPC3Choices)
+
+    }
+
+}
+
+script SetRedIce {
+
+    lockall
+    setmetatile(4, 11, 0x39C, FALSE)
+    setmetatile(6, 11, 0x39C, FALSE)
+    setmetatile(2, 13, 0x39C, FALSE)
+    setmetatile(16, 11, 0x39C, FALSE)
+    setmetatile(17, 1, 0x39C, FALSE)
+    setmetatile(18, 4, 0x39C, FALSE)
+    setmetatile(24, 2, 0x39C, FALSE)
+    setmetatile(25, 3, 0x39C, FALSE)
+    setmetatile(25, 13, 0x39C, FALSE)
+    setmetatile(26, 7, 0x39C, FALSE)
+
+    setmetatile(5, 12, 0x393, FALSE)
+    setmetatile(15, 1, 0x393, FALSE)
+    setmetatile(20, 11, 0x393, FALSE)
+    setmetatile(23, 6, 0x393, FALSE)
+
+    playse(SE_SWITCH)
+    special(DrawWholeMapView)
+    delay(30)
+    releaseall
+
+}
+
+script ClearRedIce {
+
+    lockall
+    setmetatile(4, 11, 0x397, FALSE)
+    setmetatile(6, 11, 0x397, FALSE)
+    setmetatile(2, 13, 0x397, FALSE)
+    setmetatile(16, 11, 0x397, FALSE)
+    setmetatile(17, 1, 0x397, FALSE)
+    setmetatile(18, 4, 0x397, FALSE)
+    setmetatile(24, 2, 0x397, FALSE)
+    setmetatile(25, 3, 0x397, FALSE)
+    setmetatile(25, 13, 0x397, FALSE)
+    setmetatile(26, 7, 0x397, FALSE)
+    releaseall
+
+}
+
+script SetOrangeIce {
+
+    lockall
+    setmetatile(4, 13, 0x39D, FALSE)
+    setmetatile(6, 13, 0x39D, FALSE)
+    setmetatile(4, 17, 0x39D, FALSE)
+    setmetatile(14, 4, 0x39D, FALSE)
+    setmetatile(15, 8, 0x39D, FALSE)
+    setmetatile(17, 12, 0x39D, FALSE)
+    setmetatile(18, 12, 0x39D, FALSE)
+    setmetatile(20, 8, 0x39D, FALSE)
+    setmetatile(24, 9, 0x39D, FALSE)
+
+    setmetatile(5, 12, 0x394, FALSE)
+    setmetatile(15, 1, 0x394, FALSE)
+    setmetatile(20, 11, 0x394, FALSE)
+    setmetatile(23, 6, 0x394, FALSE)
+
+    playse(SE_SWITCH)
+    special(DrawWholeMapView)
+    delay(30)
+    releaseall
+
+}
+
+script ClearOrangeIce {
+
+    lockall
+    setmetatile(4, 13, 0x35F, FALSE)
+    setmetatile(6, 13, 0x35F, FALSE)
+    setmetatile(4, 17, 0x35F, FALSE)
+    setmetatile(14, 4, 0x35F, FALSE)
+    setmetatile(15, 8, 0x35F, FALSE)
+    setmetatile(17, 12, 0x35F, FALSE)
+    setmetatile(18, 12, 0x35F, FALSE)
+    setmetatile(20, 8, 0x35F, FALSE)
+    setmetatile(24, 9, 0x35F, FALSE)
+    releaseall
+
+}
+
+script SetGreenIce {
+
+    lockall
+    setmetatile(2, 17, 0x39B, FALSE)
+    setmetatile(3, 12, 0x39B, FALSE)
+    setmetatile(14, 5, 0x39B, FALSE)
+    setmetatile(15, 9, 0x39B, FALSE)
+    setmetatile(17, 10, 0x39B, FALSE)
+    setmetatile(22, 11, 0x39B, FALSE)
+    setmetatile(21, 2, 0x39B, FALSE)
+    setmetatile(21, 3, 0x39B, FALSE)
+    setmetatile(23, 4, 0x39B, FALSE)
+    setmetatile(26, 12, 0x39B, FALSE)
+
+    setmetatile(5, 12, 0x395, FALSE)
+    setmetatile(15, 1, 0x395, FALSE)
+    setmetatile(20, 11, 0x395, FALSE)
+    setmetatile(23, 6, 0x395, FALSE)
+
+    playse(SE_SWITCH)
+    special(DrawWholeMapView)
+    delay(30)
+    releaseall
+
+}
+
+script ClearGreenIce {
+
+    lockall
+    setmetatile(2, 17, 0x364, FALSE)
+    setmetatile(3, 12, 0x364, FALSE)
+    setmetatile(14, 5, 0x364, FALSE)
+    setmetatile(15, 9, 0x364, FALSE)
+    setmetatile(17, 10, 0x364, FALSE)
+    setmetatile(22, 11, 0x364, FALSE)
+    setmetatile(21, 2, 0x364, FALSE)
+    setmetatile(21, 3, 0x364, FALSE)
+    setmetatile(23, 4, 0x364, FALSE)
+    setmetatile(26, 12, 0x364, FALSE)
+    releaseall
+
+}
+
+text hintNPCBattle3SmallHint_text {
+
+    "Start by figuring out how you're going\n"
+    "to deal with Lapras.\p"
+    "Even if you're immune to its 2 damaging\n"
+    "attacks, you faint to Perish song.\p"
+    "Can anything be done\n"
+    "about Perish Song?"
+
+
+}
+
+text hintNPCBattle3MedHint_text {
+
+    "Losing HP from Pain Split will not\n"
+    "pop a Pokémon's held Air Balloon."
+
+}
+
+text hintNPCBattle3LargeHint_text {
+
+    "Gallade should begin its fight\n"
+    "against Lapras with 44 HP.\p"
+    "After one move, Gallade should be\n"
+    "immune to all of Lapras's attacks."
+
+}
+
+text secondAbilities_text {
+
+    "Some Pokémon have additional abilities!\p"
+    "These function normally, except\n"
+    "they can't be swapped with Skill Swap."
+
+}
+
+text upload_text {
+
+    "When a Pokémon with the ability Upload\n"
+    "faints, it uploads its current type.\p"
+    "The next move used by an ally then\n"
+    "becomes that type until switching out."
+
+}
+
+text conversion2_text {
+
+    "Conversion 2 now changes the user's\n"
+    "type to a single, guaranteed type.\p"
+    "Type changes are as follows\n"
+    "(Last Dmg Type --> New User Type):\p"
+    "Grass --> Fire\n"
+    "Ice --> Water\p"
+    "Fighting --> Flying\n"
+    "Poison --> Rock\p"
+    "Ground --> Grass\n"
+    "Flying --> Electric\p"
+    "Normal --> Steel\n"
+    "Water --> Dragon"
+
+}
+
+text porygonZAI_text {
+
+    "Porygon-Z will only and always use\n"
+    "Pain Split when it is below half max HP\l"
+    "and its opponent has more HP.\p"
+    "Otherwise, Porygon-Z will default to\n"
+    "using Conversion 2, if it still has PP."
+
+}
+
+text airBalloon_text {
+
+    "A held Air Balloon will now also pop when\n"
+    "the holder receives indirect damage,\l"
+    "such as from Rocky Helmet recoil."
+
+}
+
+text unnerveCapsule_text {
+
+    "This changes the selected Pokémon's\n"
+    "ability to Unnerve when used in battle.\p"
+    "The ability change is lost when the\n"
+    "Pokémon switches out."
+
+}
+
+text Battle3_Intro_text {
+
+    "So, you're the one who's been\n"
+    "harboring that rogue Munchlax?\p"
+    "Surely you know how much Team Shuckle\n"
+    "has been looking for that, right?\p"
+    "Now, hand over the Munchlax before\n"
+    "I take it from you by force!"
+
+}
+
+text Battle3_Short_text {
+
+    "Hand over that Munchlax or\n"
+    "prepare to face the music!"
+
+}
+
+text Battle3_Lose_text {
+
+    "Aww shucks!"
+
+}
+
+text Battle3_PostBattle_text {
+
+    "You want to leave this island, right?\n"
+    "Then heed my advice.\p"
+    "Take that Munchlax with you and stay\n"
+    "out of Team Shuckle's way!\p"
+    "The next time you interfere with us\.\n"
+    "Let's just say things won't go as well."
+
+}
+
+text SignIce_text{
+
+    "There's an invisible bridge to the\n"
+    "right over the adjacent ice puzzle.\p"
+    "Use it to get a better view!"
+
+}

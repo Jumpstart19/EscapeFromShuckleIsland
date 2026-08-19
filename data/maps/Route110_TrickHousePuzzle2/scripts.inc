@@ -84,11 +84,6 @@ Route110_TrickHousePuzzle2_EventScript_PressButton4::
 	setmetatile 14, 12, METATILE_TrickHousePuzzle_Door_Shuttered, FALSE
 	return
 
-Route110_TrickHousePuzzle2_EventScript_Ted::
-	trainerbattle_single TRAINER_TED, Route110_TrickHousePuzzle2_Text_TedIntro, Route110_TrickHousePuzzle2_Text_TedDefeat
-	msgbox Route110_TrickHousePuzzle2_Text_TedPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 Route110_TrickHousePuzzle2_EventScript_Paul::
 	trainerbattle_single TRAINER_PAUL, Route110_TrickHousePuzzle2_Text_PaulIntro, Route110_TrickHousePuzzle2_Text_PaulDefeat
 	msgbox Route110_TrickHousePuzzle2_Text_PaulPostBattle, MSGBOX_AUTOCLOSE
@@ -105,17 +100,6 @@ Route110_TrickHousePuzzle2_Text_WroteSecretCodeLockOpened:
 	.string "“TRICK MASTER is smart.”\n"
 	.string "… … … … … … … …\p"
 	.string "The lock clicked open!$"
-
-Route110_TrickHousePuzzle2_Text_TedIntro:
-	.string "Which switch closes which hole?$"
-
-Route110_TrickHousePuzzle2_Text_TedDefeat:
-	.string "After that battle, I'm even more\n"
-	.string "confused!$"
-
-Route110_TrickHousePuzzle2_Text_TedPostBattle:
-	.string "Can I get you to push all the buttons\n"
-	.string "for me?$"
 
 Route110_TrickHousePuzzle2_Text_PaulIntro:
 	.string "Oh! You're on your second TRICK HOUSE\n"

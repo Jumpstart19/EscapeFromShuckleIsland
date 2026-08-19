@@ -1,0 +1,308 @@
+mapscripts ShuckleIslandMain_MapScripts {}
+
+const TM_MERCHANT_ID = 1
+const SAILOR_ID = 2
+const LITTLE_GIRL_ID = 3
+const SHUCKLE_GRUNT_ID = 4
+const TRICK_MAN_ID = 5
+const FISHERMAN_ID = 6
+
+script ShuckleIslandMain_EventScript_TMMerchantSequence {
+
+    lockall
+    setmetatile(19, 10, 0x124, FALSE)
+    special(DrawWholeMapView)
+    msgbox("What do you mean the next ferry\nisn't for another three days?")
+    waitmessage
+    closemessage
+    getplayerxy(VAR_TEMP_0, VAR_TEMP_1)
+    if (var(VAR_TEMP_1) == 11) {
+
+        applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_right * 7, face_up))
+
+    }
+    else {
+
+        applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_right * 7, walk_up))
+
+    }
+    waitmovement
+    applymovement(SAILOR_ID, moves(walk_in_place_left))
+    waitmovement
+    msgbox("Sorry sir, but the ferry needs repairs.")
+    waitmessage
+    applymovement(TM_MERCHANT_ID, moves(walk_in_place_right))
+    waitmovement
+    msgbox(TMMerchant1_text)
+    waitmessage
+    applymovement(SAILOR_ID, moves(walk_in_place_left))
+    waitmovement
+    msgbox(sailor1_text)
+    waitmessage
+    applymovement(TM_MERCHANT_ID, moves(walk_in_place_right))
+    waitmovement
+    msgbox(TMMerchant2_text)
+    waitmessage
+    closemessage
+    applymovement(TM_MERCHANT_ID, moves(face_left, delay_16 * 2, face_right, delay_16 * 4, lock_facing_direction, walk_left * 3, unlock_facing_direction))
+    waitmovement
+    setflag(FLAG_DONT_TRANSITION_MUSIC)
+    playbgm(MUS_SAILING, FALSE)
+    msgbox("CHAAAARGE!")
+    waitmessage
+    closemessage
+    applymovement(TM_MERCHANT_ID, moves(walk_fast_right * 8, jump_2_right, walk_fast_right * 8))
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(delay_16 * 2, face_right))
+    applymovement(SAILOR_ID, moves(walk_fast_down, face_up, delay_16 * 2, face_right, delay_16 * 2, emote_exclamation_mark))
+    waitmovement
+    playse(SE_PIN)
+    waitse
+    delay(30)
+    clearflag(FLAG_DONT_TRANSITION_MUSIC)
+    delay(120)
+	fadedefaultbgm
+    applymovement(SAILOR_ID, moves(walk_up, face_right))
+    waitmovement
+    msgbox("Could it really be that simple?\nI wonder\.")
+    waitmessage
+    closemessage
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(face_up))
+    applymovement(SAILOR_ID, moves(lock_facing_direction, walk_left * 6, unlock_facing_direction))
+    waitmovement
+    setflag(FLAG_DONT_TRANSITION_MUSIC)
+    playbgm(MUS_SAILING, FALSE)
+    msgbox("CHAAAARGE!")
+    waitmessage
+    closemessage
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(delay_16 * 2, face_right))
+    applymovement(SAILOR_ID, moves(walk_fast_right * 8, jump_2_right))
+    waitmovement
+    removeobject(SAILOR_ID)
+    fadescreen(FADE_TO_BLACK)
+    playbgm(MUS_NONE, FALSE)
+	clearflag(FLAG_DONT_TRANSITION_MUSIC)
+    playse(SE_M_BUBBLE3)
+    waitse
+    delay(30)
+    playse(SE_M_ACID_ARMOR)
+    waitse
+    msgbox("You had never seen anyone sink\nso quickly before.")
+    waitmessage
+    setvar(VAR_SHUCKLE_ISLAND_MAIN_STATE, 1)
+    setmetatile(19, 10, 0x232, TRUE)
+    special(DrawWholeMapView)
+    setflag(FLAG_TRICK_MAN_GIRL)
+    setflag(FLAG_TRICK_MAN)
+    //setflag(FLAG_SETUP_WILD_SHUCKLE_NPCS)
+    setflag(FLAG_SAILOR_DIED)
+    clearflag(FLAG_HIDE_FISHERMAN)
+    removeobject(TM_MERCHANT_ID)
+    addobject(FISHERMAN_ID)
+    closemessage
+    fadescreen(FADE_FROM_BLACK)
+	fadedefaultbgm
+    releaseall
+    end
+
+}
+
+script ShuckleIslandMain_EventScript_Sign{
+
+    lock
+    msgbox(Sign_Sailor_text, MSGBOX_SIGN)
+    release
+    end
+
+}
+
+script ShuckleIslandMain_EventScript_ShuckleGrunt {
+
+    lockall
+    msgbox("Get lost, kid!")
+    waitmessage
+    releaseall
+    end
+
+}
+
+script ShuckleIslandMain_EventScript_Fisherman {
+
+    lock
+    faceplayer
+    msgbox("Hmm, a ferry?\nI don't know anything about that.\pI was just asked to stand here so more\npeople don't try to jump off the dock.")
+    waitmessage
+    release
+    end
+
+
+}
+
+script ShuckleIslandMain_EventScript_LittleGirl {
+
+    lockall
+    faceplayer
+    msgbox("I really want a balloon, and my daddy\nsays he's going to get me one!")
+    waitmessage
+    releaseall
+    end
+
+}
+
+script ShuckleIslandMain_EventScript_TrickMan {
+
+    lock
+    faceplayer
+
+    if (!flag(FLAG_TRICK_MAN_BALLOON)) {
+
+        msgbox("Want to see a cool trick?\pI just need a balloon.\nDo you have one I can use?")
+        waitmessage
+        checkitem(ITEM_AIR_BALLOON)
+        if (var(VAR_RESULT) == FALSE) {
+
+            msgbox("Oh, you don't? Come back when you have\na balloon that you're not using.")
+            waitmessage
+
+        }
+        else {
+
+            msgbox("You do? Excellent!\pNow, if you stand there\nand my daughter stands here\.")
+            waitmessage
+            applymovement(TRICK_MAN_ID, moves(face_right, delay_16 *2, face_up))
+            waitmovement
+            msgbox("And if my daughter\nisn't holding anything\.\pThen I can perform my trick like so\.\p\.and ta-da!\pMy daughter now has your balloon!")
+            waitmessage
+            applymovement(LITTLE_GIRL_ID, moves(face_left, emote_heart))
+            playse(SE_PIN)
+            waitse
+            msgbox("Wow, thanks for getting me\na balloon, daddy!")
+            waitmessage
+            closemessage
+            applymovement(LITTLE_GIRL_ID, moves(walk_fast_up * 10))
+            waitmovement
+            removeobject(LITTLE_GIRL_ID)
+            removeitem(ITEM_AIR_BALLOON, 1)
+            setflag(FLAG_TRICK_MAN_BALLOON)
+            clearflag(FLAG_TRICK_MAN_GIRL)
+            msgbox(Trick_Man_ComeOn_Text)
+            waitmessage
+            
+            call(TrickManTeachTrick)
+
+        }
+
+    }
+    else {
+
+        msgbox("Have fun using your new trick!\nJust don't use it on kids, you weirdo.")
+
+    }
+
+    release
+    end
+
+}
+
+script TrickManTeachTrick {
+
+    msgbox("Now then, should I teach Trick\nto one of your Pokémon?", MSGBOX_YESNO)
+
+    if (var(VAR_RESULT) == YES) {
+
+        msgbox("Alright, which Pokémon\nshould learn Trick?")
+        setvar(VAR_0x8005, MOVE_TRICK)
+        special(ChooseMonForMoveTutor)
+        waitstate
+
+        if (var(VAR_RESULT) == 0) {
+
+            call(TrickManRefusedTrick)
+
+        }
+        else {
+
+            setflag(FLAG_TRICK_MAN_TRICK)
+            clearflag(FLAG_TRICK_MAN)
+            msgbox("Have fun using your new trick!\nJust don't use it on kids, you weirdo.")
+
+        }
+
+    }
+    else {
+
+        call(TrickManRefusedTrick)
+
+    }
+
+}
+
+script TrickManRefusedTrick {
+
+    msgbox("Ah\.so this is what's referred to\nas an illusion of choice.\pDo you know what I'm talking about?", MSGBOX_YESNO)
+
+    if (var(VAR_RESULT) == YES) {
+
+        msgbox("Exactly!")
+        waitmessage
+        call(TrickManTeachTrick)
+
+    }
+    else {
+
+        msgbox("Exactly!")
+        waitmessage
+        call(TrickManTeachTrick)
+
+    }
+
+}
+
+text TMMerchant1_text {
+
+    "No, you don't understand!\p"
+    "I have a Chatot that my kids\n"
+    "are teaching to use Chatter!"
+
+}
+
+text sailor1_text {
+
+    "Oh, I see. You're worried your kids will\n"
+    "teach Chatot an inappropriate word?"
+
+}
+
+text TMMerchant2_text {
+
+    "What? No!\p"
+    "They're teaching it to say things like\n"
+    "\qoGood job!\qc and \qoYou make me so proud!\qc\p"
+    "I can't imagine how soft my kids would\n"
+    "turn out if I actually gave them praise!\p"
+    "Now, move out of the way!\n"
+    "I'm leaving this island on my own terms!"
+
+}
+
+text Sign_Sailor_text {
+
+    "In memory of OBJ_EVENT_GFX_SAILOR.\p"
+    "He was more than just a sprite.\p"
+    "He was an animated sprite.\p"
+    "It seems someone has scribbled\n"
+    "something at the bottom of the sign:\p"
+    "Sailors are too heavy to hold tails\n"
+    "and don't even look good with them!"
+
+}
+
+text Trick_Man_ComeOn_Text {
+
+    "Oh, come on. Giving a child a balloon\n"
+    "isn't that bad, now is it?\p"
+    "Besides, this may change how people\n"
+    "think you treat children on the island.\p"
+    "Alright, fine. I guess I can teach you\n"
+    "how to perform this trick as well, ok?"
+
+}

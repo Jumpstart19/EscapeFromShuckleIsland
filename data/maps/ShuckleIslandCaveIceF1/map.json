@@ -1,0 +1,196 @@
+{
+  "id": "MAP_SHUCKLE_ISLAND_CAVE_ICE_F1",
+  "name": "ShuckleIslandCaveIceF1",
+  "layout": "LAYOUT_SHUCKLE_ISLAND_CAVE_ICE_F1",
+  "music": "MUS_MT_PYRE",
+  "region_map_section": "MAPSEC_SHUCKLE_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_POKE_BALL",
+      "x": 9,
+      "y": 6,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_AIR_BALLOON",
+      "script": "ShuckleIslandCaveIceF1_EventScript_giveAirBalloon",
+      "flag": "FLAG_RECEIVED_AIR_BALLOON"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_GENTLEMAN",
+      "x": 12,
+      "y": 16,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_berryGuy3",
+      "flag": "FLAG_SETUP_BATTLE_3_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_TEALA",
+      "x": 13,
+      "y": 16,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_resetNPC3",
+      "flag": "FLAG_SETUP_BATTLE_3_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LINK_RECEPTIONIST",
+      "x": 14,
+      "y": 16,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_hintNPC3",
+      "flag": "FLAG_SETUP_BATTLE_3_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BARD",
+      "x": 15,
+      "y": 16,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_NewMechNPC3",
+      "flag": "FLAG_SETUP_BATTLE_3_NPCS"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_SHUCKLE_GRUNT_M",
+      "x": 26,
+      "y": 21,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NORMAL",
+      "trainer_sight_or_berry_tree_id": "1",
+      "script": "ShuckleIslandCaveIceF1_EventScript_Battle3",
+      "flag": "FLAG_WON_BATTLE_3"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_INVISIBLE_CUSHION",
+      "x": 5,
+      "y": 12,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_IceSwitch",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_INVISIBLE_CUSHION",
+      "x": 15,
+      "y": 1,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_IceSwitch",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_INVISIBLE_CUSHION",
+      "x": 23,
+      "y": 6,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_IceSwitch",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_INVISIBLE_CUSHION",
+      "x": 20,
+      "y": 11,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "ShuckleIslandCaveIceF1_EventScript_IceSwitch",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_POKE_BALL",
+      "x": 25,
+      "y": 2,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_UNNERVE_CAPSULE",
+      "script": "ShuckleIslandCaveIceF1_EventScript_giveUnnerveCapsule",
+      "flag": "FLAG_RECEIVED_UNNERVE_CAPSULE"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 2,
+      "y": 1,
+      "elevation": 3,
+      "dest_map": "MAP_SHUCKLE_ISLAND_CAVE_B2F",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 27,
+      "y": 21,
+      "elevation": 3,
+      "dest_map": "MAP_SHUCKLE_ISLAND_CAVE_B2F",
+      "dest_warp_id": "2"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 14,
+      "y": 13,
+      "elevation": 4,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "ShuckleIslandCaveIceF1_EventScript_SignIce"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 7,
+      "elevation": 4,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "ShuckleIslandCaveIceF1_EventScript_SignIce"
+    }
+  ]
+}

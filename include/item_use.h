@@ -70,4 +70,14 @@ enum ItemTMHMOrEvolutionStone
     ITEM_IS_EVOLUTION_STONE,
 };
 
+// Start qol_field_moves
+
+void ItemUseOutOfBattle_SurfTool(u8);
+void ItemUseOnFieldCB_SurfTool(u8);
+
+void ItemUseOutOfBattle_StrengthTool(u8);
+void ItemUseOnFieldCB_StrengthTool(u8);
+
+// End qol_field_moves
+
 #endif // GUARD_ITEM_USE_H

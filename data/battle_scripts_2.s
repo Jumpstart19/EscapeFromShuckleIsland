@@ -26,6 +26,7 @@ gBattlescriptsForUsingItem::
 	.4byte BattleScript_ItemRestorePP                @ EFFECT_ITEM_RESTORE_PP
 	.4byte BattleScript_ItemIncreaseAllStats         @ EFFECT_ITEM_INCREASE_ALL_STATS
 	.4byte BattleScript_UsePokeFlute                 @ EFFECT_ITEM_USE_POKE_FLUTE
+	.4byte BattleScript_ItemChangeAbilityUnnerve     @ EFFECT_ITEM_CHANGE_ABILITY_UNNERVE
 
 	.align 2
 gBattlescriptsForSafariActions::
@@ -53,6 +54,7 @@ BattleScript_ItemRestoreHPRet:
 	datahpupdate BS_SCRIPTING, PASSIVE_HP_UPDATE
 	printstring STRINGID_ITEMRESTOREDSPECIESHEALTH
 	waitmessage B_WAIT_TIME_LONG
+	jumpifability BS_SCRIPTING, ABILITY_SATED_BELCH, BattleScript_SatedBelchDmg
 	return
 
 BattleScript_ItemRestoreHP::
@@ -116,6 +118,31 @@ BattleScript_ItemIncreaseStat::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 	end
+
+BattleScript_ItemChangeAbilityUnnerve::
+	call BattleScript_UseItemMessage
+	itemchangeabilityunnerve
+	copybyte gBattlerAbility, gBattlerAttacker
+	pushtraitstack BS_ATTACKER ABILITY_VOLT_ABSORB @ Generates placeholder popup entry
+	call BattleScript_AbilityPopUpOverwriteThenNormal2
+	recordability BS_ATTACKER
+	printstring STRINGID_ABILITYBECAMEUNNERVE
+	pause B_WAIT_TIME_LONG
+	switchinabilities BS_ATTACKER
+	waitmessage B_WAIT_TIME_LONG
+	end
+
+BattleScript_AbilityPopUpOverwriteThenNormal2:
+	setbyte sFIXED_ABILITY_POPUP, TRUE
+	showabilitypopup
+	pause B_WAIT_TIME_MED
+	sethword sABILITY_OVERWRITE, 0
+	updateabilitypopup
+	pause B_WAIT_TIME_SHORT
+	recordability BS_ABILITY_BATTLER
+	destroyabilitypopup
+	setbyte sFIXED_ABILITY_POPUP, FALSE
+	return
 
 BattleScript_UsePokeFlute::
 	checkpokeflute
@@ -281,6 +308,7 @@ BattleScript_TrainerASlideMsgRet::
 	trainerslideout BS_OPPONENT1
 	waitstate
 	handletrainerslidemsg BS_SCRIPTING, RESTORE_BATTLER_SLIDE_CONTROL
+	@ jumpiflaststandactive BS_TARGET, BattleScript_LastStandMsg
 	return
 
 BattleScript_TrainerASlideMsgEnd2::
@@ -294,6 +322,7 @@ BattleScript_TrainerBSlideMsgRet::
 	trainerslideout BS_OPPONENT2
 	waitstate
 	handletrainerslidemsg BS_SCRIPTING, RESTORE_BATTLER_SLIDE_CONTROL
+	@ jumpiflaststandactive BS_TARGET, BattleScript_LastStandMsg
 	return
 
 BattleScript_TrainerBSlideMsgEnd2::

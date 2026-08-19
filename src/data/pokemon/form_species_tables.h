@@ -563,6 +563,7 @@ static const u16 sAerodactylFormSpeciesIdTable[] = {
 #if P_FAMILY_SNORLAX
 static const u16 sSnorlaxFormSpeciesIdTable[] = {
     SPECIES_SNORLAX,
+    SPECIES_SNORLAX2,
 #if P_GIGANTAMAX_FORMS
     SPECIES_SNORLAX_GMAX,
 #endif

@@ -162,22 +162,9 @@ void BattleAI_SetupItems(void)
 
 static u64 GetWildAiFlags(void)
 {
-    u32 avgLevel = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL);
     u64 flags = 0;
 
-    if (IsDoubleBattle())
-        avgLevel = (GetMonData(&gEnemyParty[0], MON_DATA_LEVEL) + GetMonData(&gEnemyParty[1], MON_DATA_LEVEL)) / 2;
-
-    flags |= AI_FLAG_CHECK_BAD_MOVE;
-    if (avgLevel >= 20)
-        flags |= AI_FLAG_CHECK_VIABILITY;
-    if (avgLevel >= 60)
-        flags |= AI_FLAG_TRY_TO_2HKO;
-    if (avgLevel >= 80)
-        flags |= AI_FLAG_HP_AWARE;
-
-    if (B_VAR_WILD_AI_FLAGS != 0 && VarGet(B_VAR_WILD_AI_FLAGS) != 0)
-        flags |= VarGet(B_VAR_WILD_AI_FLAGS);
+    flags |= AI_FLAG_BASIC_TRAINER;
 
     return flags;
 }
@@ -1091,6 +1078,226 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
     SetTypeBeforeUsingMove(move, battlerAtk);
     moveType = GetBattleMoveType(move);
 
+    // Wild Shuckle Battle
+    // Always use sand tomb if opponent not wrapped
+    if (move == MOVE_SAND_TOMB)
+    {
+        if (gBattleMons[battlerDef].volatiles.wrapped)
+            ADJUST_SCORE(-30);
+        else
+            ADJUST_SCORE(30);
+    }
+
+    // Use Rock Tomb over Rollout if PP remaining
+    if (move == MOVE_ROCK_TOMB)
+    {
+        ADJUST_SCORE(20);
+    }
+
+    // Espeon and Umbreon prioritize using Swift while awake
+    if (move == MOVE_SWIFT && !(gBattleMons[battlerAtk].status1 & STATUS1_SLEEP))
+    {
+        ADJUST_SCORE(GOOD_EFFECT);
+    }
+
+    // Hariyama uses strongest move
+    if (gBattleMons[battlerAtk].species == SPECIES_HARIYAMA)
+    {
+        if (GetBestDmgMoveFromBattler(battlerAtk, battlerDef, AI_ATTACKING) == move)
+        {
+            ADJUST_SCORE(30);
+        }
+        else
+        {
+            ADJUST_SCORE(-30);
+        }
+    }
+
+    // Regigigas uses strongest move on Snorlax
+    if (gBattleMons[battlerAtk].species == SPECIES_REGIGIGAS)
+    {
+        if (gBattleMons[battlerDef].species == SPECIES_SNORLAX2
+            && (GetBestDmgMoveFromBattler(battlerAtk, battlerDef, AI_ATTACKING) == move))
+        {
+            ADJUST_SCORE(50);
+        }
+        else if (gBattleMons[battlerDef].species == SPECIES_GALLADE
+            && (GetBestDmgMoveFromBattler(battlerAtk, battlerDef, AI_ATTACKING) == move))
+        {
+            ADJUST_SCORE(10); // Use strongest move on Gallade if Snorlax fainted
+        }
+        else
+        {
+            ADJUST_SCORE(-30);
+        }
+    }
+
+    // Sableye uses strongest move on Snorlax unless only sees kill on Gallade or can increase ATK with Psych Up
+    if (gBattleMons[battlerAtk].species == SPECIES_SABLEYE)
+    {
+        if (gBattleMons[battlerAtk].statStages[STAT_ATK] <= DEFAULT_STAT_STAGE
+            && gBattleMons[battlerAtk].statStages[STAT_ATK] < gBattleMons[battlerDef].statStages[STAT_ATK]
+            && gBattleMons[battlerDef].species == SPECIES_SNORLAX2
+            && move == MOVE_PSYCH_UP) //
+        {
+            ADJUST_SCORE(50); // Prioritize boosting Attack from Snorlax, if ATK stage is 0 or less
+        }
+        else if (gBattleMons[battlerAtk].statStages[STAT_ATK] <= DEFAULT_STAT_STAGE
+            && gBattleMons[battlerAtk].statStages[STAT_ATK] < gBattleMons[battlerDef].statStages[STAT_ATK]
+            && gBattleMons[battlerDef].species == SPECIES_GALLADE
+            && move == MOVE_PSYCH_UP)
+        {
+            ADJUST_SCORE(38); // As failsafe, can boost Attack from Gallade if Gallade charmed Snorlax to -2 ATK
+        }
+        else if (CanAIFaintTarget(battlerAtk, battlerDef, 0)
+            && !CanAIFaintTarget(battlerAtk, BATTLE_PARTNER(battlerDef), 0)
+            && gBattleMons[battlerDef].species == SPECIES_GALLADE
+            && move == MOVE_PUNISHMENT)
+        {
+            ADJUST_SCORE(30); // Then, prioritize killing Gallade, if can kill Gallade but not Snorlax
+        }
+        else if (gBattleMons[battlerDef].species == SPECIES_SNORLAX2
+            && (GetBestDmgMoveFromBattler(battlerAtk, battlerDef, AI_ATTACKING) == move))
+        {
+            ADJUST_SCORE(20); // Default to attacking Snorlax
+        }
+        else if (gBattleMons[battlerDef].species == SPECIES_GALLADE
+            && (GetBestDmgMoveFromBattler(battlerAtk, battlerDef, AI_ATTACKING) == move))
+        {
+            ADJUST_SCORE(5); // Attack Gallade if Snorlax fainted
+        }
+        else
+        {
+            ADJUST_SCORE(-30);
+        }
+    }
+
+    // Shuckle2 attacks Snorlax with its strongest single-target attack if above 50% HP; uses multi-target if below 50%
+    if (gBattleMons[battlerAtk].species == SPECIES_SHUCKLE2)
+    {
+        if (gAiLogicData->hpPercents[battlerAtk] >= 50
+        && gBattleMons[battlerDef].species == SPECIES_SNORLAX2
+        && move == MOVE_ROCK_WRECKER)
+        {
+            ADJUST_SCORE(50);
+        }
+        else if (gAiLogicData->hpPercents[battlerAtk] >= 50
+        && gBattleMons[battlerDef].species == SPECIES_SNORLAX2
+        && move == MOVE_DYNAMIC_PUNCH)
+        {
+            ADJUST_SCORE(30);
+        }
+        else if (gAiLogicData->hpPercents[battlerAtk] < 50
+        && move == MOVE_DIAMOND_STORM)
+        {
+            ADJUST_SCORE(50);
+        }
+        else
+        {
+            ADJUST_SCORE(-30);
+        }
+    }
+
+    // Jumpstart Battle
+    // Stantler uses Trick Room if unset, then prioritizes Giga Impact
+    if (gBattleMons[battlerAtk].species == SPECIES_STANTLER)
+    {
+        if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM && move == MOVE_TRICK_ROOM)
+        {
+            ADJUST_SCORE(-50);
+        }
+        else if (move == MOVE_TRICK_ROOM)
+        {
+            ADJUST_SCORE(50);
+        }
+        else if (move == MOVE_GIGA_IMPACT)
+        {
+            ADJUST_SCORE(30);
+        }
+    }
+
+    // Spinda uses its strongest move
+    if (gBattleMons[battlerAtk].species == SPECIES_SPINDA)
+    {
+        if (move == MOVE_THRASH)
+        {
+            ADJUST_SCORE(50);
+        }
+    }
+
+    // Kangaskhan uses Rest when below 25% HP
+    if (gBattleMons[battlerAtk].species == SPECIES_KANGASKHAN)
+    {
+        if (move == MOVE_REST && gAiLogicData->hpPercents[battlerAtk] <= 25)
+        {
+            ADJUST_SCORE(50);
+        }
+        else if (move == MOVE_REST)
+        {
+            ADJUST_SCORE(-50);
+        }
+    }
+
+    // Chansey minimizes first turn, then prioritizes Hyper Beam
+    if (gBattleMons[battlerAtk].species == SPECIES_CHANSEY)
+    {
+        if (move == MOVE_MINIMIZE && gBattleMons[battlerAtk].statStages[STAT_EVASION] <= DEFAULT_STAT_STAGE)
+        {
+            ADJUST_SCORE(50);
+        }
+        else if (move == MOVE_HYPER_BEAM)
+        {
+            ADJUST_SCORE(30);
+        }
+    }
+
+    // Vigoroth subs when able, then alternates moves
+    if (gBattleMons[battlerAtk].species == SPECIES_VIGOROTH)
+    {
+        if (move == MOVE_SUBSTITUTE
+            && gAiLogicData->hpPercents[battlerAtk] > 25
+            && !gBattleMons[battlerAtk].volatiles.substitute)
+        {
+            ADJUST_SCORE(100);
+        }
+        else if (move == MOVE_SUBSTITUTE
+                && (gAiLogicData->hpPercents[battlerAtk] <= 25
+                || gBattleMons[battlerAtk].volatiles.substitute))
+        {
+            ADJUST_SCORE(-50);
+        }
+        else if (move != MOVE_SUBSTITUTE && move != MOVE_SUCKER_PUNCH
+                && (gLastMoves[battlerAtk] == MOVE_SUBSTITUTE
+                || gLastMoves[battlerAtk] == MOVE_SUCKER_PUNCH))
+        {
+            ADJUST_SCORE(60);
+        }
+        else if (move == MOVE_SUCKER_PUNCH
+                && (gLastMoves[battlerAtk] != MOVE_SUBSTITUTE
+                || gLastMoves[battlerAtk] != MOVE_SUCKER_PUNCH))
+        {
+            ADJUST_SCORE(30);
+        }
+    }
+
+    // Slaking uses Mimic first turn, then uses Taunt, when able
+    if (gBattleMons[battlerAtk].species == SPECIES_SLAKING)
+    {
+        if (move == MOVE_MIMIC && aiData->lastUsedMove[battlerAtk] == MOVE_NONE)
+        {
+            ADJUST_SCORE(100);
+        }
+        else if (move == MOVE_TAUNT
+                && gDisableStructs[battlerDef].tauntTimer == 0)
+        {
+            ADJUST_SCORE(50);
+        }
+        else if (move == MOVE_TAUNT)
+        {
+            ADJUST_SCORE(-50);
+        }
+    }
+    
     if (IsPowderMove(move) && !IsAffectedByPowderMove(battlerDef, aiData->holdEffects[battlerDef]))
         RETURN_SCORE_MINUS(10);
 
@@ -1711,10 +1918,14 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
                 RETURN_SCORE_MINUS(20);
             // fallthrough
         case EFFECT_OHKO:
-            if (!ShouldTryOHKO(battlerAtk, battlerDef, move))
+            //if (!ShouldTryOHKO(battlerAtk, battlerDef, move))
+            //    ADJUST_SCORE(-10);
+            //else if (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX)
+            //    ADJUST_SCORE(-10);
+            if (gBattleMons[battlerDef].item == ITEM_AIR_BALLOON)
                 ADJUST_SCORE(-10);
-            else if (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX)
-                ADJUST_SCORE(-10);
+            else
+                ADJUST_SCORE(20);
             break;
         case EFFECT_MIST:
             if (gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_MIST
@@ -1810,6 +2021,8 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
         case EFFECT_SLEEP_TALK:
             if (IsWakeupTurn(battlerAtk) || !AI_IsBattlerAsleepOrComatose(battlerAtk))
                 ADJUST_SCORE(-10);    // if mon will wake up, is not asleep, or is not comatose
+            else if (AI_IsBattlerAsleepOrComatose(battlerAtk))
+                ADJUST_SCORE(30);
             break;
         case EFFECT_MEAN_LOOK:
             if (AI_CanBattlerEscape(battlerDef)
@@ -1898,9 +2111,15 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
             }
             else
             {
-                if (CountUsablePartyMons(battlerAtk) == 0 && !AISearchTraits(AIBattlerTraits, ABILITY_SOUNDPROOF)
-                  && CountUsablePartyMons(battlerDef) >= 1)
-                    ADJUST_SCORE(-10);
+                //if (CountUsablePartyMons(battlerAtk) == 0 && !AISearchTraits(AIBattlerTraits, ABILITY_SOUNDPROOF)
+                //  && CountUsablePartyMons(battlerDef) >= 1)
+                //    ADJUST_SCORE(-10);
+
+                if (!gBattleMons[battlerDef].volatiles.perishSong && !gBattleMons[battlerAtk].volatiles.perishSong)
+                    ADJUST_SCORE(30);
+
+                if (GetDynamicMoveType(GetBattlerMon(battlerAtk), move, battlerAtk, MON_IN_BATTLE) == TYPE_WATER && BattlerHasTrait(battlerDef, ABILITY_WATER_ABSORB))
+                    ADJUST_SCORE(-100);
 
                 if (gBattleMons[battlerDef].volatiles.perishSong || AI_BATTLER_HAS_TRAIT(battlerDef, ABILITY_SOUNDPROOF))
                     ADJUST_SCORE(-10);
@@ -2216,7 +2435,7 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
                 if (aiData->lastUsedMove[battlerDef] == MOVE_NONE)
                     ADJUST_SCORE(-10);
             }
-            else if (predictedMove == MOVE_NONE)
+            else if (aiData->lastUsedMove[battlerDef] == MOVE_NONE)
             {
                 // TODO predicted move separate from aiData->lastUsedMove
                 ADJUST_SCORE(-10);
@@ -2226,7 +2445,7 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
             break;
 
         case EFFECT_CONVERSION_2:
-            //TODO
+            ADJUST_SCORE(10);
             break;
         case EFFECT_LOCK_ON:
             if (gBattleMons[battlerDef].volatiles.lockOn
@@ -2399,7 +2618,7 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
                 ADJUST_SCORE(-10);
             break;
         case EFFECT_PSYCH_UP:   // haze stats check
-            {
+            {/*
                 for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++)
                 {
                     if (gBattleMons[battlerAtk].statStages[i] > DEFAULT_STAT_STAGE || gBattleMons[BATTLE_PARTNER(battlerAtk)].statStages[i] > DEFAULT_STAT_STAGE)
@@ -2410,7 +2629,7 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
                     if (gBattleMons[battlerDef].statStages[i] < DEFAULT_STAT_STAGE || gBattleMons[BATTLE_PARTNER(battlerDef)].statStages[i] < DEFAULT_STAT_STAGE)
                         ADJUST_SCORE(-10); //Don't want to copy enemy lowered stats
                 }
-            }
+            */}
             break;
         case EFFECT_SEMI_INVULNERABLE:
             if (predictedMove != MOVE_NONE
@@ -2951,6 +3170,12 @@ static s32 AI_CheckBadMove(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
             if (gBattleMons[battlerAtk].species != SPECIES_HOOPA_UNBOUND)
                 ADJUST_SCORE(-10);
             break;
+        case EFFECT_PAIN_SPLIT:
+            if (gAiLogicData->hpPercents[battlerAtk] < 50 && (gBattleMons[battlerAtk].hp < gBattleMons[battlerDef].hp))
+                ADJUST_SCORE(20);
+            else
+                ADJUST_SCORE(-20);
+            break;        
         case EFFECT_PLACEHOLDER:
             return 0;   // cannot even select
     } // move effect checks
@@ -3081,6 +3306,22 @@ static s32 AI_DoubleBattle(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
     bool32 wouldPartnerFaint = hasPartner && CanIndexMoveFaintTarget(battlerAtk, battlerAtkPartner, gAiThinkingStruct->movesetIndex, AI_ATTACKING)
         && !partnerProtecting;
     bool32 isFriendlyFireOK = !wouldPartnerFaint && (noOfHitsToKOPartner == 0 || noOfHitsToKOPartner > friendlyFireThreshold);
+
+    // prioritize damaging Munchlax in battle 2
+    if (gBattleMons[battlerDef].species == SPECIES_MUNCHLAX
+     && move == MOVE_THUNDERBOLT)
+        RETURN_SCORE_PLUS(30);
+
+    // prioritize damaging Gallade with Last Resort in battle 2, but always prioritize over Encore
+    if (move == MOVE_LAST_RESORT)
+    {
+        if (!CanUseLastResort(battlerAtk))
+            ADJUST_SCORE(-30);
+        else if (gBattleMons[battlerDef].species == SPECIES_GALLADE)
+            ADJUST_SCORE(19);
+        else
+            ADJUST_SCORE(9);
+    }
 
     // check what effect partner is using
     if (aiData->partnerMove != 0 && hasPartner)
@@ -4464,10 +4705,10 @@ static s32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move, stru
         break;
     case EFFECT_OHKO:
     case EFFECT_SHEER_COLD:
-        if (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX)
-            break;
-        else if (gBattleMons[battlerAtk].volatiles.lockOn)
-            ADJUST_SCORE(BEST_EFFECT);
+        //if (GetActiveGimmick(battlerDef) == GIMMICK_DYNAMAX)
+        //    break;
+        //else if (gBattleMons[battlerAtk].volatiles.lockOn)
+        //    ADJUST_SCORE(BEST_EFFECT);
         break;
     case EFFECT_MEAN_LOOK:
         if (ShouldTrap(battlerAtk, battlerDef, move))
@@ -4586,6 +4827,12 @@ static s32 AI_CalcMoveEffectScore(u32 battlerAtk, u32 battlerDef, u32 move, stru
         && (B_MENTAL_HERB < GEN_5 || aiData->holdEffects[battlerDef] != HOLD_EFFECT_MENTAL_HERB)
         && (encourage))
             ADJUST_SCORE(BEST_EFFECT);
+
+        else if (gDisableStructs[battlerDef].encoreTimer == 0
+        && (B_MENTAL_HERB < GEN_5 || aiData->holdEffects[battlerDef] != HOLD_EFFECT_MENTAL_HERB)
+        && !(encourage))
+            ADJUST_SCORE(WORST_EFFECT);
+        
         break;
     }
     case EFFECT_SLEEP_TALK:

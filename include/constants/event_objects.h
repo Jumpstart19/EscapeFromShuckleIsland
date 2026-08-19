@@ -247,11 +247,24 @@
 #define OBJ_EVENT_GFX_OW_MON                     240
 #define OBJ_EVENT_GFX_LIGHT_SPRITE               241
 #define OBJ_EVENT_GFX_APRICORN_TREE              242
+#define OBJ_EVENT_GFX_MUNCHLAX                   243
+#define OBJ_EVENT_GFX_SHUCKLE_GRUNT_M            244
+#define OBJ_EVENT_GFX_INVISIBLE_CUSHION          245
+#define OBJ_EVENT_GFX_SHUCKLE_ADMIN_PETREL       246
+#define OBJ_EVENT_GFX_SHUCKLE_GRUNT_F            247
+#define OBJ_EVENT_GFX_REGIROCK2                  248
+#define OBJ_EVENT_GFX_REGICE2                    249
+#define OBJ_EVENT_GFX_REGISTEEL2                 250
+#define OBJ_EVENT_GFX_REGIGIGAS                  251
+#define OBJ_EVENT_GFX_SABLEYE                    252
+#define OBJ_EVENT_GFX_HARIYAMA                   253
+#define OBJ_EVENT_GFX_SHUCKLE_LEADER_GIOVANNI    254
+#define OBJ_EVENT_GFX_SHUCKLE22                  255
 
 // NOTE: The maximum amount of object events has been expanded from 255 to 65535.
 // Since dynamic graphics ids still require at least 16 free values, the actual limit
 // is 65519, but even considering follower Pokémon, this should be more than enough :)
-#define NUM_OBJ_EVENT_GFX                        243
+#define NUM_OBJ_EVENT_GFX                        256
 
 
 // These are dynamic object gfx ids.
@@ -381,6 +394,19 @@
 #define OBJ_EVENT_PAL_TAG_RS_BRENDAN              0x1122
 #define OBJ_EVENT_PAL_TAG_RS_MAY                  0x1123
 #define OBJ_EVENT_PAL_TAG_DYNAMIC                 0x1124
+#define OBJ_EVENT_PAL_TAG_MUNCHLAX                0x1125
+#define OBJ_EVENT_PAL_TAG_SHUCKLE_GRUNT_M         0x1126
+#define OBJ_EVENT_PAL_TAG_SHUCKLE_ADMIN_PETREL    0x1127
+#define OBJ_EVENT_PAL_TAG_SHUCKLE_GRUNT_F         0x1128
+#define OBJ_EVENT_PAL_TAG_REGIROCK2               0x1129
+#define OBJ_EVENT_PAL_TAG_REGICE2                 0x1130
+#define OBJ_EVENT_PAL_TAG_REGISTEEL2              0x1131
+#define OBJ_EVENT_PAL_TAG_REGIGIGAS               0x1132
+#define OBJ_EVENT_PAL_TAG_SABLEYE                 0x1133
+#define OBJ_EVENT_PAL_TAG_HARIYAMA                0x1134
+#define OBJ_EVENT_PAL_TAG_SHUCKLE_LEADER_GIOVANNI 0x1135
+#define OBJ_EVENT_PAL_TAG_SHUCKLE22               0x1136
+#define OBJ_EVENT_PAL_TAG_NORMAN                  0x1137
 
 #if OW_FOLLOWERS_POKEBALLS
 // Vanilla

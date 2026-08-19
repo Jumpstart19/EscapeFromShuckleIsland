@@ -129,6 +129,12 @@ enum MonData {
     MON_DATA_INNATE1,
     MON_DATA_INNATE2,
     MON_DATA_INNATE3,
+    MON_DATA_INNATE4,
+    MON_DATA_INNATE5,
+    MON_DATA_INNATE6,
+    MON_DATA_INNATE7,
+    MON_DATA_INNATE8,
+    MON_DATA_INNATE9,
 };
 
 struct PokemonSubstruct0
@@ -716,7 +722,9 @@ void ZeroMonData(struct Pokemon *mon);
 void ZeroPlayerPartyMons(void);
 void ZeroEnemyPartyMons(void);
 void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
+void CreateMonExtended(struct Pokemon *mon, u16 species, u8 level, u16 nature, u8 abilityNum, u8 gender, u16 hpEv, u16 atkEv, u16 defEv, u16 speedEv, u16 spAtkEv, u16 spDefEv, u16 hpIv, u16 atkIv, u16 defIv, u16 speedIv, u16 spAtkIv, u16 spDefIv, u16 move1, u16 move2, u16 move3, u16 move4, u8 shinyMode);
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId);
+void CreateBoxMonExtended(struct BoxPokemon *boxMon, u16 species, u8 level, u16 nature, u8 abilityNum, u8 gender, u16 hpEv, u16 atkEv, u16 defEv, u16 speedEv, u16 spAtkEv, u16 spDefEv, u16 hpIv, u16 atkIv, u16 defIv, u16 speedIv, u16 spAtkIv, u16 spDefIv, u16 move1, u16 move2, u16 move3, u16 move4, u8 shinyMode);
 void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 nature);
 void CreateMonWithGenderNatureLetter(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 gender, u8 nature, u8 unownLetter);
 void CreateMaleMon(struct Pokemon *mon, u16 species, u8 level);

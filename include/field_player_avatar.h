@@ -31,6 +31,8 @@ void PlayerSetAnimId(u8 movementActionId, u8 copyableMovement);
 bool8 IsPlayerCollidingWithFarawayIslandMew(u8 direction);
 void PlayerOnBikeCollideWithFarawayIslandMew(u8 direction);
 u8 CheckForObjectEventCollision(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 direction, u8 metatileBehavior);
+bool8 TryPushBoulder(s16, s16, u8); //qol_field_moves
+void TrySlipBoulder(u8, s16, s16, u8);
 u8 PlayerGetElevation(void);
 void SetPlayerAvatarTransitionFlags(u16 transitionFlags);
 void CancelPlayerForcedMovement(void);
@@ -66,6 +68,8 @@ void SetPlayerInvisibility(bool8 invisible);
 u8 player_get_pos_including_state_based_drift(s16 *x, s16 *y);
 void SetPlayerAvatarFishing(u8 direction);
 bool8 ObjectMovingOnRockStairs(struct ObjectEvent *objectEvent, u8 direction);
+void PlayerAvatarTransition_Surfing(struct ObjectEvent *); // qol_field_moves
+void ForcePlayerToPerformMovementAction(void); // qol_field_moves
 //sideways stairs
 u8 GetRightSideStairsDirection(u8 direction);
 u8 GetLeftSideStairsDirection(u8 direction);

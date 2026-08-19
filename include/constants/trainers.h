@@ -108,7 +108,10 @@
 #define TRAINER_PIC_LEAF                  90
 #define TRAINER_PIC_RS_BRENDAN            91
 #define TRAINER_PIC_RS_MAY                92
-#define TRAINER_PIC_COUNT                 93
+#define TRAINER_PIC_SHUCKLE_GRUNT_M       93
+#define TRAINER_PIC_SHUCKLE_ADMIN_PETREL  94
+#define TRAINER_PIC_SHUCKLE_LEADER_GIOVANNI 95
+#define TRAINER_PIC_COUNT                 96
 
 // The player back pics are assumed to alternate according to the gender values (MALE/FEMALE)
 #define TRAINER_BACK_PIC_BRENDAN                0
@@ -353,6 +356,11 @@ enum TrainerClassID
     TRAINER_CLASS_PIKE_QUEEN,
     TRAINER_CLASS_PYRAMID_KING,
     TRAINER_CLASS_RS_PROTAG,
+    TRAINER_CLASS_TEAM_SHUCKLE,
+    TRAINER_CLASS_SHUCKLE_ADMIN,
+    TRAINER_CLASS_SHUCKLE_LEADER,
+    TRAINER_CLASS_SHUCKLE_LEADER2,
+    TRAINER_CLASS_GAME_MASTER,
     TRAINER_CLASS_COUNT,
 };
 

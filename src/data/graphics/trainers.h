@@ -280,6 +280,15 @@ const u16 gTrainerPalette_RubySapphireBrendan[] = INCBIN_U16("graphics/trainers/
 const u32 gTrainerFrontPic_RubySapphireMay[] = INCBIN_U32("graphics/trainers/front_pics/may_rs.4bpp.smol");
 const u16 gTrainerPalette_RubySapphireMay[] = INCBIN_U16("graphics/trainers/palettes/may_rs.gbapal");
 
+const u32 gTrainerFrontPic_ShuckleGruntM[] = INCBIN_U32("graphics/trainers/front_pics/shuckle_grunt_m.4bpp.smol");
+const u16 gTrainerPalette_ShuckleGruntM[] = INCBIN_U16("graphics/trainers/palettes/shuckle_grunt_m.gbapal");
+
+const u32 gTrainerFrontPic_ShuckleAdminPetrel[] = INCBIN_U32("graphics/trainers/front_pics/shuckle_admin_petrel.4bpp.smol");
+const u16 gTrainerPalette_ShuckleAdminPetrel[] = INCBIN_U16("graphics/trainers/palettes/shuckle_admin_petrel.gbapal");
+
+const u32 gTrainerFrontPic_ShuckleLeaderGiovanni[] = INCBIN_U32("graphics/trainers/front_pics/shuckle_leader_giovanni.4bpp.smol");
+const u16 gTrainerPalette_ShuckleLeaderGiovanni[] = INCBIN_U16("graphics/trainers/palettes/shuckle_leader_giovanni.gbapal");
+
 const u8 gTrainerBackPic_Brendan[] = INCBIN_U8("graphics/trainers/back_pics/brendan.4bpp");
 const u8 gTrainerBackPic_May[] = INCBIN_U8("graphics/trainers/back_pics/may.4bpp");
 const u8 gTrainerBackPic_Red[] = INCBIN_U8("graphics/trainers/back_pics/red.4bpp");
@@ -401,6 +410,9 @@ const struct TrainerSprite gTrainerSprites[] =
     TRAINER_SPRITE(TRAINER_PIC_LEAF, gTrainerFrontPic_Leaf, gTrainerPalette_Leaf),
     TRAINER_SPRITE(TRAINER_PIC_RS_BRENDAN, gTrainerFrontPic_RubySapphireBrendan, gTrainerPalette_RubySapphireBrendan),
     TRAINER_SPRITE(TRAINER_PIC_RS_MAY, gTrainerFrontPic_RubySapphireMay, gTrainerPalette_RubySapphireMay),
+    TRAINER_SPRITE(TRAINER_PIC_SHUCKLE_GRUNT_M, gTrainerFrontPic_ShuckleGruntM, gTrainerPalette_ShuckleGruntM),
+    TRAINER_SPRITE(TRAINER_PIC_SHUCKLE_ADMIN_PETREL, gTrainerFrontPic_ShuckleAdminPetrel, gTrainerPalette_ShuckleAdminPetrel),
+    TRAINER_SPRITE(TRAINER_PIC_SHUCKLE_LEADER_GIOVANNI, gTrainerFrontPic_ShuckleLeaderGiovanni, gTrainerPalette_ShuckleLeaderGiovanni),
 };
 
 static const union AnimCmd sAnimCmd_Hoenn[] =

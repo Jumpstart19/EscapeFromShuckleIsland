@@ -95,34 +95,47 @@ Level: 21
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
 === TRAINER_GRUNT_AQUA_HIDEOUT_1 ===
-Name: GRUNT
-Class: Team Aqua
-Pic: Aqua Grunt M
+Name: Grunt
+Class: Team Shuckle
+Pic: Shuckle Grunt M
 Gender: Male
 Music: Aqua
 Double Battle: No
-AI: Check Bad Move
+AI: Basic Trainer / Sequence Switching
 
-Poochyena
-Level: 32
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Porygon-Z @ Rocky Helmet
+Ability: Download
+Level: 25
+Mild Nature
+IVs: 0 Def
+- Conversion 2
+- Pain Split
+- Tri Attack
+
+Lapras (F) @ Lagging Tail
+Ability: Water Absorb
+Mild Nature
+IVs: 0 HP / 0 Def
+- Perish Song
+- Fissure
+- Surf
 
 === TRAINER_GRUNT_AQUA_HIDEOUT_2 ===
-Name: GRUNT
-Class: Team Aqua
-Pic: Aqua Grunt M
+Name: Grunt
+Class: Team Shuckle
+Pic: Shuckle Grunt M
 Gender: Male
 Music: Aqua
 Double Battle: No
-AI: Check Bad Move
+AI: Basic Trainer / Sequence Switching
 
-Zubat
-Level: 31
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
-
-Carvanha
-Level: 31
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Hariyama (M)
+Ability: Thick Fat
+Level: 30
+EVs: 120 Atk
+Adamant Nature
+- Reversal
+- Seismic Toss
 
 === TRAINER_GRUNT_AQUA_HIDEOUT_3 ===
 Name: GRUNT
@@ -523,23 +536,31 @@ Machoke
 Level: 30
 IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
 
-=== TRAINER_MATT ===
-Name: MATT
-Class: Aqua Admin
-Pic: Aqua Admin M
+=== TRAINER_PETREL ===
+Name: Petrel
+Class: Shuckle Admin
+Pic: Shuckle Admin Petrel
 Gender: Male
 Music: Aqua
-Items: Super Potion
-Double Battle: No
-AI: Basic Trainer
+Double Battle: Yes
+AI: Check Bad Move / Sequence Switching
 
-Mightyena
-Level: 34
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Espeon (F) @ Wise Glasses
+Ability: Synchronize
+Level: 30
+EVs: 252 HP / 104 Def / 144 SpD
+Jolly Nature
+- Sleep Talk
+- Swift
 
-Golbat
-Level: 34
-IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
+Umbreon (M)
+Ability: Synchronize
+Level: 24
+EVs: 252 HP / 116 Def / 136 SpD
+Impish Nature
+- Sleep Talk
+- Swift
+- Nightmare
 
 === TRAINER_ZANDER ===
 Name: ZANDER
@@ -571,44 +592,50 @@ Mightyena
 Level: 28
 IVs: 6 HP / 6 Atk / 6 Def / 6 SpA / 6 SpD / 6 Spe
 
-=== TRAINER_SHELLY_SEAFLOOR_CAVERN ===
-Name: SHELLY
-Class: Aqua Admin
-Pic: Aqua Admin F
-Gender: Female
-Music: Aqua
-Double Battle: No
-AI: Basic Trainer
-
-Sharpedo
-Level: 37
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-
-Mightyena
-Level: 37
-IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
-
-=== TRAINER_ARCHIE ===
-Name: ARCHIE
-Class: Aqua Leader
-Pic: Aqua Leader Archie
+=== TRAINER_GIOVANNI_2 ===
+Name: Giovanni
+Class: Shuckle Leader2
+Pic: Shuckle Leader Giovanni
 Gender: Male
 Music: Aqua
-Items: Super Potion / Super Potion
-Double Battle: No
-AI: Basic Trainer
+Double Battle: Yes
+AI: Basic Trainer / Sequence Switching
 
-Mightyena
-Level: 41
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Shuckle2 (M)
+Ability: Sturdy
+Level: 64
+EVs: 136 HP / 124 Atk
+Brave Nature
+Shiny: Yes
+- Rock Wrecker
+- Dynamic Punch
+- Diamond Storm
 
-Crobat
-Level: 41
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+=== TRAINER_GIOVANNI ===
+Name: Giovanni
+Class: Shuckle Leader
+Pic: Shuckle Leader Giovanni
+Gender: Male
+Music: Aqua
+Double Battle: Yes
+AI: Basic Trainer / Sequence Switching
 
-Sharpedo
-Level: 43
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Regigigas @ Berry Juice
+Ability: Slow Start
+Level: 35
+EVs: 60 HP
+Timid Nature
+- Superpower
+- Crush Grip
+
+Sableye (F) @ Berry Juice
+Ability: Stall
+Level: 27
+EVs: 252 HP
+Modest Nature
+IVs: 16 Atk
+- Punishment
+- Psych Up
 
 === TRAINER_LEAH ===
 Name: LEAH
@@ -5137,18 +5164,21 @@ Ralts
 Level: 9
 IVs: 1 HP / 1 Atk / 1 Def / 1 SpA / 1 SpD / 1 Spe
 
-=== TRAINER_TED ===
-Name: TED
-Class: School Kid
-Pic: School Kid M
+=== TRAINER_TIMMY ===
+Name: Timmy
+Class: Tuber M
+Pic: Tuber M
 Gender: Male
 Music: Male
 Double Battle: No
 AI: Check Bad Move
 
-Ralts
-Level: 17
-IVs: 1 HP / 1 Atk / 1 Def / 1 SpA / 1 SpD / 1 Spe
+Shedinja @ Lagging Tail
+Ability: Wonder Guard
+Level: 30
+EVs: 252 Atk
+Brave Nature
+- Bug Bite
 
 === TRAINER_PAUL ===
 Name: PAUL
@@ -6223,22 +6253,29 @@ Taillow
 Level: 3
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 
-=== TRAINER_TIMMY ===
-Name: TIMMY
+=== TRAINER_JOHNNY ===
+Name: Johnny
 Class: Youngster
 Pic: Youngster
 Gender: Male
 Music: Male
 Double Battle: No
-AI: Check Bad Move
+AI: Basic Trainer / Sequence Switching
 
-Aron
-Level: 15
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Gallade (M) @ Lagging Tail
+Ability: Steadfast
+Level: 32
+EVs: 252 Atk
+Lonely Nature
+- Skill Swap
+- Mimic
 
-Electrike
-Level: 13
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Shedinja
+Ability: Wonder Guard
+Level: 30
+EVs: 252 Spe
+Timid Nature
+- Toxic
 
 === TRAINER_WALLACE ===
 Name: WALLACE
@@ -8764,21 +8801,29 @@ Level: 40
 IVs: 4 HP / 4 Atk / 4 Def / 4 SpA / 4 SpD / 4 Spe
 
 === TRAINER_AMY_AND_LIV_1 ===
-Name: AMY & LIV
+Name: Amy & Liv
 Class: Twins
 Pic: Twins
 Gender: Male
 Music: Twins
 Double Battle: Yes
-AI: Check Bad Move
+AI: Basic Trainer
 
-Plusle
-Level: 15
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Minun (F) @ Metronome
+Ability: Minus
+Level: 26
+Bold Nature
+IVs: 10 Atk
+- Last Resort
+- Encore
+- Helping Hand
 
-Minun
-Level: 15
-IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+Plusle (F) @ Macho Brace
+Ability: Plus
+Level: 34
+EVs: 252 HP / 252 Def
+Bold Nature
+- Thunderbolt
 
 === TRAINER_AMY_AND_LIV_2 ===
 Name: AMY & LIV
@@ -15095,63 +15140,70 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Thunderbolt
 - Shadow Ball
 
-=== TRAINER_NORMAN_5 ===
-Name: NORMAN
-Class: Leader
+=== TRAINER_JUMPSTART ===
+Name: Jumpstart
+Class: Game Master
 Pic: Leader Norman
 Gender: Male
 Music: Male
-Items: Full Restore / Full Restore / Full Restore
-Double Battle: Yes
-AI: Basic Trainer
+AI: Check Bad Move / Sequence Switching
+Mugshot: Blue
 
-Slaking @ Sitrus Berry
-Level: 57
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Blizzard
-- Shadow Ball
-- Double Edge
-- Fire Blast
+Stantler (M) @ Red Card
+Ability: Intimidate
+Level: 12
+EVs: 194 HP / 252 Def / 64 Spe
+Bold Nature
+IVs: 0 Atk
+- Trick Room
+- Giga Impact
+- Me First
 
-Blissey
-Level: 57
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Protect
-- Sing
-- Skill Swap
-- Focus Punch
-
-Kangaskhan
-Level: 55
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Fake Out
+Spinda (F) @ Figy Berry
+Ability: Tangled Feet
+Level: 44
+EVs: 252 Spe
+Timid Nature
+IVs: 0 HP / 11 Atk / 0 Def
+- Thrash
 - Dizzy Punch
-- Endure
-- Reversal
 
-Tauros
-Level: 57
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Take Down
-- Protect
-- Fire Blast
-- Earthquake
+Kangaskhan (F) @ Flame Orb
+Ability: Early Bird
+Level: 25
+EVs: 200 Atk / 68 Def
+Naughty Nature
+IVs: 21 HP
+- Stomp
+- Rest
 
-Spinda
-Level: 58
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Teeter Dance
-- Skill Swap
-- Facade
-- Hypnosis
-
-Slaking @ Sitrus Berry
-Level: 60
-IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+Chansey (F) @ Eviolite
+Ability: Natural Cure
+Level: 44
+EVs: 252 HP / 252 Def
+Impish Nature
+IVs: 20 SpA
+- Minimize
 - Hyper Beam
-- Flamethrower
-- Thunderbolt
-- Shadow Ball
+
+Vigoroth (M) @ Life Orb
+Ability: Vital Spirit
+Level: 9
+EVs: 172 HP / 224 Spe
+Timid Nature
+IVs: 28 Atk
+- Substitute
+- Mimic
+- Sucker Punch
+
+Slaking (M) @ Leftovers
+Ability: Truant
+Level: 17
+EVs: 88 HP / 170 Atk / 252 Spe
+Hasty Nature
+IVs: 0 Def
+- Mimic
+- Taunt
 
 === TRAINER_WINONA_2 ===
 Name: WINONA

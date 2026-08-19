@@ -814,7 +814,6 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
     {
         .battleScript = BattleScript_EffectDefenseCurl,
         .battleTvScore = 1,
-        .encourageEncore = TRUE,
     },
 
     [EFFECT_SOFTBOILED] =
@@ -901,6 +900,7 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
     {
         .battleScript = BattleScript_EffectFocusPunch,
         .battleTvScore = 7,
+        .encourageEncore = TRUE,
     },
 
     [EFFECT_DOUBLE_POWER_ON_ARG_STATUS] =
@@ -984,7 +984,6 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
     {
         .battleScript = BattleScript_EffectRecycle,
         .battleTvScore = 4,
-        .encourageEncore = TRUE,
     },
 
     [EFFECT_REVENGE] =
@@ -1033,7 +1032,6 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
     {
         .battleScript = BattleScript_EffectSkillSwap,
         .battleTvScore = 6,
-        .encourageEncore = TRUE,
     },
 
     [EFFECT_IMPRISON] =
@@ -1153,7 +1151,6 @@ const struct BattleMoveEffect gBattleMoveEffects[NUM_BATTLE_MOVE_EFFECTS] =
     {
         .battleScript = BattleScript_EffectNaturalGift,
         .battleTvScore = 0, // TODO: Assign points
-        .encourageEncore = TRUE,
     },
 
     [EFFECT_POWER_BASED_ON_TARGET_HP] =

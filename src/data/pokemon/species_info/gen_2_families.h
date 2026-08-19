@@ -5327,7 +5327,7 @@ const struct SpeciesInfo gSpeciesInfoGen2[] =
         .baseSpDefense = 230,
         .types = MON_TYPES(TYPE_BUG, TYPE_ROCK),
         .catchRate = 190,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 177 : 80,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_Defense = 1,
         .evYield_SpDefense = 1,
         .itemCommon = ITEM_BERRY_JUICE,
@@ -5386,6 +5386,80 @@ const struct SpeciesInfo gSpeciesInfoGen2[] =
             sAnimTable_Following,
             gOverworldPalette_Shuckle,
             gShinyOverworldPalette_Shuckle
+        )
+        .levelUpLearnset = sShuckleLevelUpLearnset,
+        .teachableLearnset = sShuckleTeachableLearnset,
+        .eggMoveLearnset = sShuckleEggMoveLearnset,
+    },
+    [SPECIES_SHUCKLE2] =
+    {
+        .baseHP        = 20,
+        .baseAttack    = 10,
+        .baseDefense   = 230,
+        .baseSpeed     = 5,
+        .baseSpAttack  = 10,
+        .baseSpDefense = 230,
+        .types = MON_TYPES(TYPE_BUG, TYPE_ROCK),
+        .catchRate = 190,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
+        .evYield_Defense = 1,
+        .evYield_SpDefense = 1,
+        .itemCommon = ITEM_BERRY_JUICE,
+        .itemRare = ITEM_BERRY_JUICE,
+        .genderRatio = PERCENT_FEMALE(50),
+        .eggCycles = 20,
+        .friendship = STANDARD_FRIENDSHIP,
+        .growthRate = GROWTH_MEDIUM_SLOW,
+        .eggGroups = MON_EGG_GROUPS(EGG_GROUP_BUG),
+    #if P_UPDATED_ABILITIES >= GEN_4
+        .abilities = { ABILITY_STURDY, ABILITY_GLUTTONY, ABILITY_CONTRARY },
+    #else
+        .abilities = { ABILITY_STURDY, ABILITY_NONE, ABILITY_CONTRARY },
+    #endif
+        .innates = { ABILITY_ABILITY_OVERLOAD, ABILITY_SHED_SKIN, ABILITY_EXTRA_PRESSURE, ABILITY_CLEAR_BODY, ABILITY_SOUL_LINKER, ABILITY_UNLIMITED_POWER, ABILITY_SECOND_WIND, ABILITY_WIDE_AIM, ABILITY_LAST_STAND },
+        .bodyColor = BODY_COLOR_YELLOW,
+        .speciesName = _("Shuckle"),
+        .cryId = CRY_SHUCKLE,
+        .natDexNum = NATIONAL_DEX_SHUCKLE,
+        .categoryName = _("Mold"),
+        .height = 6,
+        .weight = 205,
+        .description = COMPOUND_STRING(
+            "A Shuckle hides under rocks, keeping its\n"
+            "body concealed inside its shell while\n"
+            "eating stored berries. The berries mix with\n"
+            "its body fluids to become a juice."),
+        .pokemonScale = 485,
+        .pokemonOffset = 18,
+        .trainerScale = 256,
+        .trainerOffset = 0,
+        .frontPic = gMonFrontPic_Shuckle2,
+        .frontPicSize = MON_COORDS_SIZE(64, 64),
+        .frontPicYOffset = 3,
+        .frontAnimFrames = ANIM_FRAMES(
+            ANIMCMD_FRAME(1, 20),
+            ANIMCMD_FRAME(0, 20),
+        ),
+        .frontAnimId = ANIM_GROW_VIBRATE,
+        .backPic = gMonBackPic_Shuckle2,
+        .backPicSize = P_GBA_STYLE_SPECIES_GFX ? MON_COORDS_SIZE(40, 48) : MON_COORDS_SIZE(48, 48),
+        .backPicYOffset = 11,
+        .backAnimId = BACK_ANIM_DIP_RIGHT_SIDE,
+        .palette = gMonPalette_Shuckle2,
+        .shinyPalette = gMonShinyPalette_Shuckle2,
+        .iconSprite = gMonIcon_Shuckle2,
+        .iconPalIndex = 1,
+        .pokemonJumpType = PKMN_JUMP_TYPE_SLOW,
+        SHADOW(3, 10, SHADOW_SIZE_XL_BATTLE_ONLY)
+        FOOTPRINT(Shuckle2)
+        OVERWORLD(
+            sPicTable_Shuckle2,
+            SIZE_64x64,
+            SHADOW_SIZE_M,
+            TRACKS_FOOT,
+            sAnimTable_Following,
+            gOverworldPalette_Shuckle2,
+            gShinyOverworldPalette_Shuckle2
         )
         .levelUpLearnset = sShuckleLevelUpLearnset,
         .teachableLearnset = sShuckleTeachableLearnset,
@@ -7672,7 +7746,7 @@ const struct SpeciesInfo gSpeciesInfoGen2[] =
         .baseSpDefense = 65,
         .types = MON_TYPES(TYPE_NORMAL),
         .catchRate = 45,
-        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 163 : 165,
+        .expYield = (P_UPDATED_EXP_YIELDS >= GEN_5) ? 0 : 0,
         .evYield_Attack = 1,
         .genderRatio = PERCENT_FEMALE(50),
         .eggCycles = 20,
@@ -7684,6 +7758,7 @@ const struct SpeciesInfo gSpeciesInfoGen2[] =
     #else
         .abilities = { ABILITY_INTIMIDATE, ABILITY_NONE, ABILITY_SAP_SIPPER },
     #endif
+        .innates = { ABILITY_STANTLER_AI },
         .bodyColor = BODY_COLOR_BROWN,
         .speciesName = _("Stantler"),
         .cryId = CRY_STANTLER,

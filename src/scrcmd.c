@@ -1762,6 +1762,21 @@ bool8 ScrCmd_waitbuttonpress(struct ScriptContext *ctx)
     return TRUE;
 }
 
+static bool8 WaitForBPress(void)
+{
+    if (JOY_NEW(B_BUTTON))
+        return TRUE;
+    return FALSE;
+}
+
+bool8 ScrCmd_waitbbuttonpress(struct ScriptContext *ctx)
+{
+    Script_RequestEffects(SCREFF_V1 | SCREFF_HARDWARE);
+
+    SetupNativeScript(ctx, WaitForBPress);
+    return TRUE;
+}
+
 bool8 ScrCmd_yesnobox(struct ScriptContext *ctx)
 {
     u8 left = ScriptReadByte(ctx);
@@ -2514,6 +2529,76 @@ bool8 ScrCmd_setwildbattle(struct ScriptContext *ctx)
     else
     {
         CreateScriptedDoubleWildMon(species, level, item, species2, level2, item2);
+        sIsScriptedWildDouble = TRUE;
+    }
+
+    return FALSE;
+}
+
+bool8 ScrCmd_setwildbattleextended(struct ScriptContext *ctx)
+{
+    u16 species = ScriptReadHalfword(ctx);
+    u8 level = ScriptReadByte(ctx);
+    u16 item = ScriptReadHalfword(ctx);
+	u16 nature = ScriptReadHalfword(ctx);
+	u8 abilityNum = ScriptReadByte(ctx);
+	u8 gender = ScriptReadByte(ctx);
+	u16 hpEv = ScriptReadHalfword(ctx);
+	u16 atkEv = ScriptReadHalfword(ctx);
+	u16 defEv = ScriptReadHalfword(ctx);
+	u16 speedEv = ScriptReadHalfword(ctx);
+	u16 spAtkEv = ScriptReadHalfword(ctx);
+	u16 spDefEv = ScriptReadHalfword(ctx);
+	u16 hpIv = ScriptReadHalfword(ctx);
+	u16 atkIv = ScriptReadHalfword(ctx);
+	u16 defIv = ScriptReadHalfword(ctx);
+	u16 speedIv = ScriptReadHalfword(ctx);
+	u16 spAtkIv = ScriptReadHalfword(ctx);
+	u16 spDefIv = ScriptReadHalfword(ctx);
+	u16 move1 = ScriptReadHalfword(ctx);
+	u16 move2 = ScriptReadHalfword(ctx);
+	u16 move3 = ScriptReadHalfword(ctx);
+	u16 move4 = ScriptReadHalfword(ctx);
+	u8 shinyMode = ScriptReadByte(ctx);
+    u16 species2 = ScriptReadHalfword(ctx);
+    u8 level2 = ScriptReadByte(ctx);
+    u16 item2 = ScriptReadHalfword(ctx);
+    u16 nature2 = ScriptReadHalfword(ctx);
+	u8 abilityNum2 = ScriptReadByte(ctx);
+	u8 gender2 = ScriptReadByte(ctx);
+	u16 hpEv2 = ScriptReadHalfword(ctx);
+	u16 atkEv2 = ScriptReadHalfword(ctx);
+	u16 defEv2 = ScriptReadHalfword(ctx);
+	u16 speedEv2 = ScriptReadHalfword(ctx);
+	u16 spAtkEv2 = ScriptReadHalfword(ctx);
+	u16 spDefEv2 = ScriptReadHalfword(ctx);
+	u16 hpIv2 = ScriptReadHalfword(ctx);
+	u16 atkIv2 = ScriptReadHalfword(ctx);
+	u16 defIv2 = ScriptReadHalfword(ctx);
+	u16 speedIv2 = ScriptReadHalfword(ctx);
+	u16 spAtkIv2 = ScriptReadHalfword(ctx);
+	u16 spDefIv2 = ScriptReadHalfword(ctx);
+	u16 move12 = ScriptReadHalfword(ctx);
+	u16 move22 = ScriptReadHalfword(ctx);
+	u16 move32 = ScriptReadHalfword(ctx);
+	u16 move42 = ScriptReadHalfword(ctx);
+    u8 shinyMode2 = ScriptReadByte(ctx);
+
+    Script_RequestEffects(SCREFF_V1);
+
+    if(species2 == SPECIES_MEW)
+    {
+        CreateScriptedWildMonExtended(species, level, item, nature, abilityNum, gender, hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv, hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv, move1, move2, move3, move4, shinyMode);
+        sIsScriptedWildDouble = FALSE;
+    }
+    else if (species2 == SPECIES_NONE)
+    {
+        CreateScriptedWildMonExtended(species, level, item, nature, abilityNum, gender, hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv, hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv, move1, move2, move3, move4, shinyMode);
+        sIsScriptedWildDouble = TRUE;
+    }
+    else
+    {
+        CreateScriptedDoubleWildMonExtended(species, level, item, nature, abilityNum, gender, hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv, hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv, move1, move2, move3, move4, shinyMode,species2, level2, item2, nature2, abilityNum2, gender2, hpEv2, atkEv2, defEv2, speedEv2, spAtkEv2, spDefEv2, hpIv2, atkIv2, defIv2, speedIv2, spAtkIv2, spDefIv2, move12, move22, move32, move42, shinyMode2);
         sIsScriptedWildDouble = TRUE;
     }
 

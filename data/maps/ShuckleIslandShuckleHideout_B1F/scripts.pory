@@ -1,0 +1,347 @@
+mapscripts ShuckleIslandShuckleHideout_B1F_MapScripts {
+
+    MAP_SCRIPT_ON_FRAME_TABLE [
+        
+        VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F_STATE, 0: ShuckleIslandShuckleHideout_B1F_EventScript_Battle6Intro
+        VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F_STATE, 1: ShuckleIslandShuckleHideout_B1F_EventScript_EnterContinueBattle6
+
+    ]
+
+}
+
+const GIOVANNI_ID = 1
+
+script ShuckleIslandShuckleHideout_B1F_EventScript_Battle6Intro {
+
+    lock
+
+    setmetatile(18, 6, 0x31C, TRUE)
+    setmetatile(19, 6, 0x31D, TRUE)
+    setmetatile(20, 6, 0x31E, TRUE)
+    special(DrawWholeMapView)
+    
+    stopplaytime()
+    applymovement(OBJ_EVENT_ID_PLAYER, moves(walk_down * 2, walk_right * 5, face_up))
+    waitmovement
+
+    playse(SE_DING_DONG)
+    waitse
+    msgbox("What follows is a longer text section.")
+    waitmessage
+    closemessage
+
+    applymovement(GIOVANNI_ID, moves(emote_question_mark))
+    playse(SE_PIN)
+    waitse
+
+    applymovement(GIOVANNI_ID, moves(walk_right * 3, face_up, delay_16 * 4, walk_left * 5, face_up, delay_16 * 4, walk_right * 2, face_up))
+    waitmovement
+    msgbox("I wonder\.have my monologues\nreally become that predictable?")
+    waitmessage
+    closemessage
+
+    playse(SE_DING_DONG)
+    waitse
+    msgbox(paAnnouncement_text)
+    waitmessage
+    closemessage
+
+    delay(60)
+
+    applymovement(GIOVANNI_ID, moves(face_down))
+    waitmovement
+    msgbox(giovanni1_text)
+    waitmessage
+
+    msgbox(giovanni2_text)
+    waitmessage
+
+    applymovement(GIOVANNI_ID, moves(walk_right))
+    waitmovement
+    msgbox(giovanni3_text)
+    waitmessage
+
+    applymovement(GIOVANNI_ID, moves(walk_left * 2))
+    waitmovement
+    msgbox(giovanni4_text)
+    waitmessage
+
+    applymovement(GIOVANNI_ID, moves(walk_right, face_down))
+    waitmovement
+    msgbox(giovanni5_text)
+    waitmessage
+
+    applymovement(GIOVANNI_ID, moves(walk_left))
+    waitmovement
+    msgbox(giovanni6_text)
+    waitmessage
+
+    applymovement(GIOVANNI_ID, moves(walk_right, face_down))
+    waitmovement
+    msgbox(giovanni7_text)
+    waitmessage
+
+    applymovement(GIOVANNI_ID, moves(face_up))
+    waitmovement
+    msgbox(giovanni8_text)
+    waitmessage
+
+    applymovement(GIOVANNI_ID, moves(face_down))
+    waitmovement
+    msgbox(giovanni9_text)
+    waitmessage
+
+
+
+    setvar(VAR_STARTING_FIELD_EFFECT, STARTING_STATUS_TRICK_ROOM)
+    setflag(FLAG_STARTED_BATTLE_6)
+    setflag(FLAG_CLEAR_PETREL_BATTLE_6)
+    clearflag(FLAG_CLEAR_BATTLE_6_NPCS)
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F_STATE, 200)
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F_STATE, 1)
+    startplaytime()
+    release
+    call(ShuckleIslandShuckleHideout_B1F_EventScript_ContinueBattle6)
+    
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B1F_EventScript_PostBattle6 {
+
+    lock
+
+    setmetatile(18, 6, 0x31C, TRUE)
+    setmetatile(19, 6, 0x31D, TRUE)
+    setmetatile(20, 6, 0x31E, TRUE)
+    special(DrawWholeMapView)
+    
+    indexspeciesinparty(SPECIES_SNORLAX)
+    copyvar(VAR_TEMP_B, VAR_RESULT)
+    if (var(VAR_TEMP_B) != 7) {
+
+        setsnorlax2(VAR_TEMP_B)
+
+    }
+    
+    msgbox(giovanniPostBattle6_text)
+    waitmessage
+    closemessage
+
+    specialvar(VAR_TEMP_6, GetPlayerFacingDirection)
+    if (var(VAR_TEMP_6) == DIR_WEST) {
+
+        applymovement(GIOVANNI_ID, moves(walk_down, walk_right * 5, walk_up, delay_16 * 4))
+        waitmovement
+
+    }
+    else {
+
+        applymovement(GIOVANNI_ID, moves(walk_right * 5, face_up, delay_16 * 4))
+        waitmovement
+
+    }
+
+    playse(SE_SWITCH)
+    setmetatile(18, 6, 0x2CB, TRUE)
+    setmetatile(19, 6, 0x2CC, FALSE)
+    setmetatile(20, 6, 0x2CD, TRUE)
+    special(DrawWholeMapView)
+    
+    delay(60)
+
+    applymovement(GIOVANNI_ID, moves(walk_up))
+    playse(SE_EXIT)
+    setflag(FLAG_WON_BATTLE_6)
+    removeobject(GIOVANNI_ID)
+    special(HealPlayerParty)
+    
+    delay(60)
+
+    setvar(VAR_STARTING_FIELD_EFFECT, 0)
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F_STATE, 20)
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F_STATE, 2)
+    setflag(FLAG_CLEAR_BATTLE_6_NPCS)
+    setflag(FLAG_CLEAR_MOVE_TUTOR)
+    setflag(FLAG_RECEIVED_SURFBOARD)
+    setflag(FLAG_CLEAR_BATTLE_7_NPCS)
+    clearflag(FLAG_CLEAR_PETREL_BATTLE_6)
+
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B1F_EventScript_EnterContinueBattle6 {
+
+    lock
+
+    setmetatile(18, 6, 0x31C, TRUE)
+    setmetatile(19, 6, 0x31D, TRUE)
+    setmetatile(20, 6, 0x31E, TRUE)
+    special(DrawWholeMapView)
+
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F_STATE, 2)
+
+    release
+    end
+
+}
+
+script ShuckleIslandShuckleHideout_B1F_EventScript_ContinueBattle6 {
+
+    lock
+    faceplayer
+
+    setvar(VAR_STARTING_FIELD_EFFECT, STARTING_STATUS_TRICK_ROOM)
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F_STATE, 200)
+    trainerbattle_single(TRAINER_GIOVANNI, Battle6_Intro_text, Battle6_Lose_text, ShuckleIslandShuckleHideout_B1F_EventScript_PostBattle6)
+
+
+    release
+    end
+
+}
+
+text paAnnouncement_text {
+
+    "During the speech, no information about\n"
+    "the upcoming battle will be presented.\p"
+    "Your playtime will also be paused.\p"
+    "You can skip the text, but there's\n"
+    "no downside to hearing the story!"
+
+}
+
+text giovanni1_text {
+
+    "Well, that was weird.\p"
+    "Remind me to fire the grunt in charge of\n"
+    "the PA system once I'm done with you."
+
+}
+
+text giovanni2_text {
+
+    "So, kid. We finally meet.\p"
+    "You know, your Munchlax\.or, Snorlax,\n"
+    "has been giving us quite some trouble.\p"
+    "Tell me, have you ever wondered how\n"
+    "your Pokémon got its ability Gluttony?\l"
+    "Or how it gained a second ability?"
+
+}
+
+text giovanni3_text {
+
+    "Back when Team Rocket was rebuilding,\n"
+    "I came across Shuckle Island.\p"
+    "Here, residents would give berries to\n"
+    "Shuckle to ferment into Berry Juice.\p"
+    "The islanders were content with juice,\n"
+    "but this transmutation fascinated me.\p"
+    "So, I gave a Shuckle a berry and waited.\p"
+    "But once the berry became Berry Juice,\n"
+    "I kept waiting."
+
+}
+
+text giovanni4_text {
+
+    "Eventually, the Berry Juice changed,\n"
+    "drying out to become a Rare Candy!\p"
+    "But this was no ordinary Rare Candy;\n"
+    "it didn't just raise a Pokémon's level.\p"
+    "It also changed the Pokémon's ability,\n"
+    "giving the effect of an Ability Capsule."
+
+}
+
+text giovanni5_text {
+
+    "It seems these Rare Candies fittingly\n"
+    "give berry thieves the ability Gluttony."
+
+}
+
+text giovanni6_text {
+
+    "While this was interesting, it wasn't\n"
+    "of take-over-the-world significance.\p"
+    "One day, I came across a blue Shuckle\n"
+    "and decided to experiment.\p"
+    "When this Shuckle made a Rare Candy,\n"
+    "the candy didn't swap abilities,\l"
+    "it gave Pokémon a completely new one!"
+
+}
+
+text giovanni7_text {
+
+    "And with this, Team Shuckle was born.\p"
+    "We bred tens of thousands of Shuckle,\n"
+    "accumulating our own group of shinies.\p"
+    "At one point, we even tried painting\n"
+    "ordinary Shuckle blue.\p"
+    "This, however, did not change the\n"
+    "effect of the Shuckle's Rare Candies."
+
+}
+
+text giovanni8_text {
+
+    "The paint also stained skin.\n"
+    "That poor grunt is still blue\.\p"
+    "Though I heard he did become a backup\n"
+    "for the Blue Man Group."
+
+}
+
+text giovanni9_text {
+
+    "So, do you understand what you're\n"
+    "dealing with now?\p"
+    "Team Shuckle has spent years building\n"
+    "up an army of uniquely strong Pokémon.\p"
+    "And now, we're finally ready to unleash\n"
+    "this power onto the world\.\l"
+    "starting with you."
+
+}
+
+text Battle6_Intro_text {
+
+    "Prepare to face the power bestowed\n"
+    "by the shiny Shuckle!"
+
+}
+
+text Battle6_Lose_text {
+
+    "Heh\."
+
+}
+
+text giovanniPostBattle6_text {
+
+    "Ha\.\p"
+    "...\p"
+    "Hahaha\.\p"
+    "...\p"
+    "HAHAHAHAHAHAHA!\p"
+    "Well, kid. I'll give you this:\n"
+    "you've got spunk.\p"
+    "I can see why you've given our grunts\n"
+    "so much trouble.\p"
+    "But do you really think you've proven\n"
+    "anything by beating some prototypes?\p"
+    "Tell you what, go do whatever you want.\p"
+    "Explore our hideout. Run around\n"
+    "the island. I don't care.\p"
+    "But when you feel you're ready,\n"
+    "come meet me downstairs.\p"
+    "I'll prepare a demonstration for you\n"
+    "to see the true power of my research.\p"
+    "Until then, enjoy your ignorance, kid."
+
+}

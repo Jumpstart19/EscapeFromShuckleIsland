@@ -51,6 +51,7 @@
 #include "tv.h"
 #include "wallclock.h"
 #include "window.h"
+#include "constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_pyramid.h"
 #include "constants/battle_tower.h"
@@ -4380,4 +4381,160 @@ void SetAbility(void)
 {
     u32 ability = gSpecialVar_Result;
     SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_ABILITY_NUM, &ability);
+}
+
+void GiveItemToMon(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+    u16 item = VarGet(VAR_TEMP_3);
+    SetMonData(&gPlayerParty[partyIndex], MON_DATA_HELD_ITEM, &item);
+}
+
+void RemoveItemFromMon(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+    u16 item = ITEM_NONE;
+    SetMonData(&gPlayerParty[partyIndex], MON_DATA_HELD_ITEM, &item);
+}
+
+void SetMonOTData(void)
+{ 
+    u8 partyIndex = VarGet(VAR_TEMP_3);
+
+    struct Pokemon *mon = &gPlayerParty[partyIndex];
+
+    //u8 nameYN = VarGet(VAR_TEMP_4);
+    //u8 nameOT[8];
+
+    //if (nameYN == 0)
+    //{
+    //    const u8 source[] = "TIMMY";
+    //    StringCopy(nameOT, source);
+    //}
+    //else
+    //{
+    //    const u8 source[] = "JOHNNY";
+    //    StringCopy(nameOT, source);
+    //}
+
+    //u8 genderMF = VarGet(VAR_TEMP_5);
+    //u8 genderOT = FEMALE;
+
+    //if (genderMF == 0)
+    //{
+    //    genderOT = MALE;
+    //}
+
+    u8 idYN = VarGet(VAR_TEMP_6);
+    u32 idOT = 0x00000045;
+
+    if (idYN == 0)
+    {
+        idOT = 0x00000043;
+    }
+
+    //SetMonData(mon, MON_DATA_OT_NAME, &nameOT);
+    //SetMonData(mon, MON_DATA_OT_GENDER, &genderOT);
+    SetMonData(mon, MON_DATA_OT_ID, &idOT);
+}
+
+void TakeMon(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+
+    if (partyIndex < PARTY_SIZE)
+    {
+        ZeroMonData(&gPlayerParty[partyIndex]);
+        CompactPartySlots();
+    }
+}
+
+void TakeMon2(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+
+    if (partyIndex < PARTY_SIZE)
+    {
+        ZeroMonData(&gPlayerParty[partyIndex]);
+        CompactPartySlots();
+    }
+}
+
+void IndexSpeciesInParty(void)
+{
+    u16 species = VarGet(VAR_TEMP_2);
+
+    for (u32 i = 0; i < PARTY_SIZE; i++)
+    {   if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == species)
+        {
+            gSpecialVar_Result = i;
+            return;
+        }
+    }
+
+    gSpecialVar_Result = 7;
+
+}
+
+void CheckMonItem(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+    u16 item = VarGet(VAR_TEMP_3);
+    u16 heldItem = GetMonData(&gPlayerParty[partyIndex], MON_DATA_HELD_ITEM);
+
+    if (heldItem == item)
+        gSpecialVar_Result = TRUE;
+    else
+        gSpecialVar_Result = FALSE;
+
+}
+
+void GetMonLevel(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+
+    gSpecialVar_Result = GetMonData(&gPlayerParty[partyIndex], MON_DATA_LEVEL);
+
+}
+
+void SetMonMoves(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+    u16 move1 = VarGet(VAR_TEMP_3);
+    u16 move2 = VarGet(VAR_TEMP_4);
+    u16 move3 = VarGet(VAR_TEMP_5);
+    u16 move4 = VarGet(VAR_TEMP_6);
+
+    struct Pokemon *mon = &gPlayerParty[partyIndex];
+
+    SetMonData(mon, MON_DATA_MOVE1, &move1);
+    SetMonData(mon, MON_DATA_MOVE2, &move2);
+    SetMonData(mon, MON_DATA_MOVE3, &move3);
+    SetMonData(mon, MON_DATA_MOVE4, &move4);
+}
+
+void SetSnorlax2(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+    u32 targetSpecies = SPECIES_SNORLAX2;
+
+    struct Pokemon *mon = &gPlayerParty[partyIndex];
+
+    SetMonData(mon, MON_DATA_SPECIES, &targetSpecies);
+}
+
+void UpMovePP(void)
+{
+    u8 partyIndex = VarGet(VAR_TEMP_2);
+    u8 moveIndex = VarGet(VAR_TEMP_3);
+    //u32 movePP = VarGet(VAR_TEMP_4);
+
+    struct Pokemon *mon = &gPlayerParty[partyIndex];
+
+    u32 ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES, NULL);
+
+    u32 dataUnsigned = ppBonuses + (2 * gPPUpAddValues[moveIndex]);
+    SetMonData(mon, MON_DATA_PP_BONUSES, &dataUnsigned);
+
+    //SetMonData(mon, MON_DATA_PP1 + moveIndex, &movePP);           
 }

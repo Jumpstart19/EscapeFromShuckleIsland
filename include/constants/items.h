@@ -1021,7 +1021,11 @@
 #define ITEM_DRAMPANITE 853
 #define ITEM_FALINKSITE 854
 
-#define ITEMS_COUNT 855
+#define ITEM_UNNERVE_CAPSULE 855
+#define ITEM_SURF_TOOL 856
+#define ITEM_STRENGTH_TOOL 857
+
+#define ITEMS_COUNT 858
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations
@@ -1095,6 +1099,7 @@
 #define EFFECT_ITEM_RESTORE_PP              10
 #define EFFECT_ITEM_INCREASE_ALL_STATS      11
 #define EFFECT_ITEM_USE_POKE_FLUTE          12
+#define EFFECT_ITEM_CHANGE_ABILITY_UNNERVE  13
 
 // Enigma Berry dummy constant
 #define EFFECT_ITEM_ENIGMA_BERRY_EREADER    1

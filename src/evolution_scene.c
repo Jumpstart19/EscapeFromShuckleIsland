@@ -62,7 +62,7 @@ static void VBlankCB_TradeEvolutionScene(void);
 static void EvoScene_DoMonAnimAndCry(u8 monSpriteId, u16 speciesId);
 static bool32 EvoScene_IsMonAnimFinished(u8 monSpriteId);
 static void StartBgAnimation(bool8 isLink);
-static void StopBgAnimation(void);
+//static void StopBgAnimation(void);
 static void Task_AnimateBg(u8 taskId);
 static void RestoreBgAfterAnim(void);
 
@@ -236,7 +236,7 @@ void EvolutionScene(struct Pokemon *mon, u16 postEvoSpecies, bool8 canStopEvo, u
     gBattle_BG3_X = 256;
     gBattle_BG3_Y = 0;
 
-    gBattleEnvironment = BATTLE_ENVIRONMENT_PLAIN;
+    gBattleEnvironment = BATTLE_ENVIRONMENT_GRASS;
 
     InitBattleBgsVideo();
     LoadBattleTextboxAndBackground();
@@ -342,7 +342,7 @@ static void CB2_EvolutionSceneLoadGraphics(void)
     gBattle_BG3_X = 256;
     gBattle_BG3_Y = 0;
 
-    gBattleEnvironment = BATTLE_ENVIRONMENT_PLAIN;
+    gBattleEnvironment = BATTLE_ENVIRONMENT_GRASS;
 
     InitBattleBgsVideo();
     LoadBattleTextboxAndBackground();
@@ -649,6 +649,7 @@ static void Task_EvolutionScene(u8 taskId)
     struct Pokemon *mon = &gPlayerParty[gTasks[taskId].tPartyId];
 
     // check if B Button was held, so the evolution gets stopped
+    /*
     if (gMain.heldKeys == B_BUTTON
         && gTasks[taskId].tState == EVOSTATE_WAIT_CYCLE_MON_SPRITE
         && gTasks[sEvoGraphicsTaskId].isActive
@@ -659,6 +660,7 @@ static void Task_EvolutionScene(u8 taskId)
         StopBgAnimation();
         return;
     }
+    */
 
     switch (gTasks[taskId].tState)
     {
@@ -1665,7 +1667,7 @@ static void UNUSED PauseBgPaletteAnim(void)
 }
 
 #undef tPaused
-
+/*
 static void StopBgAnimation(void)
 {
     u8 taskId;
@@ -1678,6 +1680,7 @@ static void StopBgAnimation(void)
     FillPalette(RGB_BLACK, BG_PLTT_ID(10), PLTT_SIZE_4BPP);
     RestoreBgAfterAnim();
 }
+*/
 
 static void RestoreBgAfterAnim(void)
 {

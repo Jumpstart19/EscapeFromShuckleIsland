@@ -1142,6 +1142,7 @@ void DrawTerrainTypeBattleBackground(void)
         LoadMoveBg(BG_GRASSY_TERRAIN);
         break;
     case STATUS_FIELD_MISTY_TERRAIN:
+    case STATUS_FIELD_SLEEPY_TERRAIN:
         LoadMoveBg(BG_MISTY_TERRAIN);
         break;
     case STATUS_FIELD_ELECTRIC_TERRAIN:
@@ -1149,6 +1150,12 @@ void DrawTerrainTypeBattleBackground(void)
         break;
     case STATUS_FIELD_PSYCHIC_TERRAIN:
         LoadMoveBg(BG_PSYCHIC_TERRAIN);
+        break;
+    case STATUS_FIELD_TRICK_ROOM:
+        LoadMoveBg(BG_TRICK_ROOM);
+        break;
+    case STATUS_FIELD_COSMIC_TERRAIN:
+        LoadMoveBg(BG_COSMIC_TERRAIN);
         break;
     default:
         DrawMainBattleBackground();

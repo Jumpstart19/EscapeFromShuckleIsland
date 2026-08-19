@@ -3,7 +3,7 @@
 	.equ	se_m_ember_grp, voicegroup_rs_sfx_2
 	.equ	se_m_ember_pri, 4
 	.equ	se_m_ember_rev, reverb_set+50
-	.equ	se_m_ember_mvl, 127
+	.equ	se_m_ember_mvl, 100
 	.equ	se_m_ember_key, 0
 	.equ	se_m_ember_tbs, 1
 	.equ	se_m_ember_exg, 0

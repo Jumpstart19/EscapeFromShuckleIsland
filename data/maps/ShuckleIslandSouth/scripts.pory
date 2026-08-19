@@ -1,0 +1,563 @@
+mapscripts ShuckleIslandSouth_MapScripts {
+
+    MAP_SCRIPT_ON_FRAME_TABLE [
+
+        VAR_SHUCKLE_ISLAND_SOUTH_STATE, 1: ShuckleIslandSouth_EventScript_CheckBerryJuice
+
+    ]
+
+}
+
+const BERRY_JUICE_CAMPER_ID = 1
+const ROCK_1_ID = 2
+const ROCK_2_ID = 3
+const ROCK_3_ID = 4
+const ROCK_4_ID = 5
+const HINT_NPC_ID = 6
+const NEW_MECH_NPC_ID = 7
+
+script ShuckleIslandSouth_EventScript_CheckBerryJuice {
+
+    if (!flag(FLAG_HAVE_BERRY_JUICE)) {
+
+        checkmonitem(0, ITEM_BERRY_JUICE)
+        if (var(VAR_RESULT) == TRUE) {
+
+            setflag(FLAG_HAVE_BERRY_JUICE)
+
+        }
+        else {
+
+            checkmonitem(1, ITEM_BERRY_JUICE)
+            if (var(VAR_RESULT) == TRUE) {
+
+                setflag(FLAG_HAVE_BERRY_JUICE)
+
+            }
+
+        }
+
+    }
+    
+    special(HealPlayerParty)
+    setvar(VAR_SHUCKLE_ISLAND_SOUTH_STATE, 0)
+    clearflag(FLAG_MAKE_WILD_AI_SMART)
+    end
+
+}
+
+script ShuckleIslandSouth_EventScript_Camper {
+
+    lockall
+    faceplayer
+    
+    if (!flag(FLAG_SPOKE_CAMPER)) {
+
+        msgbox(Camper_Intro_Text)
+        setflag(FLAG_SPOKE_CAMPER)
+
+    }
+    elif (!flag(FLAG_HAVE_BERRY_JUICE) && !flag(FLAG_GAVE_CAMPER_BERRY_JUICE)) {
+
+        applymovement(BERRY_JUICE_CAMPER_ID, moves(face_player))
+        msgbox(Camper_Help_Text)
+
+    }
+    elif (!flag(FLAG_GAVE_CAMPER_BERRY_JUICE)) {
+
+        applymovement(BERRY_JUICE_CAMPER_ID, moves(face_player))
+        checkitem(ITEM_BERRY_JUICE)
+        if (var(VAR_RESULT) == TRUE) {
+
+            msgbox("Wow, you managed to get a Berry Juice!\nCan I have it?", MSGBOX_YESNO)
+            if (var(VAR_RESULT) == YES) {
+
+                removeitem(ITEM_BERRY_JUICE, 1)
+                setflag(FLAG_GAVE_CAMPER_BERRY_JUICE)
+                setflag(FLAG_SETUP_WILD_SHUCKLE_NPCS)
+                clearflag(FLAG_HAVE_BERRY_JUICE)
+                setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_REMOTE)
+                msgbox("Ahh! That hits the spot!\nHere, I'll step out of the way for you.")
+                
+                specialvar(VAR_TEMP_6, GetPlayerFacingDirection)
+                if (var(VAR_TEMP_6) == DIR_WEST) {
+
+                    applymovement(BERRY_JUICE_CAMPER_ID, moves(walk_left, face_down))
+                    waitmovement
+
+                }
+                else {
+
+                    applymovement(BERRY_JUICE_CAMPER_ID, moves(walk_right, face_down))
+                    waitmovement
+
+                }
+
+            }
+            else {
+
+                msgbox("Do you want me to tell everyone\nwhat you did to that Shuckle?")
+                waitmessage
+
+            }
+
+        }
+        else {
+
+            msgbox("You can't give me the Berry Juice if\nyour Pokémon is holding it!")
+            waitmessage
+
+        }
+
+    }
+    else {
+
+        applymovement(BERRY_JUICE_CAMPER_ID, moves(face_player))
+        msgbox("Thanks again for the Berry Juice!")
+        waitmessage
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandSouth_EventScript_ShuckleRocks {
+
+    lockall
+
+    if (flag(FLAG_SPOKE_CAMPER) && !flag(FLAG_HAVE_BERRY_JUICE) && !flag(FLAG_GAVE_CAMPER_BERRY_JUICE)) {
+
+        if (!flag(FLAG_BOPPED_IT)) {
+
+            msgbox("There's something yellow\nsquirming in the rocks.\pBop it?", MSGBOX_YESNO)
+
+            if (var(VAR_RESULT) == YES) {
+
+                call(ShuckleIslandSouth_EventScript_BopItSuccess)
+
+            }
+            else {
+
+                call(ShuckleIslandSouth_EventScript_BopItFail)
+
+            }
+
+        }
+        else {
+
+            msgbox("The wild Shuckle attacked!")
+            waitmessage
+            setvar(VAR_SHUCKLE_ISLAND_SOUTH_STATE, 1)
+            setflag(FLAG_MAKE_WILD_AI_SMART)
+            clearflag(FLAG_SETUP_WILD_SHUCKLE_NPCS)
+            setwildbattleextended(SPECIES_SHUCKLE, 100, ITEM_BERRY_JUICE, NATURE_BRAVE, 0, MON_ANY, 0, 0, 0, 0, 0, 0, 31, 20, 31, 4, 31, 31, MOVE_ROCK_TOMB, MOVE_SAND_TOMB, MOVE_ROLLOUT, MOVE_NONE, FALSE)
+            playmoncry(SPECIES_SHUCKLE, CRY_MODE_ENCOUNTER)
+            delay(40)
+            waitmoncry
+            dowildbattle
+
+        }
+        
+
+    }
+    elif (!flag(FLAG_SPOKE_CAMPER)) {
+
+        msgbox("It's a rugged rock, but a Pokémon\nmay be able to smash it.\pThough you get the feeling that's not\nwhat you should be doing here.")
+        waitmessage
+
+
+    }
+    else {
+
+        msgbox("The Shuckle in these rocks seem to\nhave retreated for the time being.")
+        waitmessage
+
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandSouth_EventScript_BopItSuccess {
+
+    lock
+
+    waitse
+    playse(SE_SUCCESS)
+    waitse
+
+    switch(var(VAR_BOP_IT_SUCCESSES)) {
+
+        case 0:
+            msgbox("Pull it?", MSGBOX_YESNO)
+            break
+        case 1:
+            msgbox("Twist it?", MSGBOX_YESNO)
+            break
+        case 2:
+            msgbox("Flick it?", MSGBOX_YESNO)
+            break
+        case 3:
+            msgbox("Pull it again?", MSGBOX_YESNO)
+            break
+        case 4:
+            msgbox("Pull it harder?", MSGBOX_YESNO)
+            break
+    }
+
+    if (var(VAR_RESULT) == YES && var(VAR_BOP_IT_SUCCESSES) == 4) {
+
+        call(ShuckleIslandSouth_EventScript_BopItFinalSuccess)
+
+    }
+    elif (var(VAR_RESULT) == YES) {
+        
+        addvar(VAR_BOP_IT_SUCCESSES, 1)
+        call(ShuckleIslandSouth_EventScript_BopItSuccess)
+    
+    }
+    else {
+
+        setvar(VAR_BOP_IT_SUCCESSES, 0)
+        call(ShuckleIslandSouth_EventScript_BopItFail)
+
+    }
+
+    release
+
+}
+
+script ShuckleIslandSouth_EventScript_BopItFail {
+
+    lock
+
+    waitse
+    playse(SE_FAILURE)
+    waitse
+
+    switch(var(VAR_BOP_IT_FAILS)) {
+
+        case 0:
+            msgbox("High score!\pIs not what just happened.")
+            break
+        case 1:
+            msgbox("I know.\pIt ain't easy.")
+            break
+        case 2:
+            msgbox("Yow\.try harder!")
+            break
+        case 3:
+            msgbox("Hey, you win!\pNOT.")
+            break
+        case 4:
+            msgbox("You're out!")
+            break
+        case 5:
+            msgbox("Uh, first time playing?")
+            break
+        case 6:
+            msgbox("Focus, concentrate.")
+            break
+        case 7:
+            msgbox("Listen, do it, repeat.")
+            break
+        case 8:
+            msgbox("Come on, you can do this.")
+            break
+        case 9:
+            msgbox("Do it the same but, uh, better!")
+            break
+        case 10:
+            msgbox("I remember my first time playing Bop It!")
+            break
+        case 11:
+            msgbox("Fair enough.\pThe camper is right there, and this\nisn't helping you beat the allegations.")
+            break
+    }
+
+    addvar(VAR_BOP_IT_FAILS, 1)
+
+    if (var(VAR_BOP_IT_FAILS) > 11) {
+
+        setvar(VAR_BOP_IT_FAILS, 0)
+
+    }
+
+    release
+
+}
+
+script ShuckleIslandSouth_EventScript_BopItFinalSuccess {
+
+    lock
+
+    waitse
+    applymovement(BERRY_JUICE_CAMPER_ID, moves(face_player, emote_question_mark))
+    playse(SE_PIN)
+    waitse
+    delay(30)
+    msgbox("Uh, what are you doing to that Shuckle?\pUsually we just go up to the rocks\nand the Shuckle attack\.")
+    setflag(FLAG_BOPPED_IT)
+
+    release
+    end
+
+}
+
+script ShuckleIslandSouth_EventScript_hintNPCWildShuckle {
+
+    lockall
+    faceplayer
+
+    if (!flag(FLAG_BOPPED_IT)) {
+
+        msgbox("They're being quiet right now.\nMaybe they'll have more to say soon?")
+        releaseall
+        end
+
+    }
+
+    if (!flag(FLAG_SPOKE_HINT_NPC)) {
+
+        setflag(FLAG_SPOKE_HINT_NPC)
+        msgbox(hintNPCIntro_text)
+
+    }
+
+    msgbox("Now then, what hints can I offer you?\n(Press B to exit)")
+
+    if (!flag(FLAG_READ_HINT_INFO)) {
+
+        dynmultipush("About Hints (read me!)", 0)
+
+    }
+    else {
+
+        dynmultipush("About Hints", 0)
+
+    }
+    
+    dynmultipush("Small Hint", 1)
+    dynmultipush("Medium Hint", 2)
+    dynmultipush("Large Hint", 3)
+
+    if (flag(FLAG_SM_HINT_WILD_SHUCKLE) && flag(FLAG_MED_HINT_WILD_SHUCKLE) && flag(FLAG_LRG_HINT_WILD_SHUCKLE)) {
+
+        dynmultipush("Solution", 4)
+
+    }
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+            msgbox(hintNPCRefusedHint_text)
+
+        }
+    elif(var(VAR_RESULT) == 0) {
+
+        msgbox(hintNPCAboutHints_text)
+        setflag(FLAG_READ_HINT_INFO)
+
+    }
+    elif(var(VAR_RESULT) == 1) {
+
+        msgbox(hintNPCWildShuckleSmallHint_text)
+
+        if (!flag(FLAG_SM_HINT_WILD_SHUCKLE)) {
+
+            setflag(FLAG_SM_HINT_WILD_SHUCKLE)
+            addvar(VAR_NUM_SMALL_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 2) {
+
+        msgbox(hintNPCWildShuckleMedHint_text)
+
+        if (!flag(FLAG_MED_HINT_WILD_SHUCKLE)) {
+
+            setflag(FLAG_MED_HINT_WILD_SHUCKLE)
+            addvar(VAR_NUM_MED_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 3) {
+
+        msgbox(hintNPCWildShuckleLargeHint_text)
+
+        if (!flag(FLAG_LRG_HINT_WILD_SHUCKLE)) {
+
+            setflag(FLAG_LRG_HINT_WILD_SHUCKLE)
+            addvar(VAR_NUM_LARGE_HINTS, 1)
+
+        }
+
+    }
+    elif(var(VAR_RESULT) == 4) {
+
+        if (!flag(FLAG_SOLUTION_WILD_SHUCKLE)) {
+
+            msgbox(hintNPCSolution_text, MSGBOX_YESNO)
+
+        }
+        else {
+
+            setvar(VAR_RESULT, 1)
+
+        }
+
+        if (var(VAR_RESULT) == 0) {
+
+            msgbox("Understood.\pKeep trying, and come back\nif you feel you need the solution.")
+
+        }
+        elif(var(VAR_RESULT) == 1) {
+
+            setvar(VAR_0x8000, MUGSHOT_BATTLE_WILD)
+            callnative(DrawMugshot)
+            msgbox("https://youtu.be/9BBGabKeHy4")
+            callnative(ClearMugshot)
+
+            if (!flag(FLAG_SOLUTION_WILD_SHUCKLE)) {
+
+                setflag(FLAG_SOLUTION_WILD_SHUCKLE)
+                addvar(VAR_NUM_SOLUTIONS, 1)
+
+            }
+
+        }
+        
+    }
+
+    releaseall
+    end
+
+}
+
+script ShuckleIslandSouth_EventScript_NewMechWildShuckle {
+    
+    lockall
+    faceplayer
+
+    if (!flag(FLAG_BOPPED_IT)) {
+
+        msgbox("They're being quiet right now.\nMaybe they'll have more to say soon?")
+        releaseall
+        end
+
+    }
+
+    if(!flag(FLAG_SPOKE_NEW_MECH_NPC)) {
+
+        setflag(FLAG_SPOKE_NEW_MECH_NPC)
+        msgbox(newMechNPCIntro_text)
+
+    }
+
+    call(NewMechNPCWildShuckleChoices)
+
+    releaseall
+    end
+
+}
+
+script NewMechNPCWildShuckleChoices {
+
+    msgbox("Now then, what new mechanics do\nyou want explained? (Press B to exit)")
+
+    dynmultipush("Running From Wild Battles", 0)
+    dynmultipush("Trapping Moves", 1)
+    dynmultipush("Shuckle AI", 2)
+
+    dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+    if (var(VAR_RESULT) == 127) {
+
+        msgbox("Stop by if you ever want\nthe new mechanics explained again!")
+
+    }
+    elif (var(VAR_RESULT) == 0) {
+
+        msgbox(wildRun_text)
+        call(NewMechNPCWildShuckleChoices)
+
+    }
+    elif (var(VAR_RESULT) == 1) {
+
+        msgbox("Damaging trapping moves now deal\ndamage on their release turn.")
+        call(NewMechNPCWildShuckleChoices)
+
+    }
+    elif (var(VAR_RESULT) == 2) {
+
+        msgbox(ShuckleAI_text)
+        call(NewMechNPCWildShuckleChoices)
+
+    }
+
+}
+
+text Camper_Intro_Text {
+
+    "Team Shuckle asked me to guard this\n"
+    "cave, but I didn't expect a sandstorm!\p"
+    "Where is all the sand even coming from?\n"
+    "We're in the middle of the ocean!\p"
+    "Anyway, I'm parched. So tell you what\.\p"
+    "I'll let you pass if you get me a\n"
+    "Berry Juice from a Shuckle in the rocks."
+
+}
+
+text Camper_Help_Text {
+
+    "The Shuckle here are tough, so I\n"
+    "recommend taking the juice and running.\p"
+    "Just make sure your own Pokémon\n"
+    "don't get thirsty and drink it first!"
+
+}
+
+text hintNPCWildShuckleSmallHint_text {
+
+    "Even though speed no longer affects\n"
+    "running, could speed still be important?"
+
+}
+
+text hintNPCWildShuckleMedHint_text {
+
+    "Can both of your Pokemon hold the\n"
+    "Berry Juice during the battle?"
+
+}
+
+text hintNPCWildShuckleLargeHint_text {
+
+    "Munchlax must use Defense Curl before\n"
+    "Shuckle's first attack on Munchlax."
+
+}
+
+text wildRun_text {
+
+    "Speed no longer affects your odds\n"
+    "of running from wild battles.\p"
+    "You'll always be able to escape!"
+
+}
+
+text ShuckleAI_text {
+
+    "Shuckle will always use Sand Tomb if its\n"
+    "opponent isn't trapped by the move.\p"
+    "Otherwise, Shuckle defaults to using\n"
+    "its highest damaging move."
+
+}

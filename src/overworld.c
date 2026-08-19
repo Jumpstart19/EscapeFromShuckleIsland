@@ -77,6 +77,7 @@
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
 #include "constants/weather.h"
+#include "qol_field_moves.h" // qol_field_moves
 
 STATIC_ASSERT((B_FLAG_FOLLOWERS_DISABLED == 0 || OW_FOLLOWERS_ENABLED), FollowersFlagAssignedWithoutEnablingThem);
 
@@ -392,6 +393,7 @@ void Overworld_ResetStateAfterFly(void)
     FlagClear(FLAG_SYS_SAFARI_MODE);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
+    ClearFieldMoveFlags(); // qol_field_moves
 }
 
 void Overworld_ResetStateAfterTeleport(void)
@@ -402,6 +404,7 @@ void Overworld_ResetStateAfterTeleport(void)
     FlagClear(FLAG_SYS_SAFARI_MODE);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
+    ClearFieldMoveFlags(); // qol_field_moves
     RunScriptImmediately(EventScript_ResetMrBriney);
 }
 
@@ -413,6 +416,7 @@ void Overworld_ResetStateAfterDigEscRope(void)
     FlagClear(FLAG_SYS_SAFARI_MODE);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
+    ClearFieldMoveFlags(); // qol_field_moves
 }
 
 #if B_RESET_FLAGS_VARS_AFTER_WHITEOUT  == TRUE
@@ -453,6 +457,7 @@ static void Overworld_ResetStateAfterWhiteOut(void)
     FlagClear(FLAG_SYS_SAFARI_MODE);
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
+    ClearFieldMoveFlags(); // qol_field_moves
     if (B_RESET_FLAGS_VARS_AFTER_WHITEOUT == TRUE)
         Overworld_ResetBattleFlagsAndVars();
     // If you were defeated by Kyogre/Groudon and the step counter has
@@ -889,7 +894,8 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
 
     if (OW_HIDE_REPEAT_MAP_POPUP)
     {
-        if (gMapHeader.regionMapSectionId != sLastMapSectionId)
+        if (gMapHeader.regionMapSectionId != sLastMapSectionId
+         && gSaveBlock1Ptr->weather != WEATHER_SANDSTORM)
             ShowMapNamePopup();
     }
     else
@@ -962,7 +968,7 @@ static void LoadMapFromWarp(bool32 a1)
 
 void ResetInitialPlayerAvatarState(void)
 {
-    sInitialPlayerAvatarState.direction = DIR_SOUTH;
+    sInitialPlayerAvatarState.direction = DIR_NORTH;
     sInitialPlayerAvatarState.transitionFlags = PLAYER_AVATAR_FLAG_ON_FOOT;
 }
 
@@ -1038,7 +1044,7 @@ static u8 GetAdjustedInitialDirection(struct InitialPlayerAvatarState *playerStr
     else if (MetatileBehavior_IsLadder(metatileBehavior) == TRUE)
         return playerStruct->direction;
     else
-        return DIR_SOUTH;
+        return DIR_NORTH;
 }
 
 static u16 GetCenterScreenMetatileBehavior(void)
@@ -1798,7 +1804,7 @@ void CB2_NewGame(void)
     PlayTimeCounter_Start();
     ScriptContext_Init();
     UnlockPlayerFieldControls();
-    gFieldCallback = ExecuteTruckSequence;
+    //gFieldCallback = ExecuteTruckSequence;
     gFieldCallback2 = NULL;
     DoMapLoadLoop(&gMain.state);
     SetFieldVBlankCallback();

@@ -117,7 +117,7 @@ struct WirelessLink_URoom
     u8 topListMenuId;
     u8 tradeBoardMainWindowId;
     u8 tradeBoardHeaderWindowId;
-    u8 unused1;
+    u8 headerStr;
     u8 searchTaskId;
     u8 spriteIds[NUM_UNION_ROOM_SPRITES];
     u8 unused2;

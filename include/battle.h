@@ -64,6 +64,8 @@ struct DisableStruct
     u16 disabledMove;
     u16 encoredMove;
     u8 protectUses:4;
+    u8 charmUses:4;
+    u8 lastStandActivated:1;
     u8 stockpileCounter:4;
     s8 stockpileDef;
     s8 stockpileSpDef;
@@ -153,7 +155,8 @@ struct ProtectStruct
     u16 assuranceDoubled:1;
     u16 myceliumMight:1;
     u16 revengeDoubled:4;
-    u16 padding:7;
+    u16 lastStandTurn1:1;
+    u16 padding:6;
     // End of 16-bit bitfield
     u16 physicalDmg;
     u16 specialDmg;
@@ -592,6 +595,8 @@ struct PartyState
     u32 sentOut:1;
     u32 padding:9;
     u16 usedHeldItem;
+    u16 usedPartyHeldItem;
+    u16 uploadType;
 };
 
 struct EventStates
@@ -723,6 +728,7 @@ struct BattleStruct
     u8 ballSwapped:1; // Used for the last used ball feature
     u8 throwingPokeBall:1;
     u8 ballSpriteIds[2];    // item gfx, window gfx
+    u8 enemyInfoSpriteId; // enemy info, window gfx
     u8 moveInfoSpriteId; // move info, window gfx
     u8 skyDropTargets[MAX_BATTLERS_COUNT]; // For Sky Drop, to account for if multiple Pokemon use Sky Drop in a double battle.
     // When using a move which hits multiple opponents which is then bounced by a target, we need to make sure, the move hits both opponents, the one with bounce, and the one without.
@@ -750,6 +756,7 @@ struct BattleStruct
     s32 battlerExpReward;
     u16 prevTurnSpecies[MAX_BATTLERS_COUNT]; // Stores species the AI has in play at start of turn
     s16 passiveHpUpdate[MAX_BATTLERS_COUNT]; // non-move damage and healing
+    s16 moveHealedAmount[MAX_BATTLERS_COUNT]; // Stores amount healed as result of move; for Sated Belch
     s16 moveDamage[MAX_BATTLERS_COUNT];
     s16 critChance[MAX_BATTLERS_COUNT];
     u16 moveResultFlags[MAX_BATTLERS_COUNT];
@@ -1141,11 +1148,22 @@ static inline bool32 IsBattlerAlive(u32 battler)
         return TRUE;
 }
 
+static inline bool32 IsBattlerPresent(u32 battler)
+{
+    if (battler >= gBattlersCount)
+        return FALSE;
+    else if (gAbsentBattlerFlags & (1u << battler))
+        return FALSE;
+    else
+        return TRUE;
+}
+
 static inline bool32 IsBattlerTurnDamaged(u32 battler)
 {
     return gSpecialStatuses[battler].physicalDmg != 0
         || gSpecialStatuses[battler].specialDmg != 0
-        || gSpecialStatuses[battler].enduredDamage;
+        || gSpecialStatuses[battler].enduredDamage
+        || gProtectStructs[battler].lastStandTurn1;
 }
 
 static inline bool32 IsBattlerAtMaxHp(u32 battler)
@@ -1261,6 +1279,7 @@ static inline void SetHealAmount(u32 battler, s32 value)
     if (value == 0)
         value = 1;
     gBattleStruct->passiveHpUpdate[battler] = -1 * value;
+    gBattleStruct->moveHealedAmount[battler] = -1 * value;
 }
 
 #endif // GUARD_BATTLE_H

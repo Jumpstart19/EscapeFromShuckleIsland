@@ -55,4 +55,7 @@ bool8 FldEff_UseRockSmash(void);
 bool32 SetUpFieldMove_Defog(void);
 bool8 FldEff_Defog(void);
 
+//general
+void Task_DoFieldMove_RunFunc(u8 taskId); // qol_field_moves
+
 #endif // GUARD_FLDEFF_H

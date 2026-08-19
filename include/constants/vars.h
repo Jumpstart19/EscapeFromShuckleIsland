@@ -95,44 +95,44 @@
 #define VAR_POKELOT_RND1                                 0x404B
 #define VAR_POKELOT_RND2                                 0x404C
 #define VAR_POKELOT_PRIZE_PLACE                          0x404D
-#define VAR_UNUSED_0x404E                                0x404E // Unused Var
+#define VAR_SHUCKLE_ISLAND_STATE                         0x404E // Defines state of Shuckle Island
 #define VAR_LOTAD_SIZE_RECORD                            0x404F
 #define VAR_LITTLEROOT_TOWN_STATE                        0x4050
 #define VAR_OLDALE_TOWN_STATE                            0x4051
-#define VAR_DEWFORD_TOWN_STATE                           0x4052 // Unused Var
+#define VAR_SHUCKLE_ISLAND_ICE_CAVE_STATE                0x4052 // Defines state of Shuckle Island's ice cave
 #define VAR_LAVARIDGE_TOWN_STATE                         0x4053
 #define VAR_CURRENT_SECRET_BASE                          0x4054 // was probably allocated for VAR_FALLARBOR_TOWN_STATE at one point
-#define VAR_VERDANTURF_TOWN_STATE                        0x4055 // Unused Var
-#define VAR_PACIFIDLOG_TOWN_STATE                        0x4056 // Unused Var
+#define VAR_SHUCKLE_ISLAND_CAVE_STATE                    0x4055 // Defines state of Shuckle Island's cave
+#define VAR_SHUCKLE_ISLAND_SOUTH_STATE                   0x4056 // Defines state of Shuckle Island's south area
 #define VAR_PETALBURG_CITY_STATE                         0x4057
 #define VAR_SLATEPORT_CITY_STATE                         0x4058
-#define VAR_MAUVILLE_CITY_STATE                          0x4059 // Unused Var
+#define VAR_SHUCKLE_ISLAND_MAIN_STATE                    0x4059 // Defines the state of Shuckle Island's main area
 #define VAR_RUSTBORO_CITY_STATE                          0x405A
-#define VAR_FORTREE_CITY_STATE                           0x405B // Unused Var
-#define VAR_LILYCOVE_CITY_STATE                          0x405C // Unused Var
+#define VAR_WILD_BATTLE_AI_FLAG                          0x405B // Sets the AI flags of wild battles
+#define VAR_ICE_CAVE_BOULDER_1                           0x405C // Unused Var
 #define VAR_MOSSDEEP_CITY_STATE                          0x405D
 #define VAR_SOOTOPOLIS_CITY_STATE                        0x405E
-#define VAR_EVER_GRANDE_CITY_STATE                       0x405F // Unused Var
+#define VAR_ICE_CAVE_BOULDER_2                           0x405F // Unused Var
 #define VAR_ROUTE101_STATE                               0x4060
-#define VAR_ROUTE102_STATE                               0x4061 // Unused Var
-#define VAR_ROUTE103_STATE                               0x4062 // Unused Var
+#define VAR_SHUCKLE_ISLAND_REMOTE_STATE                  0x4061 // Unused Var
+#define VAR_RARE_CANDY                                   0x4062 // Unused Var
 #define VAR_ROUTE104_STATE                               0x4063
-#define VAR_ROUTE105_STATE                               0x4064 // Unused Var
-#define VAR_ROUTE106_STATE                               0x4065 // Unused Var
-#define VAR_ROUTE107_STATE                               0x4066 // Unused Var
-#define VAR_ROUTE108_STATE                               0x4067 // Unused Var
-#define VAR_ROUTE109_STATE                               0x4068 // Unused Var
+#define VAR_STARTING_FIELD_EFFECT                        0x4064 // Unused Var
+#define VAR_BATTLE4_BERRY                                0x4065 // Unused Var
+#define VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F_STATE      0x4066 // Unused Var
+#define VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F_STATE     0x4067 // Unused Var
+#define VAR_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F_STATE     0x4068 // Unused Var
 #define VAR_ROUTE110_STATE                               0x4069
-#define VAR_ROUTE111_STATE                               0x406A // Unused Var
-#define VAR_ROUTE112_STATE                               0x406B // Unused Var
-#define VAR_ROUTE113_STATE                               0x406C // Unused Var
-#define VAR_ROUTE114_STATE                               0x406D // Unused Var
-#define VAR_ROUTE115_STATE                               0x406E // Unused Var
+#define VAR_BATTLE7_BERRY_2                              0x406A // Unused Var
+#define VAR_SHUCKLE_ISLAND_ESCAPE_STATE                  0x406B // Unused Var
+#define VAR_FINISH_TIME_HOURS                            0x406C // Unused Var
+#define VAR_FINISH_TIME_MINUTES                          0x406D // Unused Var
+#define VAR_BOP_IT_FAILS                                 0x406E // Unused Var
 #define VAR_ROUTE116_STATE                               0x406F
-#define VAR_ROUTE117_STATE                               0x4070 // Unused Var
+#define VAR_BOP_IT_SUCCESSES                             0x4070 // Unused Var
 #define VAR_ROUTE118_STATE                               0x4071
 #define VAR_ROUTE119_STATE                               0x4072
-#define VAR_ROUTE120_STATE                               0x4073 // Unused Var
+#define VAR_SHUCKLE_ISLAND_SHUCKLE_ESCAPE_HOUSE_STATE    0x4073 // Unused Var
 #define VAR_ROUTE121_STATE                               0x4074
 #define VAR_ROUTE122_STATE                               0x4075 // Unused Var
 #define VAR_ROUTE123_STATE                               0x4076 // Unused Var
@@ -264,15 +264,15 @@
 #define VAR_ROXANNE_CALL_STEP_COUNTER                    0x40F4
 #define VAR_SCOTT_BF_CALL_STEP_COUNTER                   0x40F5
 #define VAR_RIVAL_RAYQUAZA_CALL_STEP_COUNTER             0x40F6
-#define VAR_UNUSED_0x40F7                                0x40F7 // Unused Var
-#define VAR_UNUSED_0x40F8                                0x40F8 // Unused Var
-#define VAR_UNUSED_0x40F9                                0x40F9 // Unused Var
-#define VAR_UNUSED_0x40FA                                0x40FA // Unused Var
-#define VAR_UNUSED_0x40FB                                0x40FB // Unused Var
-#define VAR_UNUSED_0x40FC                                0x40FC // Unused Var
-#define VAR_UNUSED_0x40FD                                0x40FD // Unused Var
-#define VAR_UNUSED_0x40FE                                0x40FE // Unused Var
-#define VAR_UNUSED_0x40FF                                0x40FF // Unused Var
+#define VAR_NUM_SMALL_HINTS                              0x40F7 // Unused Var
+#define VAR_NUM_MED_HINTS                                0x40F8 // Unused Var
+#define VAR_NUM_LARGE_HINTS                              0x40F9 // Unused Var
+#define VAR_NUM_SOLUTIONS                                0x40FA // Unused Var
+#define VAR_BATTLE1_BERRY                                0x40FB // Unused Var
+#define VAR_BATTLE2_BERRY                                0x40FC // Unused Var
+#define VAR_BATTLE3_BERRY                                0x40FD // Unused Var
+#define VAR_BATTLE6_BERRY                                0x40FE // Unused Var
+#define VAR_BATTLE7_BERRY                                0x40FF // Unused Var
 
 #define VARS_END                                         0x40FF
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)

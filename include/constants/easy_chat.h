@@ -22,6 +22,7 @@
 #define EASY_CHAT_TYPE_QUIZ_SET_ANSWER         18
 #define EASY_CHAT_TYPE_APPRENTICE              19
 #define EASY_CHAT_TYPE_QUESTIONNAIRE           20
+#define EASY_CHAT_TYPE_REGI_RIDDLE             21
 
 #define EASY_CHAT_PERSON_REPORTER_MALE   0
 #define EASY_CHAT_PERSON_REPORTER_FEMALE 1
@@ -29,27 +30,27 @@
 #define EASY_CHAT_PERSON_DISPLAY_NONE    3
 
 #define EC_GROUP_POKEMON          0
-#define EC_GROUP_TRAINER          1
-#define EC_GROUP_STATUS           2
-#define EC_GROUP_BATTLE           3
-#define EC_GROUP_GREETINGS        4
-#define EC_GROUP_PEOPLE           5
-#define EC_GROUP_VOICES           6
-#define EC_GROUP_SPEECH           7
-#define EC_GROUP_ENDINGS          8
-#define EC_GROUP_FEELINGS         9
-#define EC_GROUP_CONDITIONS       10
-#define EC_GROUP_ACTIONS          11
-#define EC_GROUP_LIFESTYLE        12
-#define EC_GROUP_HOBBIES          13
-#define EC_GROUP_TIME             14
-#define EC_GROUP_MISC             15
-#define EC_GROUP_ADJECTIVES       16
-#define EC_GROUP_EVENTS           17
-#define EC_GROUP_MOVE_1           18
-#define EC_GROUP_MOVE_2           19
-#define EC_GROUP_TRENDY_SAYING    20
-#define EC_GROUP_POKEMON_NATIONAL 21
+#define EC_GROUP_POKEMON_NATIONAL 1
+#define EC_GROUP_TRAINER          2
+#define EC_GROUP_STATUS           3
+#define EC_GROUP_BATTLE           4
+#define EC_GROUP_GREETINGS        5
+#define EC_GROUP_PEOPLE           6
+#define EC_GROUP_VOICES           7
+#define EC_GROUP_SPEECH           8
+#define EC_GROUP_ENDINGS          9
+#define EC_GROUP_FEELINGS         10
+#define EC_GROUP_CONDITIONS       11
+#define EC_GROUP_ACTIONS          12
+#define EC_GROUP_LIFESTYLE        13
+#define EC_GROUP_HOBBIES          14
+#define EC_GROUP_TIME             15
+#define EC_GROUP_MISC             16
+#define EC_GROUP_ADJECTIVES       17
+#define EC_GROUP_EVENTS           18
+#define EC_GROUP_MOVE_1           19
+#define EC_GROUP_MOVE_2           20
+#define EC_GROUP_TRENDY_SAYING    21
 #define EC_NUM_GROUPS             22
 
 // TRAINER
@@ -1104,6 +1105,17 @@
 #define PHRASE_OVERWHELMING_LATIAS  3
 #define PHRASE_COOL_LATIOS          4
 #define PHRASE_SUPER_HUSTLE         5
+
+// Regi Riddle phrases
+#define PHRASE_SABLEYE              1
+#define PHRASE_REGIROCK             2
+#define PHRASE_REGISTEEL            3
+#define PHRASE_REGICE               4
+#define PHRASE_SHUCKLE              5
+#define PHRASE_SNORLAX              6
+#define PHRASE_GALLADE              7
+#define PHRASE_MUNCHLAX             8
+#define PHRASE_BAGON                9
 
 #define EC_NUM_ALPHABET_GROUPS 27 // 26 (1 for each letter) + 1 (Others)
 

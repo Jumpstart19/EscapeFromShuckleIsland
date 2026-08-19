@@ -1,0 +1,41 @@
+mapscripts ShuckleIslandMain_House2_MapScripts {}
+
+const LITTLE_GIRL_ID = 1
+const TRICK_MAN_ID = 2
+
+script ShuckleIslandMain_House2_EventScript_LittleGirl {
+
+    lock
+    faceplayer
+    if (!flag(FLAG_SPOKE_TRICK_MAN_GIRL)) {
+
+        msgbox("Haha, tricks are fun!\nThanks again for the balloon!")
+        waitmessage
+        applymovement(LITTLE_GIRL_ID, moves(emote_exclamation_mark))
+        playse(SE_PIN)
+        waitse
+        msgbox("Wait, are you the one\nwho's been beating all my friends?\pSTAY AWAY FROM ME!")
+        waitmessage
+        setflag(FLAG_SPOKE_TRICK_MAN_GIRL)
+
+    }
+    else {
+
+        msgbox("STRANGER DANGER!")
+        waitmessage
+
+    }
+    release
+    end
+
+}
+
+script ShuckleIslandMain_House2_EventScript_TrickMan {
+
+    lock
+    faceplayer
+    msgbox("Have fun using your new trick!\nJust don't use it on kids, you weirdo.")
+    release
+    end
+
+}

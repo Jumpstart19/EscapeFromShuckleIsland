@@ -1,0 +1,308 @@
+mapscripts ShuckleIslandEscapeHouse_MapScripts {
+
+    MAP_SCRIPT_ON_FRAME_TABLE [
+        
+        VAR_SHUCKLE_ISLAND_SHUCKLE_ESCAPE_HOUSE_STATE, 1: ShuckleIslandEscapeHouse_EventScript_ClearParty
+
+    ]
+
+}
+
+const JUMPSTART_ID = 1
+
+script ShuckleIslandEscapeHouse_EventScript_ClearParty {
+
+    lock
+
+    removeitemfrommon(0)
+    removeitemfrommon(1)
+    removeitem(ITEM_CHILAN_BERRY)
+
+    setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_ESCAPE_HOUSE_STATE, 0)
+
+    release
+    end
+
+}
+
+script ShuckleIslandEscapeHouse_EventScript_TimeStats {
+
+    lock
+
+    msgbox("Do you want to see your final time?", MSGBOX_YESNO)
+
+    if (var(VAR_RESULT) == YES) {
+
+        special(BufferPlaytime)
+        msgbox("You completed the game in {STR_VAR_1}:{STR_VAR_2}!")
+        waitmessage
+
+        special(BufferHints)
+        msgbox("You used {STR_VAR_1} small, {STR_VAR_2} medium,\nand {STR_VAR_3} large hints.")
+        waitmessage
+
+        special(BufferSolutions)
+        msgbox("You also used {STR_VAR_1} solutions.")
+        waitmessage
+
+        if (flag(FLAG_BEAT_JUMPSTART)) {
+
+            msgbox("And you defeated Jumpstart in battle!\nSo\.")
+
+        }
+        else {
+
+            msgbox("And so\.")
+
+        }
+
+        waitmessage
+
+        special(BufferAdjustedTime)
+        msgbox("Your adjusted completion time is {STR_VAR_1}:{STR_VAR_2}!")
+        waitmessage
+
+    }
+
+    release
+    end
+
+}
+
+script ShuckleIslandEscapeHouse_EventScript_Jumpstart {
+
+    lock
+    faceplayer
+
+    setrespawn(HEAL_LOCATION_SHUCKLE_ISLAND_ESCAPE_HOUSE_2)
+
+    if (!flag(FLAG_BEAT_JUMPSTART)) {
+
+        if (!flag(FLAG_JUMPSTART_BATTLE_INTRO)) {
+
+            msgbox(jumpstartBattleIntro_text)
+            waitmessage
+            setflag(FLAG_JUMPSTART_BATTLE_INTRO)
+
+        }
+
+        msgbox("So then, do you want to challenge me to\na battle?", MSGBOX_YESNO)
+
+            if (var(VAR_RESULT) == YES) {
+
+                msgbox(jumpstartPreBattle_text)
+                waitmessage
+
+                takemon(1)
+                takemon(0)
+
+                givemon(SPECIES_SNORLAX, 28, ITEM_NONE, ITEM_POKE_BALL, NATURE_IMPISH, 2, 0, 100, 0, 252, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_COUNTER, MOVE_SNATCH, MOVE_RECYCLE, MOVE_MIMIC)
+                givemon(SPECIES_GALLADE, 28, ITEM_CHILAN_BERRY, ITEM_POKE_BALL, NATURE_LONELY, 0, 0, 0, 0, 0, 0, 0, 0, 31, 31, 31, 31, 31, 31, MOVE_RECYCLE, MOVE_IMPRISON, MOVE_MIMIC, MOVE_NONE)
+                special(HealPlayerParty)
+
+                setvar(VAR_SHUCKLE_ISLAND_SHUCKLE_ESCAPE_HOUSE_STATE, 1)
+
+                trainerbattle_single(TRAINER_JUMPSTART, jumpstartBattleStart_text, jumpstartBattleLose_text, ShuckleIslandEscapeHouse_EventScript_DefeatedJumpstart)
+
+            }
+            else {
+            
+                msgbox(jumpstartUnderstood_text)
+                waitmessage
+
+            }
+
+    }
+    else {
+
+        msgbox(jumpstartMusic_text)
+
+        dynmultipush("vs Big Blue", 0)
+        dynmultipush("Ability Overload", 1)
+        dynmultipush("Last Stand", 2)
+        dynmultipush("vs Jumpstart", 3)
+
+        dynmultistack(0, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE)
+
+        if (var(VAR_RESULT) == 127) {
+
+            msgbox("Come back if you're ever interested in\nlistening to my custom music!")
+
+        }
+        elif (var(VAR_RESULT) == 0) {
+
+            msgbox(jumpstartBigBlue_text)
+            //setvar(VAR_0x8000, MUGSHOT_VS_BIG_BLUE)
+            //callnative(DrawMugshot)
+            msgbox("Hey, that's cheating!")
+            //callnative(ClearMugshot)
+
+        }
+        elif (var(VAR_RESULT) == 1) {
+
+            msgbox(jumpstartAbilityOverload_text)
+            //setvar(VAR_0x8000, MUGSHOT_ABILITY_OVERLOAD)
+            //callnative(DrawMugshot)
+            msgbox("Hey, that's cheating!")
+            //callnative(ClearMugshot)
+
+        }
+        elif (var(VAR_RESULT) == 2) {
+
+            msgbox(jumpstartLastStand_text)
+            //setvar(VAR_0x8000, MUGSHOT_LAST_STAND)
+            //callnative(DrawMugshot)
+            msgbox("Hey, that's cheating!")
+            //callnative(ClearMugshot)
+
+        }
+        elif (var(VAR_RESULT) == 3) {
+
+            msgbox(jumpstartVsJumpstart_text)
+            //setvar(VAR_0x8000, MUGSHOT_VS_JUMPSTART)
+            //callnative(DrawMugshot)
+            msgbox("Hey, that's cheating!")
+            //callnative(ClearMugshot)
+
+        }
+
+    }
+
+    release
+    end
+    
+}
+
+script ShuckleIslandEscapeHouse_EventScript_DefeatedJumpstart {
+
+    lock
+    faceplayer
+
+    setflag(FLAG_BEAT_JUMPSTART)
+    special(HealPlayerParty)
+
+    msgbox(jumpstartPostBattle_text)
+    waitmessage
+
+    release
+    end
+
+}
+
+text jumpstartBattleIntro_text {
+
+    "So, you want to solve one last puzzle?\p"
+    "Your final test is this:\n"
+    "defeat me in battle!\p"
+    "Fair warning, this will be challenging!\p"
+    "But there may be a reward if you win\.\p"
+    "I'll give your Pokémon the necessary\n"
+    "moves and items before the match,\l"
+    "so there's no need to prepare.\p"
+    "Oh, and don't worry!\p"
+    "I'll remove Snorlax's Sated Belch\n"
+    "ability before the battle begins.\p"
+    "That's right, no more damage calcs!\n"
+    "And no more extra abilities."
+
+}
+
+text jumpstartPreBattle_text {
+
+    "Excellent!\p"
+    "Before we begin, let me provide one\n"
+    "recommendation:\p"
+    "Use save states liberally throughout\n"
+    "this battle!\p"
+    "You'll understand soon enough\.\p"
+    "Now, {PLAYER}\."
+
+}
+
+text jumpstartBattleStart_text {
+
+    "There's no holding back!\n"
+    "Come at me with everything you've got!"
+
+}
+
+text jumpstartBattleLose_text {
+
+    "Ha, that was wonderful!\n"
+    "Absolutely brilliant work!"
+
+}
+
+text jumpstartUnderstood_text {
+
+    "Understood.\p"
+    "This challenge is completely optional,\n"
+    "so there's no pressure to complete it!\p"
+    "I'll be here if you change your mind."
+
+}
+
+text jumpstartPostBattle_text {
+
+    "Excellent job!\p"
+    "I know that couldn't have been easy.\n"
+    "So, truly, thank you.\p"
+    "I appreciate you exploring everything\n"
+    "I've designed for this Escape Room.\p"
+    "And let's not forget your reward!\p"
+    "First, I've deducted three hours from\n"
+    "your adjusted clear time.\p"
+    "You can view your new time on the\n"
+    "poster on my wall.\p"
+    "Also, I'm giving you access to all the\n"
+    "arrangements I made for this game!\p"
+    "Come speak to me anytime, and I'll\n"
+    "provide links to the songs."
+
+}
+
+text jumpstartMusic_text {
+
+    "Ah, so you're interested in my remixes?\n"
+    "Which song do you want a link to?"
+
+}
+
+text jumpstartBigBlue_text {
+
+    "Ooh.\n"
+    "This one is my favorite.\p"
+    "Did you realize that this is a remix\n"
+    "of Big Blue from F-Zero?\p"
+    "I figured it was appropriate given that\n"
+    "Giovanni's nickname here is Big Blue.\p"
+    "Anyway, here's the link!"
+
+}
+
+text jumpstartAbilityOverload_text {
+
+    "This one is the Cave of Origin music\n"
+    "remixed as a battle theme."
+
+}
+
+text jumpstartLastStand_text {
+
+    "Last Stand is an up-tempo arrangement\n"
+    "of Big Blue's battle theme.\p"
+    "A remix of a remix, if you will.\p"
+    "It also includes the part from F-Zero's\n"
+    "Big Blue that wasn't in the first remix."
+    
+}
+
+text jumpstartVsJumpstart_text {
+
+    "Oh, you're interested in this one?\p"
+    "I just made some small edits to the\n"
+    "Frontier Brain battle theme.\p"
+    "But feel free to listen if you prefer it\n"
+    "over the original track."
+    
+}

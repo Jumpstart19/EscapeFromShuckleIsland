@@ -4410,6 +4410,216 @@
       "secondary_tileset": "gTileset_MysteryEventsHouse",
       "border_filepath": "data/layouts/SootopolisCity_MysteryEventsHouse_1F_StairsUnblocked/border.bin",
       "blockdata_filepath": "data/layouts/SootopolisCity_MysteryEventsHouse_1F_StairsUnblocked/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND",
+      "name": "ShuckleIsland_Layout",
+      "width": 55,
+      "height": 43,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Dewford",
+      "border_filepath": "data/layouts/ShuckleIsland/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIsland/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_CAVE",
+      "name": "ShuckleIslandCave_Layout",
+      "width": 19,
+      "height": 7,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandCave/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandCave/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_CAVE_B2F",
+      "name": "ShuckleIslandCave_B2F_Layout",
+      "width": 29,
+      "height": 24,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandCave_B2F/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandCave_B2F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_CAVE_ICE_F1",
+      "name": "ShuckleIslandCaveIceF1_Layout",
+      "width": 29,
+      "height": 24,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandCaveIceF1/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandCaveIceF1/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_MAIN",
+      "name": "ShuckleIslandMain_Layout",
+      "width": 55,
+      "height": 33,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Dewford",
+      "border_filepath": "data/layouts/ShuckleIslandMain/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandMain/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SOUTH",
+      "name": "ShuckleIslandSouth_Layout",
+      "width": 55,
+      "height": 16,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Dewford",
+      "border_filepath": "data/layouts/ShuckleIslandSouth/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandSouth/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_MAIN_HOUSE1",
+      "name": "ShuckleIslandMain_House1_Layout",
+      "width": 10,
+      "height": 9,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_GenericBuilding",
+      "border_filepath": "data/layouts/ShuckleIslandMain_House1/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandMain_House1/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_MAIN_HOUSE2",
+      "name": "ShuckleIslandMain_House2_Layout",
+      "width": 10,
+      "height": 8,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_GenericBuilding",
+      "border_filepath": "data/layouts/ShuckleIslandMain_House2/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandMain_House2/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_MAIN_HOUSE3",
+      "name": "ShuckleIslandMain_House3_Layout",
+      "width": 10,
+      "height": 8,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_GenericBuilding",
+      "border_filepath": "data/layouts/ShuckleIslandMain_House3/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandMain_House3/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SOUTH_CAVE",
+      "name": "ShuckleIslandSouthCave_Layout",
+      "width": 19,
+      "height": 11,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandSouthCave/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandSouthCave/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SOUTH_CAVE_B2F",
+      "name": "ShuckleIslandSouthCave_B2F_Layout",
+      "width": 29,
+      "height": 11,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandSouthCave_B2F/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandSouthCave_B2F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SOUTH_CAVE_ICE",
+      "name": "ShuckleIslandSouthCaveIce_Layout",
+      "width": 66,
+      "height": 19,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandSouthCaveIce/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandSouthCaveIce/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_REMOTE_CAVE_B2F",
+      "name": "ShuckleIslandRemoteCave_B2F_Layout",
+      "width": 13,
+      "height": 11,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandRemoteCave_B2F/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandRemoteCave_B2F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_REMOTE_CAVE",
+      "name": "ShuckleIslandRemoteCave_Layout",
+      "width": 19,
+      "height": 11,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ShuckleIslandRemoteCave/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandRemoteCave/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_REMOTE",
+      "name": "ShuckleIslandRemote_Layout",
+      "width": 37,
+      "height": 22,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Dewford",
+      "border_filepath": "data/layouts/ShuckleIslandRemote/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandRemote/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_1F",
+      "name": "ShuckleIslandShuckleHideout_1F_Layout",
+      "width": 75,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Facility",
+      "border_filepath": "data/layouts/ShuckleIslandShuckleHideout_1F/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandShuckleHideout_1F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B1F",
+      "name": "ShuckleIslandShuckleHideout_B1F_Layout",
+      "width": 30,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Facility",
+      "border_filepath": "data/layouts/ShuckleIslandShuckleHideout_B1F/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandShuckleHideout_B1F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_2F",
+      "name": "ShuckleIslandShuckleHideout_2F_Layout",
+      "width": 50,
+      "height": 35,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Facility",
+      "border_filepath": "data/layouts/ShuckleIslandShuckleHideout_2F/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandShuckleHideout_2F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_SHUCKLE_HIDEOUT_B2F",
+      "name": "ShuckleIslandShuckleHideout_B2F_Layout",
+      "width": 35,
+      "height": 50,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Facility",
+      "border_filepath": "data/layouts/ShuckleIslandShuckleHideout_B2F/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandShuckleHideout_B2F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_ESCAPE",
+      "name": "ShuckleIslandEscape_Layout",
+      "width": 37,
+      "height": 34,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Mossdeep",
+      "border_filepath": "data/layouts/ShuckleIslandEscape/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandEscape/map.bin"
+    },
+    {
+      "id": "LAYOUT_SHUCKLE_ISLAND_ESCAPE_HOUSE",
+      "name": "ShuckleIslandEscapeHouse_Layout",
+      "width": 10,
+      "height": 9,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_GenericBuilding",
+      "border_filepath": "data/layouts/ShuckleIslandEscapeHouse/border.bin",
+      "blockdata_filepath": "data/layouts/ShuckleIslandEscapeHouse/map.bin"
     }
   ]
 }

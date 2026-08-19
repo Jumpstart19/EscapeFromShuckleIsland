@@ -1045,10 +1045,7 @@ void MainCB2_Intro(void)
     AnimateSprites();
     BuildOamBuffer();
     UpdatePaletteFade();
-    if (gMain.newKeys != 0 && !gPaletteFade.active)
-        SetMainCallback2(MainCB2_EndIntro);
-    else if (gIntroFrameCounter != -1)
-        gIntroFrameCounter++;
+    SetMainCallback2(MainCB2_EndIntro);
 }
 
 static void MainCB2_EndIntro(void)
@@ -1062,11 +1059,6 @@ static void LoadCopyrightGraphics(u16 tilesetAddress, u16 tilemapAddress, u16 pa
     DecompressDataWithHeaderVram(gIntroCopyright_Gfx, (void *)(VRAM + tilesetAddress));
     DecompressDataWithHeaderVram(gIntroCopyright_Tilemap, (void *)(VRAM + tilemapAddress));
     LoadPalette(gIntroCopyright_Pal, paletteOffset, PLTT_SIZE_4BPP);
-}
-
-static void SerialCB_CopyrightScreen(void)
-{
-    GameCubeMultiBoot_HandleSerialInterrupt(&gMultibootProgramStruct);
 }
 
 static u8 SetUpCopyrightScreen(void)
@@ -1100,8 +1092,6 @@ static u8 SetUpCopyrightScreen(void)
         EnableInterrupts(INTR_FLAG_VBLANK);
         SetVBlankCallback(VBlankCB_Intro);
         REG_DISPCNT = DISPCNT_MODE_0 | DISPCNT_OBJ_1D_MAP | DISPCNT_BG0_ON;
-        SetSerialCallback(SerialCB_CopyrightScreen);
-        GameCubeMultiBoot_Init(&gMultibootProgramStruct);
     // REG_DISPCNT needs to be overwritten the second time, because otherwise the intro won't show up on VBA 1.7.2 and John GBA Lite emulators.
     // The REG_DISPCNT overwrite is NOT needed in m-GBA, No$GBA, VBA 1.8.0, My Boy and Pizza Boy GBA emulators.
     case COPYRIGHT_EMULATOR_BLEND:

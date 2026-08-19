@@ -863,7 +863,7 @@ static const enum Stat sStatsToRaise[] =
 // 0-99, 100-199, 200+
 static const s8 sFriendshipEventModifiers[][3] =
 {
-    [FRIENDSHIP_EVENT_GROW_LEVEL]      = { 5,  3,  2},
+    [FRIENDSHIP_EVENT_GROW_LEVEL]      = { 255,  255,  255},
     [FRIENDSHIP_EVENT_VITAMIN]         = { 5,  3,  2},
     [FRIENDSHIP_EVENT_BATTLE_ITEM]     = { 1,  1,  0},
     [FRIENDSHIP_EVENT_LEAGUE_BATTLE]   = { 3,  2,  1},
@@ -1035,6 +1035,19 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     mail = MAIL_NONE;
     SetMonData(mon, MON_DATA_MAIL, &mail);
     CalculateMonStats(mon);
+}
+
+void CreateMonExtended(struct Pokemon *mon, u16 species, u8 level, u16 nature, u8 abilityNum, u8 gender, u16 hpEv, u16 atkEv, u16 defEv, u16 speedEv, u16 spAtkEv, u16 spDefEv, u16 hpIv, u16 atkIv, u16 defIv, u16 speedIv, u16 spAtkIv, u16 spDefIv, u16 move1, u16 move2, u16 move3, u16 move4, u8 shinyMode)
+{
+    u32 mail;
+    ZeroMonData(mon);
+    CreateBoxMonExtended(&mon->box, species, level, nature, abilityNum, gender, hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv, hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv, move1, move2, move3, move4, shinyMode);
+    SetMonData(mon, MON_DATA_LEVEL, &level);
+    mail = MAIL_NONE;
+    SetMonData(mon, MON_DATA_MAIL, &mail);
+    CalculateMonStats(mon);
+    MonRestorePP(mon);
+
 }
 
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
@@ -1216,6 +1229,93 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     }
 
     GiveBoxMonInitialMoveset(boxMon);
+}
+
+void CreateBoxMonExtended(struct BoxPokemon *boxMon, u16 species, u8 level, u16 nature, u8 abilityNum, u8 gender, u16 hpEv, u16 atkEv, u16 defEv, u16 speedEv, u16 spAtkEv, u16 spDefEv, u16 hpIv, u16 atkIv, u16 defIv, u16 speedIv, u16 spAtkIv, u16 spDefIv, u16 move1, u16 move2, u16 move3, u16 move4, u8 shinyMode)
+{
+    u8 speciesName[POKEMON_NAME_LENGTH + 1];
+    u8 genderRatio = gSpeciesInfo[species].genderRatio;
+    u32 personality;
+    u32 value;
+    u16 checksum;
+
+    ZeroBoxMonData(boxMon);
+
+    // Determine original trainer ID
+    value = Random32();
+
+    // Determine gender and personality
+    if ((gender == MON_MALE && genderRatio != MON_FEMALE && genderRatio != MON_GENDERLESS)
+     || (gender == MON_FEMALE && genderRatio != MON_MALE && genderRatio != MON_GENDERLESS)
+     || (gender == MON_GENDERLESS && genderRatio == MON_GENDERLESS)
+     || (gender == MON_ANY)) {
+
+        do
+        {
+            personality = Random32();
+        }
+        while (nature != GetNatureFromPersonality(personality));
+
+    }
+    else {
+
+        do
+        {
+            personality = Random32();
+        }
+        while (nature != GetNatureFromPersonality(personality)
+            || gender != GetGenderFromSpeciesAndPersonality(species, personality));
+
+    }
+
+    SetBoxMonData(boxMon, MON_DATA_PERSONALITY, &personality);
+    SetBoxMonData(boxMon, MON_DATA_OT_ID, &value);
+
+    checksum = CalculateBoxMonChecksum(boxMon);
+    SetBoxMonData(boxMon, MON_DATA_CHECKSUM, &checksum);
+    EncryptBoxMon(boxMon);
+    SetBoxMonData(boxMon, MON_DATA_IS_SHINY, &shinyMode);
+    StringCopy(speciesName, GetSpeciesName(species));
+    SetBoxMonData(boxMon, MON_DATA_NICKNAME, speciesName);
+    SetBoxMonData(boxMon, MON_DATA_LANGUAGE, &gGameLanguage);
+    SetBoxMonData(boxMon, MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
+    SetBoxMonData(boxMon, MON_DATA_SPECIES, &species);
+    SetBoxMonData(boxMon, MON_DATA_EXP, &gExperienceTables[gSpeciesInfo[species].growthRate][level]);
+    SetBoxMonData(boxMon, MON_DATA_FRIENDSHIP, &gSpeciesInfo[species].friendship);
+    value = GetCurrentRegionMapSectionId();
+    SetBoxMonData(boxMon, MON_DATA_MET_LOCATION, &value);
+    SetBoxMonData(boxMon, MON_DATA_MET_LEVEL, &level);
+    SetBoxMonData(boxMon, MON_DATA_MET_GAME, &gGameVersion);
+    value = ITEM_POKE_BALL;
+    SetBoxMonData(boxMon, MON_DATA_POKEBALL, &value);
+    SetBoxMonData(boxMon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
+
+    enum Type teraType = (boxMon->personality & 0x1) == 0 ? GetSpeciesType(species, 0) : GetSpeciesType(species, 1);
+    SetBoxMonData(boxMon, MON_DATA_TERA_TYPE, &teraType);
+
+    SetBoxMonData(boxMon, MON_DATA_HP_IV, &hpIv);
+    SetBoxMonData(boxMon, MON_DATA_ATK_IV, &atkIv);
+    SetBoxMonData(boxMon, MON_DATA_DEF_IV, &defIv);
+    SetBoxMonData(boxMon, MON_DATA_SPEED_IV, &speedIv);
+    SetBoxMonData(boxMon, MON_DATA_SPATK_IV, &spAtkIv);
+    SetBoxMonData(boxMon, MON_DATA_SPDEF_IV, &spDefIv);
+
+    SetBoxMonData(boxMon, MON_DATA_HP_EV, &hpEv);
+    SetBoxMonData(boxMon, MON_DATA_ATK_EV, &atkEv);
+    SetBoxMonData(boxMon, MON_DATA_DEF_EV, &defEv);
+    SetBoxMonData(boxMon, MON_DATA_SPEED_EV, &speedEv);
+    SetBoxMonData(boxMon, MON_DATA_SPATK_EV, &spAtkEv);
+    SetBoxMonData(boxMon, MON_DATA_SPDEF_EV, &spDefEv);
+
+    SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &abilityNum);
+
+    GiveBoxMonInitialMoveset(boxMon);
+
+    SetBoxMonData(boxMon, MON_DATA_MOVE1, &move1);
+    SetBoxMonData(boxMon, MON_DATA_MOVE2, &move2);
+    SetBoxMonData(boxMon, MON_DATA_MOVE3, &move3);
+    SetBoxMonData(boxMon, MON_DATA_MOVE4, &move4);
+
 }
 
 void CreateMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 nature)
@@ -5180,6 +5280,12 @@ u8 GetTrainerEncounterMusicId(u16 trainerOpponentId)
         return GetTrainerEncounterMusicIdInBattlePyramid(trainerOpponentId);
     else if (InTrainerHillChallenge())
         return GetTrainerEncounterMusicIdInTrainerHill(trainerOpponentId);
+    else if (!FlagGet(FLAG_WON_BATTLE_1A))
+        return TRAINER_ENCOUNTER_MUSIC_MALE;
+    else if (FlagGet(FLAG_WON_BATTLE_2) && !FlagGet(FLAG_WON_BATTLE_3))
+        return TRAINER_ENCOUNTER_MUSIC_AQUA;
+    else if (FlagGet(FLAG_WON_BATTLE_7))
+        return TRAINER_ENCOUNTER_MUSIC_ELITE_FOUR;
     else
         return gTrainers[difficulty][sanitizedTrainerId].encounterMusic_gender & (F_TRAINER_FEMALE - 1);
 }
@@ -6109,8 +6215,10 @@ u16 GetBattleBGM(void)
         {
         case TRAINER_CLASS_AQUA_LEADER:
         case TRAINER_CLASS_MAGMA_LEADER:
+        case TRAINER_CLASS_SHUCKLE_ADMIN:
             return MUS_VS_AQUA_MAGMA_LEADER;
         case TRAINER_CLASS_TEAM_AQUA:
+        case TRAINER_CLASS_TEAM_SHUCKLE:
         case TRAINER_CLASS_TEAM_MAGMA:
         case TRAINER_CLASS_AQUA_ADMIN:
         case TRAINER_CLASS_MAGMA_ADMIN:
@@ -6126,7 +6234,8 @@ u16 GetBattleBGM(void)
                 return MUS_VS_TRAINER;
             return MUS_VS_RIVAL;
         case TRAINER_CLASS_ELITE_FOUR:
-            return MUS_VS_ELITE_FOUR;
+        case TRAINER_CLASS_SHUCKLE_LEADER:
+            return MUS_VS_BIG_BLUE;
         case TRAINER_CLASS_SALON_MAIDEN:
         case TRAINER_CLASS_DOME_ACE:
         case TRAINER_CLASS_PALACE_MAVEN:
@@ -6135,6 +6244,10 @@ u16 GetBattleBGM(void)
         case TRAINER_CLASS_PIKE_QUEEN:
         case TRAINER_CLASS_PYRAMID_KING:
             return MUS_VS_FRONTIER_BRAIN;
+        case TRAINER_CLASS_SHUCKLE_LEADER2:
+            return MUS_ABILITY_OVERLOAD;
+        case TRAINER_CLASS_GAME_MASTER:
+            return MUS_VS_JUMPSTART;
         default:
             return MUS_VS_TRAINER;
         }

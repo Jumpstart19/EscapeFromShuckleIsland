@@ -35,6 +35,7 @@
 #include "constants/moves.h"
 #include "constants/items.h"
 #include "constants/rgb.h"
+#include "stdio.h"
 
 #define MAX_MODIFY_DIGITS 4
 
@@ -102,6 +103,7 @@ enum
     LIST_ITEM_TYPES,
     LIST_ITEM_STATS,
     LIST_ITEM_STAT_STAGES,
+    LIST_ITEM_PARTY_STATE,
     LIST_ITEM_STATUS1,
     LIST_ITEM_VOLATILE,
     LIST_ITEM_HAZARDS,
@@ -124,6 +126,13 @@ enum
     LIST_STAT_SPEED,
     LIST_STAT_SP_ATK,
     LIST_STAT_SP_DEF,
+};
+
+enum
+{
+    LIST_USED_HELD_ITEM,
+    LIST_USED_PARTY_HELD_ITEM,
+
 };
 
 enum
@@ -318,6 +327,7 @@ static const struct ListMenuItem sMainListItems[] =
     {COMPOUND_STRING("Types"),        LIST_ITEM_TYPES},
     {COMPOUND_STRING("Stats"),        LIST_ITEM_STATS},
     {COMPOUND_STRING("Stat Stages"),  LIST_ITEM_STAT_STAGES},
+    {COMPOUND_STRING("Party State"),  LIST_ITEM_PARTY_STATE},
     {COMPOUND_STRING("Status1"),      LIST_ITEM_STATUS1},
     {COMPOUND_STRING("Volatiles"),    LIST_ITEM_VOLATILE},
     {COMPOUND_STRING("Hazards"),      LIST_ITEM_HAZARDS},
@@ -339,6 +349,12 @@ static const struct ListMenuItem sStatsListItems[] =
     {COMPOUND_STRING("Speed"),      LIST_STAT_SPEED},
     {COMPOUND_STRING("Sp. Atk"),    LIST_STAT_SP_ATK},
     {COMPOUND_STRING("Sp. Def"),    LIST_STAT_SP_DEF},
+};
+
+static const struct ListMenuItem sPartyStateListItems[] =
+{
+    {COMPOUND_STRING("Used Held Item"),         LIST_USED_HELD_ITEM},
+    {COMPOUND_STRING("Used Party Held Item"),   LIST_USED_PARTY_HELD_ITEM},
 };
 
 static const struct ListMenuItem sStatus1ListItems[] =
@@ -1378,6 +1394,11 @@ static void CreateSecondaryListMenu(struct BattleDebugMenu *data)
     case LIST_ITEM_STAT_STAGES:
         itemsCount = 8;
         break;
+     case LIST_ITEM_PARTY_STATE:
+        //listTemplate.items= sPartyStateListItems;
+        //itemsCount = ARRAY_COUNT(sPartyStateListItems);
+        itemsCount = 2;
+        break;
     case LIST_ITEM_STATUS1:
         listTemplate.items = sStatus1ListItems;
         itemsCount = ARRAY_COUNT(sStatus1ListItems);
@@ -1525,6 +1546,17 @@ static void PrintSecondaryEntries(struct BattleDebugMenu *data)
         // Allow changing all stat stages at once.
         PadString(sTextAll, text);
         printer.currentY = printer.y = (i * yMultiplier) + sSecondaryListTemplate.upText_Y;
+        AddTextPrinter(&printer, 0, NULL);
+        break;
+    case LIST_ITEM_PARTY_STATE:
+        u16 *usedHeldItem = &GetBattlerPartyState(data->battlerId)->usedHeldItem;
+        PadString(GetItemName(*usedHeldItem), text);
+        printer.currentY = printer.y = sSecondaryListTemplate.upText_Y;
+        AddTextPrinter(&printer, 0, NULL);
+
+        u16 *usedPartyHeldItem = &GetBattlerPartyState(data->battlerId)->usedPartyHeldItem;
+        PadString(GetItemName(*usedPartyHeldItem), text);
+        printer.currentY = printer.y = yMultiplier + sSecondaryListTemplate.upText_Y;
         AddTextPrinter(&printer, 0, NULL);
         break;
     }
@@ -1966,6 +1998,22 @@ static void SetUpModifyArrows(struct BattleDebugMenu *data)
             data->modifyArrows.modifiedValPtr = &gBattleMons[data->battlerId].statStages[data->currentSecondaryListItemId + STAT_ATK];
             data->modifyArrows.typeOfVal = VAL_U8;
             data->modifyArrows.currValue = gBattleMons[data->battlerId].statStages[data->currentSecondaryListItemId + STAT_ATK];
+        }
+        break;
+    case LIST_ITEM_PARTY_STATE:
+        data->modifyArrows.minValue = 0;
+        data->modifyArrows.maxValue = ITEMS_COUNT - 1;
+        data->modifyArrows.maxDigits = 3;
+        data->modifyArrows.typeOfVal = VAL_U16;
+        if (data->currentSecondaryListItemId == LIST_USED_HELD_ITEM)
+        {
+            data->modifyArrows.currValue = gBattleStruct->partyState[B_SIDE_PLAYER][0].usedHeldItem;
+            data->modifyArrows.modifiedValPtr = &gBattleStruct->partyState[B_SIDE_PLAYER][0].usedHeldItem;
+        }
+        else
+        {
+            data->modifyArrows.currValue = gBattleStruct->partyState[B_SIDE_PLAYER][0].usedPartyHeldItem;
+            data->modifyArrows.modifiedValPtr = &gBattleStruct->partyState[B_SIDE_PLAYER][0].usedPartyHeldItem;
         }
         break;
     case LIST_ITEM_VARIOUS:

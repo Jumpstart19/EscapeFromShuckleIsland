@@ -6749,7 +6749,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
     #elif P_UPDATED_EXP_YIELDS >= GEN_5
         .expYield = 302,
     #else
-        .expYield = 220,
+        .expYield = 0,
     #endif
         .evYield_Attack = 3,
         .genderRatio = MON_GENDERLESS,
@@ -6758,6 +6758,7 @@ const struct SpeciesInfo gSpeciesInfoGen4[] =
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_NO_EGGS_DISCOVERED),
         .abilities = { ABILITY_SLOW_START, ABILITY_NONE, ABILITY_NONE },
+        .innates = { ABILITY_FAST_FINISH },
         .bodyColor = BODY_COLOR_WHITE,
         .speciesName = _("Regigigas"),
         .cryId = CRY_REGIGIGAS,

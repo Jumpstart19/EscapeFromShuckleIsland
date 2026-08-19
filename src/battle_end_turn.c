@@ -185,6 +185,7 @@ static bool32 HandleEndTurnWeatherDamage(u32 battler)
 static bool32 HandleEndTurnEmergencyExit(u32 battler)
 {
     bool32 effect = FALSE;
+    s32 i;
 
     gBattleStruct->eventState.endTurnBattler++;
 
@@ -198,6 +199,9 @@ static bool32 HandleEndTurnEmergencyExit(u32 battler)
 
         effect = TRUE;
     }
+
+    if ((i = ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), TRAINER_SLIDE_PLAYER_LANDS_FIRST_CRITICAL_HIT)))
+        BattleScriptExecute(i == 1 ? BattleScript_TrainerASlideMsgEnd2 : BattleScript_TrainerBSlideMsgEnd2);
 
     return effect;
 }
@@ -213,7 +217,7 @@ static bool32 HandleEndTurnAffection(u32 battler)
      || !IsOnPlayerSide(battler))
         return effect;
 
-    if (GetBattlerAffectionHearts(gBattlerAttacker) >= AFFECTION_FOUR_HEARTS && (Random() % 100 < 20))
+    if (GetBattlerAffectionHearts(gBattlerAttacker) >= AFFECTION_FOUR_HEARTS && (Random() % 100 < 0))
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = 1;
         BattleScriptExecute(BattleScript_AffectionBasedStatusHeal);
@@ -336,7 +340,7 @@ static bool32 HandleEndTurnFirstEventBlock(u32 battler)
         gBattleStruct->eventState.endTurnBlock++;
         break;
     case FIRST_EVENT_BLOCK_THRASH:
-        if (gBattleMons[battler].volatiles.lockConfusionTurns && gBattleMons[battler].volatiles.semiInvulnerable != STATE_SKY_DROP)
+        /*if (gBattleMons[battler].volatiles.lockConfusionTurns && gBattleMons[battler].volatiles.semiInvulnerable != STATE_SKY_DROP)
         {
             gBattleMons[battler].volatiles.lockConfusionTurns--;
             if (WasUnableToUseMove(battler))
@@ -354,7 +358,7 @@ static bool32 HandleEndTurnFirstEventBlock(u32 battler)
                     effect = TRUE;
                 }
             }
-        }
+        }*/
         gBattleStruct->eventState.endTurnBlock++;
         break;
     case FIRST_EVENT_BLOCK_GRASSY_TERRAIN_HEAL:
@@ -607,7 +611,7 @@ static bool32 HandleEndTurnWrap(u32 battler)
 
     if (gBattleMons[battler].volatiles.wrapped && IsBattlerAlive(battler))
     {
-        if (gDisableStructs[battler].wrapTurns != 0)
+        if (gDisableStructs[battler].wrapTurns > 1)
         {
             gDisableStructs[battler].wrapTurns--;
             if (IsAbilityAndRecord(battler, ABILITY_MAGIC_GUARD))
@@ -623,6 +627,25 @@ static bool32 HandleEndTurnWrap(u32 battler)
             else
                 bindDamage = GetNonDynamaxMaxHP(battler) / (B_BINDING_DAMAGE >= GEN_6 ? 8 : 16);
             SetPassiveDamageAmount(battler, bindDamage);
+
+        }
+        else if (gDisableStructs[battler].wrapTurns == 1)
+        {
+            gDisableStructs[battler].wrapTurns--;
+            if (IsAbilityAndRecord(battler, ABILITY_MAGIC_GUARD))
+                return effect;
+
+            gBattleScripting.animArg1 = gBattleMons[battler].volatiles.wrappedMove;
+            gBattleScripting.animArg2 = gBattleMons[battler].volatiles.wrappedMove >> 8;
+            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleMons[battler].volatiles.wrappedMove);
+            s32 bindDamage = 0;
+            if (GetBattlerHoldEffect(gBattleMons[battler].volatiles.wrappedBy) == HOLD_EFFECT_BINDING_BAND)
+                bindDamage = GetNonDynamaxMaxHP(battler) / (B_BINDING_DAMAGE >= GEN_6 ? 6 : 8);
+            else
+                bindDamage = GetNonDynamaxMaxHP(battler) / (B_BINDING_DAMAGE >= GEN_6 ? 8 : 16);
+            SetPassiveDamageAmount(battler, bindDamage);
+            gBattleMons[battler].volatiles.wrapped = FALSE;
+            BattleScriptExecute(BattleScript_WrapTurnDmgThenEnd);
         }
         else  // broke free
         {
@@ -1197,6 +1220,8 @@ static bool32 HandleEndTurnTerrain(u32 battler)
         effect = EndTurnTerrain(STATUS_FIELD_ELECTRIC_TERRAIN, B_MSG_TERRAIN_END_ELECTRIC);
     else if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
         effect = EndTurnTerrain(STATUS_FIELD_MISTY_TERRAIN, B_MSG_TERRAIN_END_MISTY);
+    else if (gFieldStatuses & STATUS_FIELD_SLEEPY_TERRAIN)
+        effect = EndTurnTerrain(STATUS_FIELD_SLEEPY_TERRAIN, B_MSG_TERRAIN_END_SLEEPY);
     else if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
         effect = EndTurnTerrain(STATUS_FIELD_GRASSY_TERRAIN, B_MSG_TERRAIN_END_GRASSY);
     else if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
@@ -1218,6 +1243,8 @@ static bool32 HandleEndTurnThirdEventBlock(u32 battler)
     switch (gBattleStruct->eventState.endTurnBlock)
     {
     case THIRD_EVENT_BLOCK_UPROAR:
+        bool32 resetBattler = FALSE;
+
         if (gBattleMons[battler].volatiles.uproarTurns)
         {
             for (gEffectBattler = 0; gEffectBattler < gBattlersCount; gEffectBattler++)
@@ -1252,14 +1279,40 @@ static bool32 HandleEndTurnThirdEventBlock(u32 battler)
                 else
                 {
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_UPROAR_ENDS;
+                    resetBattler = TRUE;
                     CancelMultiTurnMoves(battler, SKY_DROP_IGNORE);
                 }
                 BattleScriptExecute(BattleScript_PrintUproarOverTurns);
+                if (resetBattler == TRUE)
+                {
+                    gBattleStruct->eventState.endTurnBattler = 0; // Sleep faster mons
+                    gBattleStruct->eventState.endTurn--;
+                    gBattleStruct->eventState.endTurnBlock = 0;
+                }
                 effect = TRUE;
             }
         }
         gBattleStruct->eventState.endTurnBlock++;
         break;
+    case THIRD_EVENT_BLOCK_TERRAIN:
+    {
+        if (gFieldStatuses & STATUS_FIELD_SLEEPY_TERRAIN
+         && !(gBattleMons[battler].status1 & STATUS1_ANY)
+         && !BattlerHasTrait(battler, ABILITY_VITAL_SPIRIT)
+         && !BattlerHasTrait(battler, ABILITY_INSOMNIA)
+         && !UproarWakeUpCheck(battler))
+        {
+            gEffectBattler = gBattlerTarget = battler;
+            gBattleMons[battler].status1 |= (RandomUniform(RNG_SLEEP_TURNS, 4, 5));
+
+            BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+            MarkBattlerForControllerExec(battler);
+            BattleScriptExecute(BattleScript_SleepyTerrainMakesAsleepEnd2);
+            effect = TRUE;
+        }
+        gBattleStruct->eventState.endTurnBlock++;
+        break;
+    }
     case THIRD_EVENT_BLOCK_ABILITIES:
     {
         enum Ability battlerTraits[MAX_MON_TRAITS];
@@ -1268,7 +1321,7 @@ static bool32 HandleEndTurnThirdEventBlock(u32 battler)
         if (SearchTraits(battlerTraits, ABILITY_TRUANT) // Not fully accurate but it has to be handled somehow. TODO: Find a better way.
          || SearchTraits(battlerTraits, ABILITY_CUD_CHEW)
          || SearchTraits(battlerTraits, ABILITY_SLOW_START)
-         || SearchTraits(battlerTraits, ABILITY_BAD_DREAMS)
+         //|| SearchTraits(battlerTraits, ABILITY_BAD_DREAMS)
          || SearchTraits(battlerTraits, ABILITY_BALL_FETCH)
          || SearchTraits(battlerTraits, ABILITY_HARVEST)
          || SearchTraits(battlerTraits, ABILITY_MOODY)
@@ -1283,7 +1336,7 @@ static bool32 HandleEndTurnThirdEventBlock(u32 battler)
         if (SearchTraits(battlerTraits, ABILITY_TRUANT)
          || SearchTraits(battlerTraits, ABILITY_CUD_CHEW)
          || SearchTraits(battlerTraits, ABILITY_SLOW_START)
-         || SearchTraits(battlerTraits, ABILITY_BAD_DREAMS)
+         //|| SearchTraits(battlerTraits, ABILITY_BAD_DREAMS)
          || SearchTraits(battlerTraits, ABILITY_BALL_FETCH)
          || SearchTraits(battlerTraits, ABILITY_HARVEST)
          || SearchTraits(battlerTraits, ABILITY_MOODY)
@@ -1331,6 +1384,7 @@ static bool32 HandleEndTurnFormChangeAbilities(u32 battler)
     
     if (SearchTraits(battlerTraits, ABILITY_POWER_CONSTRUCT)
      || SearchTraits(battlerTraits, ABILITY_SCHOOLING)
+     || SearchTraits(battlerTraits, ABILITY_BAD_DREAMS)
      || SearchTraits(battlerTraits, ABILITY_SHIELDS_DOWN)
      || SearchTraits(battlerTraits, ABILITY_ZEN_MODE)
      || SearchTraits(battlerTraits, ABILITY_HUNGER_SWITCH))

@@ -114,6 +114,13 @@ enum {
     UR_STATE_CANCEL_REGISTRATION,
 };
 
+// States for Task_RunDmgCalc
+enum {
+    DC_STATE_INIT,
+    DC_STATE_MAIN,
+    DC_STATE_END,
+};
+
 // States for sUnionRoomTrade.state
 enum {
     URTRADE_STATE_NONE,
@@ -179,6 +186,7 @@ enum {
     UR_COLOR_DEFAULT,
     UR_COLOR_RED,
     UR_COLOR_GREEN,
+    UR_COLOR_BLUE,
     UR_COLOR_WHITE,
     UR_COLOR_CANCEL,
     UR_COLOR_TRADE_BOARD_SELF,
@@ -221,6 +229,16 @@ static void Task_SendMysteryGift(u8);
 static void Task_CardOrNewsWithFriend(u8);
 static void Task_CardOrNewsOverWireless(u8);
 static void Task_RunUnionRoom(u8);
+static void Task_RunDmgCalcHariyamaSnorlax(u8);
+static void Task_RunDmgCalcHariyamaGallade(u8);
+static void Task_RunDmgCalcRegigigasSnorlaxSuperpower(u8);
+static void Task_RunDmgCalcRegigigasSnorlaxCrushGrip(u8);
+static void Task_RunDmgCalcSableyeSnorlax(u8);
+static void Task_RunDmgCalcSableyeGallade(u8);
+static void Task_RunDmgCalcShuckleRockWrecker(u8);
+static void Task_RunDmgCalcShuckleDynamicPunch(u8);
+static void Task_RunDmgCalcShuckleDiamondStorm(u8);
+static void Task_RunDmgCalcShuckleNaturalGift(u8);
 static void ClearIncomingPlayerList(struct RfuIncomingPlayerList *, u8);
 static void ClearRfuPlayerList(struct RfuPlayer *, u8);
 static u8 CreateTask_ListenForCompatiblePartners(struct RfuIncomingPlayerList *, u32);
@@ -262,6 +280,7 @@ static s32 UnionRoomGetPlayerInteractionResponse(struct RfuPlayerList *, u8, u8,
 static void HandleCancelActivity(bool32);
 static s32 ListMenuHandler_AllItemsAvailable(u8 *, u8 *, u8 *, const struct WindowTemplate *, const struct ListMenuTemplate *);
 static s32 TradeBoardMenuHandler(u8 *, u8 *, u8 *, u8 *, const struct WindowTemplate *, const struct ListMenuTemplate *, struct RfuPlayerList *);
+static s32 DmgCalcMenuHandler(u8 *, u8 *, u8 *, u8 *, const struct WindowTemplate *, const struct ListMenuTemplate2 *, const struct PrintFuncs);
 static s32 GetIndexOfNthTradeBoardOffer(struct RfuPlayer *, s32);
 static bool32 HasAtLeastTwoMonsOfLevel30OrLower(void);
 static u32 GetResponseIdx_InviteToURoomActivity(s32);
@@ -278,6 +297,26 @@ static bool8 ArePlayersDifferent(struct RfuPlayerData *, const struct RfuPlayerD
 static void ItemPrintFunc_PossibleGroupMembers(u8, u32, u8);
 static void ListMenuItemPrintFunc_UnionRoomGroups(u8, u32, u8);
 static void TradeBoardListMenuItemPrintFunc(u8, u32, u8);
+static int DmgCalcHariyamaSnorlaxDefaultItemPrintFunc(u8, u32, u8);
+//static int DmgCalcHariyamaSnorlaxBurnItemPrintFunc(u8, u32, u8);
+//static int DmgCalcHariyamaSnorlaxBerryItemPrintFunc(u8, u32, u8);
+//static int DmgCalcHariyamaSnorlaxBurnBerryItemPrintFunc(u8, u32, u8);
+static int DmgCalcHariyamaGalladeDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcRegigigasSnorlaxSuperpowerDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcRegigigasSnorlaxSuperpowerBerryItemPrintFunc(u8, u32, u8);
+static int DmgCalcRegigigasSnorlaxCrushGripDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcRegigigasSnorlaxCrushGripBerryItemPrintFunc(u8, u32, u8);
+static int DmgCalcSableyeSnorlaxDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcSableyeGalladeDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleRockWreckerDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleRockWreckerBurnItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleDynamicPunchDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleDynamicPunchBurnItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleDynamicPunchBerryItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleDynamicPunchBurnBerryItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleDiamondStormDefaultItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleDiamondStormBurnItemPrintFunc(u8, u32, u8);
+static int DmgCalcShuckleNaturalGiftDefaultItemPrintFunc(u8, u32, u8);
 static void ItemPrintFunc_EmptyList(u8, u32, u8);
 
 #include "data/union_room.h"
@@ -3246,6 +3285,356 @@ static void Task_RunUnionRoom(u8 taskId)
     }
 }
 
+static void Task_RunDmgCalcHariyamaSnorlax(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sHariyamaSnorlaxDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsHariyamaSnorlax);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcHariyamaGallade(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sHariyamaGalladeDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsHariyamaGallade);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcRegigigasSnorlaxSuperpower(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sRegigigasSnorlaxSuperpowerDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsRegigigasSnorlaxSuperpower);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcRegigigasSnorlaxCrushGrip(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sRegigigasSnorlaxCrushGripDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsRegigigasSnorlaxCrushGrip);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcSableyeSnorlax(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sSableyeSnorlaxDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsSableyeSnorlax);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcSableyeGallade(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sSableyeGalladeDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsSableyeGallade);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcShuckleRockWrecker(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sShuckleRockWreckerDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsShuckleRockWrecker);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcShuckleDynamicPunch(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sShuckleDynamicPunchDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsShuckleDynamicPunch);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcShuckleDiamondStorm(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sShuckleDiamondStormDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsShuckleDiamondStorm);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
+static void Task_RunDmgCalcShuckleNaturalGift(u8 taskId)
+{
+    s32 input = 0;
+    struct WirelessLink_URoom *uroom = sWirelessLinkMain.uRoom;
+    
+    switch (uroom->state)
+    {
+    case DC_STATE_INIT:
+        StartScriptInteraction();
+        UR_ClearBg0();
+        uroom->state = DC_STATE_MAIN;
+        break;
+    case DC_STATE_MAIN:
+        input = DmgCalcMenuHandler(&uroom->textState, 
+                                   &uroom->tradeBoardMainWindowId,
+                                   &uroom->tradeBoardListMenuId,
+                                   &uroom->tradeBoardHeaderWindowId,
+                                   &sWindowTemplate_DmgCalcMain,
+                                   &sShuckleNaturalGiftDmgCalcMenuDefaultTemplate,
+                                   sitemPrintFuncsShuckleNaturalGift);
+        if (input == LIST_CANCEL)
+        {
+            uroom->state = DC_STATE_END;
+            break;
+        }
+        break;
+    case DC_STATE_END:
+        UR_ClearBg0();
+        UnlockPlayerFieldControls();
+        DestroyTask(taskId);
+        Free(sWirelessLinkMain.uRoom);
+        break;
+    }
+}
+
 void SetUsingUnionRoomStartMenu(void)
 {
     if (InUnionRoom() == TRUE)
@@ -3667,6 +4056,17 @@ static u8 CreateTradeBoardWindow(const struct WindowTemplate *template)
     return windowId;
 }
 
+static u8 CreateDmgCalcWindow(const struct WindowTemplate *template)
+{
+    u8 windowId = AddWindow(template);
+    DrawStdWindowFrame(windowId, FALSE);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
+    PrintUnionRoomText(windowId, FONT_NORMAL, gStringVar4, 8, 1, UR_COLOR_DEFAULT);
+    CopyWindowToVram(windowId, COPYWIN_GFX);
+    PutWindowTilemap(windowId);
+    return windowId;
+}
+
 static void DeleteTradeBoardWindow(u8 windowId)
 {
     RemoveWindow(windowId);
@@ -3779,6 +4179,258 @@ static s32 TradeBoardMenuHandler(u8 *state, u8 *mainWindowId, u8 *listMenuId, u8
     return LIST_NOTHING_CHOSEN;
 }
 
+static s32 DmgCalcMenuHandler(u8 *state, u8 *mainWindowId, u8 *listMenuId, u8 *headerWindowId,
+                              const struct WindowTemplate *winTemplate,
+                              const struct ListMenuTemplate2 *menuTemplate,
+                              const struct PrintFuncs itemPrintFuncs)
+{   
+    switch (*state)
+    {
+    case 0:
+        *headerWindowId = CreateDmgCalcWindow(&sWindowTemplate_TradingBoardHeader);
+        *mainWindowId = AddWindow(winTemplate);
+        DrawStdWindowFrame(*mainWindowId, FALSE);
+        gMultiuseListMenuTemplate2 = *menuTemplate;
+        gMultiuseListMenuTemplate2.windowId = *mainWindowId;
+        *listMenuId = ListMenuInitDmgCalc(&gMultiuseListMenuTemplate2, 0, 0);
+        (*state)++;
+        break;
+    case 1:
+        CopyWindowToVram(*mainWindowId, COPYWIN_MAP);
+        (*state)++;
+        break;
+    case 2:
+        DmgCalcMenu_ProcessInput(*listMenuId, itemPrintFuncs);
+        if (JOY_NEW(B_BUTTON))
+        {
+            DestroyListMenuTaskDmgCalc(*listMenuId, NULL, NULL);
+            RemoveWindow(*mainWindowId);
+            DeleteTradeBoardWindow(*headerWindowId);
+            *state = 0;
+            return LIST_CANCEL;
+        }
+        break;
+    }
+
+    return LIST_NOTHING_CHOSEN;
+}
+
+extern void DisplayHariyamaSnorlaxDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcHariyamaSnorlax, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_HariyamaSnorlaxDmgCalcHeader);
+}
+
+extern void DisplayHariyamaGalladeDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcHariyamaGallade, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_HariyamaGalladeDmgCalcHeader);
+
+}
+
+extern void DisplayRegigigasSnorlaxSuperpowerDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcRegigigasSnorlaxSuperpower, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_RegigigasSnorlaxSuperpowerDmgCalcHeader);
+}
+
+extern void DisplayRegigigasSnorlaxCrushGripDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcRegigigasSnorlaxCrushGrip, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_RegigigasSnorlaxCrushGripDmgCalcHeader);
+}
+
+extern void DisplaySableyeSnorlaxDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcSableyeSnorlax, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_SableyeSnorlaxDmgCalcHeader);
+}
+
+extern void DisplaySableyeGalladeDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcSableyeGallade, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_SableyeGalladeDmgCalcHeader);
+
+}
+
+extern void DisplayShuckleRockWreckerDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcShuckleRockWrecker, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_ShuckleRockWreckerDmgCalcHeader);
+
+}
+
+extern void DisplayShuckleDynamicPunchDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcShuckleDynamicPunch, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_ShuckleDynamicPunchDmgCalcHeader);
+
+}
+
+extern void DisplayShuckleDiamondStormDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcShuckleDiamondStorm, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_ShuckleDiamondStormDmgCalcHeader);
+
+}
+
+extern void DisplayShuckleNaturalGiftDmgCalc(void)
+{
+    struct WirelessLink_URoom *uroom;
+
+    CreateTask(Task_RunDmgCalcShuckleNaturalGift, 10);
+
+    // dumb line needed to match
+    sWirelessLinkMain.uRoom = sWirelessLinkMain.uRoom;
+
+    uroom = AllocZeroed(sizeof(struct WirelessLink_URoom));
+    sWirelessLinkMain.uRoom = uroom;
+
+    uroom->state = DC_STATE_INIT;
+    uroom->textState = 0;
+
+    LoadPalette(gStandardMenuPalette, BG_PLTT_ID(13), PLTT_SIZE_4BPP);
+    //ListMenuLoadStdPalAt(BG_PLTT_ID(13), 1);
+
+    StringCopy(gStringVar4, sText_ShuckleNaturalGiftDmgCalcHeader);
+
+}
+
 static void UR_ClearBg0(void)
 {
     FillBgTilemapBufferRect(0, 0, 0, 0, 32, 32, 0);
@@ -3826,6 +4478,13 @@ static void PrintUnionRoomText(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y
         printerTemplate.fgColor = TEXT_COLOR_GREEN;
         printerTemplate.bgColor = TEXT_COLOR_WHITE;
         printerTemplate.shadowColor = TEXT_COLOR_LIGHT_GREEN;
+        break;
+    case UR_COLOR_BLUE:
+        printerTemplate.letterSpacing = 0;
+        printerTemplate.lineSpacing = 0;
+        printerTemplate.fgColor = TEXT_COLOR_BLUE;
+        printerTemplate.bgColor = TEXT_COLOR_WHITE;
+        printerTemplate.shadowColor = TEXT_COLOR_LIGHT_BLUE;
         break;
     case UR_COLOR_WHITE:
         printerTemplate.letterSpacing = 0;
@@ -4150,6 +4809,343 @@ static void TradeBoardListMenuItemPrintFunc(u8 windowId, u32 itemId, u8 y)
             }
         }
     }
+}
+
+static void DmgCalcHariyamaSnorlaxPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *hpStr = sDmgCalcHariyamaSnorlaxText[itemId][0];
+    const u8 *defStr = sDmgCalcHariyamaSnorlaxText[itemId][1];
+    const u8 *dmgStr = sDmgCalcHariyamaSnorlaxText[itemId][2];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, hpStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 88, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 158, y, colorIdx);
+}
+
+static int DmgCalcHariyamaSnorlaxDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcHariyamaSnorlaxPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+/*
+static int DmgCalcHariyamaSnorlaxBurnItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 1;
+    DmgCalcHariyamaSnorlaxPrintItemInfo(windowId, itemId, y, UR_COLOR_RED);
+    return 0;
+}
+
+static int DmgCalcHariyamaSnorlaxBerryItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 2;
+    DmgCalcHariyamaSnorlaxPrintItemInfo(windowId, itemId, y, UR_COLOR_BLUE);
+    return 0;
+}
+
+static int DmgCalcHariyamaSnorlaxBurnBerryItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 3;
+    DmgCalcHariyamaSnorlaxPrintItemInfo(windowId, itemId, y, UR_COLOR_GREEN);
+    return 0;
+}*/
+
+static void DmgCalcHariyamaGalladePrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *hpStr = sDmgCalcHariyamaGalladeText[itemId][0];
+    const u8 *dmgStr = sDmgCalcHariyamaGalladeText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, hpStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 158, y, colorIdx);
+}
+
+static int DmgCalcHariyamaGalladeDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcHariyamaGalladePrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+// Regigigas Snorlax Superpower
+static void DmgCalcRegigigasSnorlaxSuperpowerDefaultPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *atkStr = sDmgCalcRegigigasSnorlaxSuperpowerText[itemId][0];
+    const u8 *defStr = sDmgCalcRegigigasSnorlaxSuperpowerText[itemId][1];
+    const u8 *dmgStr = sDmgCalcRegigigasSnorlaxSuperpowerText[itemId][2];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, atkStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 80, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 146, y, colorIdx);
+}
+
+static int DmgCalcRegigigasSnorlaxSuperpowerDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcRegigigasSnorlaxSuperpowerDefaultPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+static void DmgCalcRegigigasSnorlaxSuperpowerBerryPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *atkStr = sDmgCalcRegigigasSnorlaxSuperpowerBerryText[itemId][0];
+    const u8 *defStr = sDmgCalcRegigigasSnorlaxSuperpowerBerryText[itemId][1];
+    const u8 *dmgStr = sDmgCalcRegigigasSnorlaxSuperpowerBerryText[itemId][2];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, atkStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 80, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 146, y, colorIdx);
+}
+
+static int DmgCalcRegigigasSnorlaxSuperpowerBerryItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 2;
+    DmgCalcRegigigasSnorlaxSuperpowerBerryPrintItemInfo(windowId, itemId, y, UR_COLOR_BLUE);
+    return 0;
+}
+
+// Regigigas Snorlax Crush Grip
+static void DmgCalcRegigigasSnorlaxCrushGripDefaultPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcRegigigasSnorlaxCrushGripText[itemId][0];
+    const u8 *twoHKOStr = sDmgCalcRegigigasSnorlaxCrushGripText[itemId][1];
+    const u8 *OHKOStr = sDmgCalcRegigigasSnorlaxCrushGripText[itemId][2];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, twoHKOStr, 78, y, colorIdx);
+    PrintUnionRoomText(windowId, FONT_NORMAL, OHKOStr, 168, y, colorIdx);
+}
+
+static int DmgCalcRegigigasSnorlaxCrushGripDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcRegigigasSnorlaxCrushGripDefaultPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+static void DmgCalcRegigigasSnorlaxCrushGripBerryPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcRegigigasSnorlaxCrushGripBerryText[itemId][0];
+    const u8 *twoHKOStr = sDmgCalcRegigigasSnorlaxCrushGripBerryText[itemId][1];
+    const u8 *OHKOStr = sDmgCalcRegigigasSnorlaxCrushGripBerryText[itemId][2];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, twoHKOStr, 78, y, colorIdx);
+    PrintUnionRoomText(windowId, FONT_NORMAL, OHKOStr, 168, y, colorIdx);
+}
+
+static int DmgCalcRegigigasSnorlaxCrushGripBerryItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 2;
+    DmgCalcRegigigasSnorlaxCrushGripBerryPrintItemInfo(windowId, itemId, y, UR_COLOR_BLUE);
+    return 0;
+}
+
+// Sableye Snorlax
+static void DmgCalcSableyeSnorlaxPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *atkStr = sDmgCalcSableyeSnorlaxText[itemId][0];
+    const u8 *defStr = sDmgCalcSableyeSnorlaxText[itemId][1];
+    const u8 *statStr = sDmgCalcSableyeSnorlaxText[itemId][2];
+    const u8 *dmgStr = sDmgCalcSableyeSnorlaxText[itemId][3];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, atkStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 73, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, statStr, 138, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 190, y, colorIdx);
+}
+
+static int DmgCalcSableyeSnorlaxDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcSableyeSnorlaxPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+// Sableye Gallade
+static void DmgCalcSableyeGalladePrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *atkStr = sDmgCalcSableyeGalladeText[itemId][0];
+    const u8 *OHKOStr = sDmgCalcSableyeGalladeText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, atkStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, OHKOStr, 148, y, colorIdx);
+}
+
+static int DmgCalcSableyeGalladeDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcSableyeGalladePrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+// Shuckle Rock Wrecker
+static void DmgCalcShuckleRockWreckerDefaultPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleRockWreckerText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleRockWreckerText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleRockWreckerDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcShuckleRockWreckerDefaultPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+static void DmgCalcShuckleRockWreckerBurnPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleRockWreckerBurnText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleRockWreckerBurnText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleRockWreckerBurnItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 1;
+    DmgCalcShuckleRockWreckerBurnPrintItemInfo(windowId, itemId, y, UR_COLOR_RED);
+    return 0;
+}
+
+// Shuckle Dynamic Punch
+static void DmgCalcShuckleDynamicPunchDefaultPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleDynamicPunchText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleDynamicPunchText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleDynamicPunchDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcShuckleDynamicPunchDefaultPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+static void DmgCalcShuckleDynamicPunchBurnPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleDynamicPunchBurnText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleDynamicPunchBurnText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleDynamicPunchBurnItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 1;
+    DmgCalcShuckleDynamicPunchBurnPrintItemInfo(windowId, itemId, y, UR_COLOR_RED);
+    return 0;
+}
+
+static void DmgCalcShuckleDynamicPunchBerryPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleDynamicPunchBerryText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleDynamicPunchBerryText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleDynamicPunchBerryItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 2;
+    DmgCalcShuckleDynamicPunchBerryPrintItemInfo(windowId, itemId, y, UR_COLOR_BLUE);
+    return 0;
+}
+
+static void DmgCalcShuckleDynamicPunchBurnBerryPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleDynamicPunchBurnBerryText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleDynamicPunchBurnBerryText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleDynamicPunchBurnBerryItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 3;
+    DmgCalcShuckleDynamicPunchBurnBerryPrintItemInfo(windowId, itemId, y, UR_COLOR_GREEN);
+    return 0;
+}
+
+// Shuckle Diamond Storm
+static void DmgCalcShuckleDiamondStormDefaultPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleDiamondStormText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleDiamondStormText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleDiamondStormDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcShuckleDiamondStormDefaultPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
+}
+
+static void DmgCalcShuckleDiamondStormBurnPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleDiamondStormBurnText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleDiamondStormBurnText[itemId][1];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 128, y, colorIdx);
+}
+
+static int DmgCalcShuckleDiamondStormBurnItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 1;
+    DmgCalcShuckleDiamondStormBurnPrintItemInfo(windowId, itemId, y, UR_COLOR_RED);
+    return 0;
+}
+
+// Shuckle Natural Gift
+static void DmgCalcShuckleNaturalGiftDefaultPrintItemInfo(u8 windowId, u32 itemId, u8 y, u8 colorIdx)
+{
+    const u8 *defStr = sDmgCalcShuckleNaturalGiftText[itemId][0];
+    const u8 *dmgStr = sDmgCalcShuckleNaturalGiftText[itemId][1];
+    const u8 *dmgLSStr = sDmgCalcShuckleNaturalGiftText[itemId][2];
+
+    PrintUnionRoomText(windowId, FONT_NORMAL, defStr, 8, y, UR_COLOR_DEFAULT);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgStr, 98, y, colorIdx);
+    PrintUnionRoomText(windowId, FONT_NORMAL, dmgLSStr, 138, y, colorIdx);
+}
+
+static int DmgCalcShuckleNaturalGiftDefaultItemPrintFunc(u8 windowId, u32 itemId, u8 y)
+{
+    if (y == 255)
+        return 0;
+    DmgCalcShuckleNaturalGiftDefaultPrintItemInfo(windowId, itemId, y, UR_COLOR_DEFAULT);
+    return 0;
 }
 
 static s32 GetIndexOfNthTradeBoardOffer(struct RfuPlayer *players, s32 n)

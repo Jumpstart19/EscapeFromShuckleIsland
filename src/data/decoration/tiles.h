@@ -641,3 +641,31 @@ const u16 DecorGfx_REGICE_DOLL[] = {
 const u16 DecorGfx_REGISTEEL_DOLL[] = {
     OBJ_EVENT_GFX_BIG_REGISTEEL_DOLL
 };
+
+const u16 DecorGfx_REGIROCK2[] = {
+    OBJ_EVENT_GFX_REGIROCK2
+};
+
+const u16 DecorGfx_REGICE2[] = {
+    OBJ_EVENT_GFX_REGICE2
+};
+
+const u16 DecorGfx_REGISTEEL2[] = {
+    OBJ_EVENT_GFX_REGISTEEL2
+};
+
+const u16 DecorGfx_REGIGIGAS[] = {
+    OBJ_EVENT_GFX_REGIGIGAS
+};
+
+const u16 DecorGfx_SABLEYE[] = {
+    OBJ_EVENT_GFX_SABLEYE
+};
+
+const u16 DecorGfx_HARIYAMA[] = {
+    OBJ_EVENT_GFX_HARIYAMA
+};
+
+const u16 DecorGfx_SHUCKLE22[] = {
+    OBJ_EVENT_GFX_SHUCKLE22
+};

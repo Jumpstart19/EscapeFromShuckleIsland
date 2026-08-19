@@ -10,6 +10,11 @@
 #include "string_util.h"
 #include "data/hold_effects.h"
 #include "constants/berry.h"
+#include "constants/songs.h"
+#include "event_data.h"
+#include "text.h"
+#include "constants/characters.h"
+#include "strings.h"
 
 bool32 IsOnSwitchInActivation(enum HoldEffect holdEffect)          { return gHoldEffectsInfo[holdEffect].onSwitchIn; }
 bool32 IsOnSwitchInFirstTurnActivation(enum HoldEffect holdEffect) { return gHoldEffectsInfo[holdEffect].onSwitchInFirstTurn; }
@@ -270,7 +275,11 @@ static enum ItemEffect TryRockyHelmet(u32 battlerDef, u32 battlerAtk, u32 item)
     {
         SetPassiveDamageAmount(battlerAtk, GetNonDynamaxMaxHP(battlerAtk) / 6);
         PREPARE_ITEM_BUFFER(gBattleTextBuff1, item);
-        BattleScriptCall(BattleScript_RockyHelmetActivates);
+
+        if (gBattleMons[battlerAtk].item == ITEM_AIR_BALLOON)
+            BattleScriptCall(BattleScript_RockyHelmetActivatesPlusAirBalloon);
+        else
+            BattleScriptCall(BattleScript_RockyHelmetActivates);
         effect = ITEM_HP_CHANGE;
     }
 
@@ -867,6 +876,10 @@ static u32 ItemHealHp(u32 battler, u32 itemId, enum HealAmount percentHeal, Acti
      && HasEnoughHpToEatBerry(battler, 2, itemId))
     {
         s32 healAmount = 0;
+        s32 maxHealAmount;
+
+        maxHealAmount = (gBattleMons[battler].maxHP - gBattleMons[battler].hp);
+
         if (percentHeal == PERCENT_HEAL_AMOUNT)
             healAmount = (GetNonDynamaxMaxHP(battler) * GetItemHoldEffectParam(itemId) / 100);
         else
@@ -874,8 +887,78 @@ static u32 ItemHealHp(u32 battler, u32 itemId, enum HealAmount percentHeal, Acti
 
         if (BattlerHasTrait(battler, ABILITY_RIPEN) && GetItemPocket(itemId) == POCKET_BERRIES)
             healAmount *= 2;
-
+        if (healAmount > maxHealAmount)
+            healAmount = maxHealAmount;
         SetHealAmount(battler, healAmount);
+        gBattleScripting.battler = battler;
+        enum Ability battlerTraits[MAX_MON_TRAITS];
+        STORE_BATTLER_TRAITS(battler);
+
+        if (SearchTraits(battlerTraits, ABILITY_SATED_BELCH))
+        {
+            s32 damageAmount = 0;
+            u8 targetBattler = 0;
+            u32 battler1HP = gBattleMons[1].hp;
+            u32 battler3HP = gBattleMons[3].hp;
+            damageAmount = healAmount / 2;
+            if(IsBattlerAlive(1))
+            {
+                //enum Ability battler1Traits[MAX_MON_TRAITS];
+                //STORE_BATTLER_TRAITS(1);
+
+                if (BattlerHasTrait(1, ABILITY_LAST_STAND)
+                && damageAmount >= battler1HP
+                && gDisableStructs[1].lastStandActivated == FALSE)
+                {
+                    SetPassiveDamageAmount(1, (battler1HP - 1));
+                    //PushTraitStack(battler, ABILITY_LAST_STAND);
+                    FlagSet(FLAG_LAST_STAND_TRIGGERED);
+                    gDisableStructs[1].lastStandActivated = TRUE;
+                    gProtectStructs[1].assuranceDoubled = TRUE;
+                    gProtectStructs[1].lastStandTurn1 = TRUE;
+                    //TryInitializeTrainerSlidePlayerLandsFirstCriticalHit(1);
+                    gBattleStruct->trainerSlideMsg = gText_LastStandSlide;
+                    //SetHealAmount(1, ((GetNonDynamaxMaxHP(1) / 2) - 1));
+                }
+                else
+                {
+                    SetPassiveDamageAmount(1, damageAmount);
+                }
+            }
+            if(IsBattlerAlive(3))
+            {
+                //enum Ability battler3Traits[MAX_MON_TRAITS];
+                //STORE_BATTLER_TRAITS(3);
+
+                if (BattlerHasTrait(3, ABILITY_LAST_STAND)
+                && damageAmount >= battler3HP
+                && gDisableStructs[3].lastStandActivated == FALSE)
+                {
+                    SetPassiveDamageAmount(3, (battler3HP - 1));
+                    //PushTraitStack(3, ABILITY_LAST_STAND);
+                    FlagSet(FLAG_LAST_STAND_TRIGGERED);
+                    gDisableStructs[3].lastStandActivated = TRUE;
+                    gProtectStructs[3].assuranceDoubled = TRUE;
+                    gProtectStructs[3].lastStandTurn1 = TRUE;
+                    //TryInitializeTrainerSlidePlayerLandsFirstCriticalHit(3);
+                    gBattleStruct->trainerSlideMsg = gText_LastStandSlide;
+                    //SetHealAmount(3, ((GetNonDynamaxMaxHP(3) / 2) - 1));
+                }
+                else
+                {
+                    SetPassiveDamageAmount(3, damageAmount);
+                }
+            }
+            targetBattler = GetOpposingSideBattler(gBattleScripting.battler);
+            if (IsDoubleBattle() && !IsBattlerAlive(targetBattler))
+                targetBattler ^= BIT_FLANK;
+            gBattlerTarget = targetBattler;
+            gLastUsedAbility = ABILITY_SATED_BELCH;
+            PushTraitStack(battler, ABILITY_SATED_BELCH);
+        }
+
+        gBattleStruct->moveHealedAmount[battler] = 0;
+
         if (timing == IsOnSwitchInFirstTurnActivation)
             BattleScriptExecute(BattleScript_ItemHealHP_RemoveItemEnd2);
         else
@@ -968,8 +1051,9 @@ static enum ItemEffect StatRaiseBerry(u32 battler, u32 itemId, enum Stat statId,
 {
     enum ItemEffect effect = ITEM_NO_EFFECT;
 
-    if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN)
-     && HasEnoughHpToEatBerry(battler, GetItemHoldEffectParam(itemId), itemId))
+    //if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN)
+    // && HasEnoughHpToEatBerry(battler, GetItemHoldEffectParam(itemId), itemId))
+    if (HasEnoughHpToEatBerry(battler, GetItemHoldEffectParam(itemId), itemId))
     {
         gEffectBattler = gBattleScripting.battler = battler;
         SET_STATCHANGER(statId, BattlerHasTrait(battler, ABILITY_RIPEN) ? 2 : 1, FALSE);
@@ -978,8 +1062,10 @@ static enum ItemEffect StatRaiseBerry(u32 battler, u32 itemId, enum Stat statId,
 
         if (timing == IsOnSwitchInFirstTurnActivation)
             BattleScriptExecute(BattleScript_ConsumableStatRaiseEnd2);
-        else
+        else if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
             BattleScriptCall(BattleScript_ConsumableStatRaiseRet);
+        else
+            BattleScriptCall(BattleScript_ConsumableStatRaiseRet2);
         effect = ITEM_STATS_CHANGE;
     }
 

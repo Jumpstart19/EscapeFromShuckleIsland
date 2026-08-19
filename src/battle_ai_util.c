@@ -67,7 +67,7 @@ u32 AI_GetDamage(u32 battlerAtk, u32 battlerDef, u32 moveIndex, enum DamageCalcC
             return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].maximum;
         if ((gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_CONSERVATIVE) && !(gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_RISKY)) // Conservative assumes it deals min damage
             return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].minimum;
-        return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].median; // Default assumes it deals median damage
+        return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].maximum; // Default assumes it deals median damage
     }
     else if (calcContext == AI_DEFENDING && BattlerHasAi(battlerDef))
     {
@@ -75,11 +75,11 @@ u32 AI_GetDamage(u32 battlerAtk, u32 battlerDef, u32 moveIndex, enum DamageCalcC
             return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].minimum;
         if ((gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_CONSERVATIVE) && !(gAiThinkingStruct->aiFlags[battlerAtk] & AI_FLAG_RISKY)) // Conservative assumes it takes max damage
             return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].maximum;
-        return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].median; // Default assumes it takes median damage
+        return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].maximum; // Default assumes it takes median damage
     }
     else
     {
-        return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].median;
+        return aiData->simulatedDmg[battlerAtk][battlerDef][moveIndex].maximum;
     }
 }
 
@@ -961,10 +961,10 @@ struct SimulatedDamage AI_CalcDamage(u32 move, u32 battlerAtk, u32 battlerDef, u
         {
             u32 damage = CalculateMoveDamageVars(&ctx);
 
-            simDamage.minimum = GetDamageByRollType(damage, DMG_ROLL_LOWEST);
+            simDamage.minimum = GetDamageByRollType(damage, DMG_ROLL_HIGHEST);
             simDamage.minimum = ApplyModifiersAfterDmgRoll(&ctx, simDamage.minimum);
 
-            simDamage.median = GetDamageByRollType(damage, DMG_ROLL_DEFAULT);
+            simDamage.median = GetDamageByRollType(damage, DMG_ROLL_HIGHEST);
             simDamage.median = ApplyModifiersAfterDmgRoll(&ctx, simDamage.median);
 
             simDamage.maximum = GetDamageByRollType(damage, DMG_ROLL_HIGHEST);
@@ -2570,7 +2570,7 @@ bool32 HasMoveWithMoveEffectExcept(u32 battlerId, u32 moveEffect, enum BattleMov
 bool32 HasMove(u32 battlerId, u32 move)
 {
     s32 i;
-    u16 *moves = GetMovesArray(battlerId);
+    u16 *moves = gBattleMons[battlerId].moves;
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
@@ -6032,6 +6032,7 @@ s32 BattlerBenefitsFromAbilityScore(u32 battler, enum Ability ability, struct Ai
     case ABILITY_PURIFYING_SALT:
     case ABILITY_SPEED_BOOST:
     case ABILITY_WHITE_SMOKE:
+    case ABILITY_WONDER_GUARD:
         return GOOD_EFFECT;
     // Conditional ability logic goes here.
     case ABILITY_COMPOUND_EYES:

@@ -542,6 +542,16 @@ ALIGNED(4) static const u8 sText_Exit[] = _("EXIT");
 ALIGNED(4) static const u8 sText_Exit2[] = _("EXIT");
 ALIGNED(4) static const u8 sText_Info[] = _("INFO");
 ALIGNED(4) static const u8 sText_NameWantedOfferLv[] = _("NAME{CLEAR_TO 60}WANTED{CLEAR_TO 110}OFFER{CLEAR_TO 198}LV.");
+ALIGNED(4) static const u8 sText_HariyamaSnorlaxDmgCalcHeader[] = _("Hariyama HP{CLEAR_TO 80}Snorlax Def{CLEAR_TO 150}Reversal Dmg");
+ALIGNED(4) static const u8 sText_HariyamaGalladeDmgCalcHeader[] = _("Hariyama HP{CLEAR_TO 150}Reversal Dmg");
+ALIGNED(4) static const u8 sText_RegigigasSnorlaxSuperpowerDmgCalcHeader[] = _("Regigigas Atk{CLEAR_TO 72}Snorlax Def{CLEAR_TO 138}Superpower Dmg");
+ALIGNED(4) static const u8 sText_RegigigasSnorlaxCrushGripDmgCalcHeader[] = _("Snorlax Def{CLEAR_TO 70}2HKO HPs{CLEAR_TO 160}OHKO HPs");
+ALIGNED(4) static const u8 sText_SableyeSnorlaxDmgCalcHeader[] = _("Sableye Atk{CLEAR_TO 65}Snorlax Def{CLEAR_TO 130}Stat {UP_ARROW}s{CLEAR_TO 182}Dmg");
+ALIGNED(4) static const u8 sText_SableyeGalladeDmgCalcHeader[] = _("Sableye Atk{CLEAR_TO 140}OHKOs?");
+ALIGNED(4) static const u8 sText_ShuckleRockWreckerDmgCalcHeader[] = _("Snorlax Def{CLEAR_TO 120}Rock Wrecker Dmg");
+ALIGNED(4) static const u8 sText_ShuckleDynamicPunchDmgCalcHeader[] = _("Snorlax Def{CLEAR_TO 120}Dynamic Punch Dmg");
+ALIGNED(4) static const u8 sText_ShuckleDiamondStormDmgCalcHeader[] = _("Snorlax Def{CLEAR_TO 120}Diamond Storm Dmg");
+ALIGNED(4) static const u8 sText_ShuckleNaturalGiftDmgCalcHeader[] = _("Effectiveness{CLEAR_TO 90}Dmg{CLEAR_TO 130}Dmg (Last Stand)");
 ALIGNED(4) static const u8 sText_SingleBattle[] = _("SINGLE BATTLE");
 ALIGNED(4) static const u8 sText_DoubleBattle[] = _("DOUBLE BATTLE");
 ALIGNED(4) static const u8 sText_MultiBattle[] = _("MULTI BATTLE");
@@ -568,6 +578,278 @@ ALIGNED(4) static const u8 sText_ItsBronzeCard[] = _("It's a BRONZE CARD!");
 ALIGNED(4) static const u8 sText_ItsCopperCard[] = _("It's a COPPER CARD!");
 ALIGNED(4) static const u8 sText_ItsSilverCard[] = _("It's a SILVER CARD!");
 ALIGNED(4) static const u8 sText_ItsGoldCard[] = _("It's a GOLD CARD!");
+
+//Hariyama Snorlax Damage Calc Text Rows
+static const u8 *const sDmgCalcHariyamaSnorlaxText[24][3] = { 
+    {COMPOUND_STRING("HP ≥ 91"), COMPOUND_STRING("+0"), COMPOUND_STRING("26")},
+    {COMPOUND_STRING("HP ≥ 91"), COMPOUND_STRING("+1"), COMPOUND_STRING("20")},
+    {COMPOUND_STRING("HP ≥ 91"), COMPOUND_STRING("+2"), COMPOUND_STRING("14")},
+    {COMPOUND_STRING("HP ≥ 91"), COMPOUND_STRING("+3"), COMPOUND_STRING("14")},
+    {COMPOUND_STRING("47 ≤ HP < 91"), COMPOUND_STRING("+0"), COMPOUND_STRING("50")},
+    {COMPOUND_STRING("47 ≤ HP < 91"), COMPOUND_STRING("+1"), COMPOUND_STRING("36")},
+    {COMPOUND_STRING("47 ≤ HP < 91"), COMPOUND_STRING("+2"), COMPOUND_STRING("26")},
+    {COMPOUND_STRING("47 ≤ HP < 91"), COMPOUND_STRING("+3"), COMPOUND_STRING("24")},
+    {COMPOUND_STRING("28 ≤ HP < 47"), COMPOUND_STRING("+0"), COMPOUND_STRING("98")},
+    {COMPOUND_STRING("28 ≤ HP < 47"), COMPOUND_STRING("+1"), COMPOUND_STRING("68")},
+    {COMPOUND_STRING("28 ≤ HP < 47"), COMPOUND_STRING("+2"), COMPOUND_STRING("50")},
+    {COMPOUND_STRING("28 ≤ HP < 47"), COMPOUND_STRING("+3"), COMPOUND_STRING("42")},
+    {COMPOUND_STRING("13 ≤ HP < 28"), COMPOUND_STRING("+0"), COMPOUND_STRING("122")},
+    {COMPOUND_STRING("13 ≤ HP < 28"), COMPOUND_STRING("+1"), COMPOUND_STRING("84")},
+    {COMPOUND_STRING("13 ≤ HP < 28"), COMPOUND_STRING("+2"), COMPOUND_STRING("62")},
+    {COMPOUND_STRING("13 ≤ HP < 28"), COMPOUND_STRING("+3"), COMPOUND_STRING("54")},
+    {COMPOUND_STRING("5 ≤ HP < 13"), COMPOUND_STRING("+0"), COMPOUND_STRING("182")},
+    {COMPOUND_STRING("5 ≤ HP < 13"), COMPOUND_STRING("+1"), COMPOUND_STRING("126")},
+    {COMPOUND_STRING("5 ≤ HP < 13"), COMPOUND_STRING("+2"), COMPOUND_STRING("92")},
+    {COMPOUND_STRING("5 ≤ HP < 13"), COMPOUND_STRING("+3"), COMPOUND_STRING("78")},
+    {COMPOUND_STRING("HP < 5"), COMPOUND_STRING("+0"), COMPOUND_STRING("242")},
+    {COMPOUND_STRING("HP < 5"), COMPOUND_STRING("+1"), COMPOUND_STRING("164")},
+    {COMPOUND_STRING("HP < 5"), COMPOUND_STRING("+2"), COMPOUND_STRING("122")},
+    {COMPOUND_STRING("HP < 5"), COMPOUND_STRING("+3"), COMPOUND_STRING("102")}
+};
+
+//Hariyama Gallade Damage Calc Text Rows
+static const u8 *const sDmgCalcHariyamaGalladeText[6][2] = { 
+    {COMPOUND_STRING("HP ≥ 91"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("47 ≤ HP < 91"), COMPOUND_STRING("20")},
+    {COMPOUND_STRING("28 ≤ HP < 47"), COMPOUND_STRING("39")},
+    {COMPOUND_STRING("13 ≤ HP < 28"), COMPOUND_STRING("49")},
+    {COMPOUND_STRING("5 ≤ HP < 13"), COMPOUND_STRING("74")},
+    {COMPOUND_STRING("HP < 5"), COMPOUND_STRING("98")}
+};
+
+//Regigigas Snorlax Superpower Damage Calc Text Rows
+static const u8 *const sDmgCalcRegigigasSnorlaxSuperpowerText[28][3] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+0"), COMPOUND_STRING("62")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+1"), COMPOUND_STRING("44")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+2"), COMPOUND_STRING("32")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+3"), COMPOUND_STRING("28")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+0"), COMPOUND_STRING("42")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+1"), COMPOUND_STRING("30")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+2"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+3"), COMPOUND_STRING("20")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+0"), COMPOUND_STRING("32")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+1"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+2"), COMPOUND_STRING("18")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+3"), COMPOUND_STRING("14")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+0"), COMPOUND_STRING("26")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+1"), COMPOUND_STRING("18")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+2"), COMPOUND_STRING("14")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+3"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+0"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+1"), COMPOUND_STRING("16")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+2"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+3"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+0"), COMPOUND_STRING("20")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+1"), COMPOUND_STRING("14")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+2"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+3"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+0"), COMPOUND_STRING("18")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+1"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+2"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+3"), COMPOUND_STRING("8")}
+};
+
+//Regigigas Snorlax Superpower Damage Calc BERRY Text Rows
+static const u8 *const sDmgCalcRegigigasSnorlaxSuperpowerBerryText[28][3] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+0"), COMPOUND_STRING("31")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+1"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+2"), COMPOUND_STRING("16")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+3"), COMPOUND_STRING("14")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+0"), COMPOUND_STRING("21")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+1"), COMPOUND_STRING("15")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+2"), COMPOUND_STRING("11")},
+    {COMPOUND_STRING("-1"), COMPOUND_STRING("+3"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+0"), COMPOUND_STRING("16")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+1"), COMPOUND_STRING("11")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+2"), COMPOUND_STRING("9")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+3"), COMPOUND_STRING("7")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+0"), COMPOUND_STRING("13")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+1"), COMPOUND_STRING("9")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+2"), COMPOUND_STRING("7")},
+    {COMPOUND_STRING("-3"), COMPOUND_STRING("+3"), COMPOUND_STRING("6")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+0"), COMPOUND_STRING("11")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+1"), COMPOUND_STRING("8")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+2"), COMPOUND_STRING("6")},
+    {COMPOUND_STRING("-4"), COMPOUND_STRING("+3"), COMPOUND_STRING("6")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+0"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+1"), COMPOUND_STRING("7")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+2"), COMPOUND_STRING("6")},
+    {COMPOUND_STRING("-5"), COMPOUND_STRING("+3"), COMPOUND_STRING("5")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+0"), COMPOUND_STRING("9")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+1"), COMPOUND_STRING("6")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+2"), COMPOUND_STRING("5")},
+    {COMPOUND_STRING("-6"), COMPOUND_STRING("+3"), COMPOUND_STRING("4")}
+};
+
+//Regigigas Snorlax Crush Grip Damage Calc Text Rows
+static const u8 *const sDmgCalcRegigigasSnorlaxCrushGripText[4][3] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("None"), COMPOUND_STRING("All")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("None"), COMPOUND_STRING("All")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("13-14, ≥16"), COMPOUND_STRING("≤12, 15")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("8, ≥10"), COMPOUND_STRING("≤7, 9")}
+};
+
+//Regigigas Snorlax Crush Grip Damage Calc BERRY Text Rows
+static const u8 *const sDmgCalcRegigigasSnorlaxCrushGripBerryText[4][3] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("≥7"), COMPOUND_STRING("≤6")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("≥4"), COMPOUND_STRING("≤3")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("3-6, 8, 10-12"), COMPOUND_STRING("≤2")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("3-6"), COMPOUND_STRING("≤2")}
+};
+
+//Sableye Snorlax Punishment Damage Calc Text Rows
+static const u8 *const sDmgCalcSableyeSnorlaxText[65][4] = { 
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+0"), COMPOUND_STRING("0"), COMPOUND_STRING("9")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+0"), COMPOUND_STRING("2"), COMPOUND_STRING("13")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+0"), COMPOUND_STRING("4"), COMPOUND_STRING("18")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+0"), COMPOUND_STRING("6"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+1"), COMPOUND_STRING("2"), COMPOUND_STRING("9")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+1"), COMPOUND_STRING("4"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+1"), COMPOUND_STRING("6"), COMPOUND_STRING("15")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+1"), COMPOUND_STRING("≥7"), COMPOUND_STRING("16")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+2"), COMPOUND_STRING("4"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+2"), COMPOUND_STRING("6"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+2"), COMPOUND_STRING("≥7"), COMPOUND_STRING("13")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+3"), COMPOUND_STRING("6"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("+3"), COMPOUND_STRING("≥7"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+0"), COMPOUND_STRING("0"), COMPOUND_STRING("15")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+0"), COMPOUND_STRING("2"), COMPOUND_STRING("24")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+0"), COMPOUND_STRING("4"), COMPOUND_STRING("33")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+0"), COMPOUND_STRING("6"), COMPOUND_STRING("42")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+1"), COMPOUND_STRING("2"), COMPOUND_STRING("16")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+1"), COMPOUND_STRING("4"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+1"), COMPOUND_STRING("6"), COMPOUND_STRING("28")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+1"), COMPOUND_STRING("≥7"), COMPOUND_STRING("31")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+2"), COMPOUND_STRING("4"), COMPOUND_STRING("18")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+2"), COMPOUND_STRING("6"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+2"), COMPOUND_STRING("≥7"), COMPOUND_STRING("24")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+3"), COMPOUND_STRING("6"), COMPOUND_STRING("18")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("+3"), COMPOUND_STRING("≥7"), COMPOUND_STRING("19")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+0"), COMPOUND_STRING("0"), COMPOUND_STRING("28")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+0"), COMPOUND_STRING("2"), COMPOUND_STRING("45")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+0"), COMPOUND_STRING("4"), COMPOUND_STRING("63")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+0"), COMPOUND_STRING("6"), COMPOUND_STRING("81")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+1"), COMPOUND_STRING("2"), COMPOUND_STRING("31")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+1"), COMPOUND_STRING("4"), COMPOUND_STRING("43")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+1"), COMPOUND_STRING("6"), COMPOUND_STRING("54")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+1"), COMPOUND_STRING("≥7"), COMPOUND_STRING("60")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+2"), COMPOUND_STRING("4"), COMPOUND_STRING("33")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+2"), COMPOUND_STRING("6"), COMPOUND_STRING("37")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+2"), COMPOUND_STRING("≥7"), COMPOUND_STRING("42")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+3"), COMPOUND_STRING("6"), COMPOUND_STRING("45")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("+3"), COMPOUND_STRING("≥7"), COMPOUND_STRING("33")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+0"), COMPOUND_STRING("0"), COMPOUND_STRING("42")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+0"), COMPOUND_STRING("2"), COMPOUND_STRING("67")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+0"), COMPOUND_STRING("4"), COMPOUND_STRING("93")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+0"), COMPOUND_STRING("6"), COMPOUND_STRING("120")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+1"), COMPOUND_STRING("2"), COMPOUND_STRING("46")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+1"), COMPOUND_STRING("4"), COMPOUND_STRING("63")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+1"), COMPOUND_STRING("6"), COMPOUND_STRING("81")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+1"), COMPOUND_STRING("≥7"), COMPOUND_STRING("90")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+2"), COMPOUND_STRING("4"), COMPOUND_STRING("48")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+2"), COMPOUND_STRING("6"), COMPOUND_STRING("61")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+2"), COMPOUND_STRING("≥7"), COMPOUND_STRING("67")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+3"), COMPOUND_STRING("6"), COMPOUND_STRING("49")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("+3"), COMPOUND_STRING("≥7"), COMPOUND_STRING("54")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+0"), COMPOUND_STRING("0"), COMPOUND_STRING("54")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+0"), COMPOUND_STRING("2"), COMPOUND_STRING("88")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+0"), COMPOUND_STRING("4"), COMPOUND_STRING("124")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+0"), COMPOUND_STRING("6"), COMPOUND_STRING("159")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+1"), COMPOUND_STRING("2"), COMPOUND_STRING("60")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+1"), COMPOUND_STRING("4"), COMPOUND_STRING("84")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+1"), COMPOUND_STRING("6"), COMPOUND_STRING("106")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+1"), COMPOUND_STRING("≥7"), COMPOUND_STRING("118")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+2"), COMPOUND_STRING("4"), COMPOUND_STRING("63")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+2"), COMPOUND_STRING("6"), COMPOUND_STRING("81")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+2"), COMPOUND_STRING("≥7"), COMPOUND_STRING("88")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+3"), COMPOUND_STRING("6"), COMPOUND_STRING("64")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("+3"), COMPOUND_STRING("≥7"), COMPOUND_STRING("72")}
+};
+
+//Sableye Gallade Punishment Damage Calc Text Rows
+static const u8 *const sDmgCalcSableyeGalladeText[5][2] = { 
+    {COMPOUND_STRING("-2"), COMPOUND_STRING("No")},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("No")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("No")},
+    {COMPOUND_STRING("+4"), COMPOUND_STRING("No")},
+    {COMPOUND_STRING("+6"), COMPOUND_STRING("Yes")}
+};
+
+//Shuckle Rock Wrecker Damage Calc Text Rows
+static const u8 *const sDmgCalcShuckleRockWreckerText[4][2] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("105")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("72")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("54")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("43")}
+};
+
+//Shuckle Rock Wrecker Damage Calc BURN Text Rows
+static const u8 *const sDmgCalcShuckleRockWreckerBurnText[4][2] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("54")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("37")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("28")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("22")}
+};
+
+//Shuckle Dynamic Punch Damage Calc Text Rows
+static const u8 *const sDmgCalcShuckleDynamicPunchText[4][2] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("94")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("64")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("48")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("40")}
+};
+
+//Shuckle Dynamic Punch Damage Calc BURN Text Rows
+static const u8 *const sDmgCalcShuckleDynamicPunchBurnText[4][2] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("48")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("34")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("26")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("22")}
+};
+
+//Shuckle Dynamic Punch Damage Calc BERRY Text Rows
+static const u8 *const sDmgCalcShuckleDynamicPunchBerryText[4][2] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("47")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("32")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("24")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("20")}
+};
+
+//Shuckle Dynamic Punch Damage Calc BURN BERRY Text Rows
+static const u8 *const sDmgCalcShuckleDynamicPunchBurnBerryText[4][2] = { 
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("24")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("17")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("13")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("11")}
+};
+
+//Shuckle Diamond Storm Damage Calc Text Rows
+static const u8 *const sDmgCalcShuckleDiamondStormText[6][2] = { 
+    {COMPOUND_STRING("SNORLAX:"), sText_EmptyString},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("52")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("36")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("27")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("22")},
+    {COMPOUND_STRING("GALLADE:"), COMPOUND_STRING("42")}
+};
+
+//Shuckle Diamond Storm Damage Calc BURN Text Rows
+static const u8 *const sDmgCalcShuckleDiamondStormBurnText[6][2] = { 
+    {COMPOUND_STRING("SNORLAX:"), sText_EmptyString},
+    {COMPOUND_STRING("+0"), COMPOUND_STRING("27")},
+    {COMPOUND_STRING("+1"), COMPOUND_STRING("19")},
+    {COMPOUND_STRING("+2"), COMPOUND_STRING("15")},
+    {COMPOUND_STRING("+3"), COMPOUND_STRING("12")},
+    {COMPOUND_STRING("GALLADE:"), COMPOUND_STRING("21")}
+};
+
+//Shuckle Natural Gift Damage Calc Text Rows
+static const u8 *const sDmgCalcShuckleNaturalGiftText[4][3] = { 
+    {COMPOUND_STRING("Super"), COMPOUND_STRING("10"), COMPOUND_STRING("28")},
+    {COMPOUND_STRING("Normal"), COMPOUND_STRING("5"), COMPOUND_STRING("14")},
+    {COMPOUND_STRING("STAB"), COMPOUND_STRING("3"), COMPOUND_STRING("10")},
+    {COMPOUND_STRING("Not Very"), COMPOUND_STRING("2"), COMPOUND_STRING("7")}
+};
 
 static const u8 *const sCardColorTexts[] = {
     sText_ItsNormalCard,
@@ -955,12 +1237,490 @@ static const struct ListMenuTemplate sTradeBoardListMenuTemplate = {
     .item_X = 8,
     .cursor_X = 0,
     .upText_Y = 1,
-    .cursorPal = 14,
-    .fillValue = 15,
-    .cursorShadowPal = 13,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
     .lettersSpacing = 0,
     .itemVerticalPadding = 0,
     .scrollMultiple = LIST_NO_MULTIPLE_SCROLL,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+static const struct WindowTemplate sWindowTemplate_DmgCalcMain = {
+    .bg = 0,
+    .tilemapLeft = 1,
+    .tilemapTop = 5,
+    .width = 28,
+    .height = 12,
+    .paletteNum = 13,
+    .baseBlock = 0x0039
+};
+
+static const struct PrintFuncs sitemPrintFuncsHariyamaSnorlax = {
+    .defaultFunc = DmgCalcHariyamaSnorlaxDefaultItemPrintFunc,
+    .burnFunc = DmgCalcHariyamaSnorlaxDefaultItemPrintFunc,//DmgCalcHariyamaSnorlaxBurnItemPrintFunc,
+    .berryFunc = DmgCalcHariyamaSnorlaxDefaultItemPrintFunc,//DmgCalcHariyamaSnorlaxBerryItemPrintFunc,
+    .burnberryFunc = DmgCalcHariyamaSnorlaxDefaultItemPrintFunc,//DmgCalcHariyamaSnorlaxBurnBerryItemPrintFunc
+};
+
+static const struct ListMenuItem sHariyamaSnorlaxDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 },
+    { sText_EmptyString,  4 },
+    { sText_EmptyString,  5 },
+    { sText_EmptyString,  6 },
+    { sText_EmptyString,  7 },
+    { sText_EmptyString,  8 },
+    { sText_EmptyString,  9 },
+    { sText_EmptyString,  10 },
+    { sText_EmptyString,  11 },
+    { sText_EmptyString,  12 },
+    { sText_EmptyString,  13 },
+    { sText_EmptyString,  14 },
+    { sText_EmptyString,  15 },
+    { sText_EmptyString,  16 },
+    { sText_EmptyString,  17 },
+    { sText_EmptyString,  18 },
+    { sText_EmptyString,  19 },
+    { sText_EmptyString,  20 },
+    { sText_EmptyString,  21 },
+    { sText_EmptyString,  22 },
+    { sText_EmptyString,  23 }
+};
+
+static const struct ListMenuTemplate2 sHariyamaSnorlaxDmgCalcMenuDefaultTemplate = {
+    .items = sHariyamaSnorlaxDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcHariyamaSnorlaxDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sHariyamaSnorlaxDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+static const struct PrintFuncs sitemPrintFuncsHariyamaGallade = {
+    .defaultFunc = DmgCalcHariyamaGalladeDefaultItemPrintFunc,
+    .burnFunc = DmgCalcHariyamaGalladeDefaultItemPrintFunc,
+    .berryFunc = DmgCalcHariyamaGalladeDefaultItemPrintFunc,
+    .burnberryFunc = DmgCalcHariyamaGalladeDefaultItemPrintFunc
+};
+
+static const struct ListMenuItem sHariyamaGalladeDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 },
+    { sText_EmptyString,  4 },
+    { sText_EmptyString,  5 },
+};
+
+static const struct ListMenuTemplate2 sHariyamaGalladeDmgCalcMenuDefaultTemplate = {
+    .items = sHariyamaGalladeDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcHariyamaGalladeDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sHariyamaGalladeDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Snorlax Regigigas Superpower
+static const struct PrintFuncs sitemPrintFuncsRegigigasSnorlaxSuperpower = {
+    .defaultFunc = DmgCalcRegigigasSnorlaxSuperpowerDefaultItemPrintFunc,
+    .burnFunc = DmgCalcRegigigasSnorlaxSuperpowerDefaultItemPrintFunc,
+    .berryFunc = DmgCalcRegigigasSnorlaxSuperpowerBerryItemPrintFunc,
+    .burnberryFunc = DmgCalcRegigigasSnorlaxSuperpowerDefaultItemPrintFunc,
+};
+
+static const struct ListMenuItem sRegigigasSnorlaxSuperpowerDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 },
+    { sText_EmptyString,  4 },
+    { sText_EmptyString,  5 },
+    { sText_EmptyString,  6 },
+    { sText_EmptyString,  7 },
+    { sText_EmptyString,  8 },
+    { sText_EmptyString,  9 },
+    { sText_EmptyString,  10 },
+    { sText_EmptyString,  11 },
+    { sText_EmptyString,  12 },
+    { sText_EmptyString,  13 },
+    { sText_EmptyString,  14 },
+    { sText_EmptyString,  15 },
+    { sText_EmptyString,  16 },
+    { sText_EmptyString,  17 },
+    { sText_EmptyString,  18 },
+    { sText_EmptyString,  19 },
+    { sText_EmptyString,  20 },
+    { sText_EmptyString,  21 },
+    { sText_EmptyString,  22 },
+    { sText_EmptyString,  23 },
+    { sText_EmptyString,  24 },
+    { sText_EmptyString,  25 },
+    { sText_EmptyString,  26 },
+    { sText_EmptyString,  27 }
+};
+
+static const struct ListMenuTemplate2 sRegigigasSnorlaxSuperpowerDmgCalcMenuDefaultTemplate = {
+    .items = sRegigigasSnorlaxSuperpowerDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcRegigigasSnorlaxSuperpowerDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sHariyamaSnorlaxDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Snorlax Regigigas Crush Grip
+static const struct PrintFuncs sitemPrintFuncsRegigigasSnorlaxCrushGrip = {
+    .defaultFunc = DmgCalcRegigigasSnorlaxCrushGripDefaultItemPrintFunc,
+    .burnFunc = DmgCalcRegigigasSnorlaxCrushGripDefaultItemPrintFunc,
+    .berryFunc = DmgCalcRegigigasSnorlaxCrushGripBerryItemPrintFunc,
+    .burnberryFunc = DmgCalcRegigigasSnorlaxCrushGripDefaultItemPrintFunc,
+};
+
+static const struct ListMenuItem sRegigigasSnorlaxCrushGripDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 }
+};
+
+static const struct ListMenuTemplate2 sRegigigasSnorlaxCrushGripDmgCalcMenuDefaultTemplate = {
+    .items = sRegigigasSnorlaxCrushGripDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcRegigigasSnorlaxCrushGripDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sRegigigasSnorlaxCrushGripDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Snorlax Sableye
+static const struct PrintFuncs sitemPrintFuncsSableyeSnorlax = {
+    .defaultFunc = DmgCalcSableyeSnorlaxDefaultItemPrintFunc,
+    .burnFunc = DmgCalcSableyeSnorlaxDefaultItemPrintFunc,
+    .berryFunc = DmgCalcSableyeSnorlaxDefaultItemPrintFunc,
+    .burnberryFunc = DmgCalcSableyeSnorlaxDefaultItemPrintFunc,
+};
+
+static const struct ListMenuItem sSableyeSnorlaxDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 },
+    { sText_EmptyString,  4 },
+    { sText_EmptyString,  5 },
+    { sText_EmptyString,  6 },
+    { sText_EmptyString,  7 },
+    { sText_EmptyString,  8 },
+    { sText_EmptyString,  9 },
+    { sText_EmptyString,  10 },
+    { sText_EmptyString,  11 },
+    { sText_EmptyString,  12 },
+    { sText_EmptyString,  13 },
+    { sText_EmptyString,  14 },
+    { sText_EmptyString,  15 },
+    { sText_EmptyString,  16 },
+    { sText_EmptyString,  17 },
+    { sText_EmptyString,  18 },
+    { sText_EmptyString,  19 },
+    { sText_EmptyString,  20 },
+    { sText_EmptyString,  21 },
+    { sText_EmptyString,  22 },
+    { sText_EmptyString,  23 },
+    { sText_EmptyString,  24 },
+    { sText_EmptyString,  25 },
+    { sText_EmptyString,  26 },
+    { sText_EmptyString,  27 },
+    { sText_EmptyString,  28 },
+    { sText_EmptyString,  29 },
+    { sText_EmptyString,  30 },
+    { sText_EmptyString,  31 },
+    { sText_EmptyString,  32 },
+    { sText_EmptyString,  33 },
+    { sText_EmptyString,  34 },
+    { sText_EmptyString,  35 },
+    { sText_EmptyString,  36 },
+    { sText_EmptyString,  37 },
+    { sText_EmptyString,  38 },
+    { sText_EmptyString,  39 },
+    { sText_EmptyString,  40 },
+    { sText_EmptyString,  41 },
+    { sText_EmptyString,  42 },
+    { sText_EmptyString,  43 },
+    { sText_EmptyString,  44 },
+    { sText_EmptyString,  45 },
+    { sText_EmptyString,  46 },
+    { sText_EmptyString,  47 },
+    { sText_EmptyString,  48 },
+    { sText_EmptyString,  49 },
+    { sText_EmptyString,  50 },
+    { sText_EmptyString,  51 },
+    { sText_EmptyString,  52 },
+    { sText_EmptyString,  53 },
+    { sText_EmptyString,  54 },
+    { sText_EmptyString,  55 },
+    { sText_EmptyString,  56 },
+    { sText_EmptyString,  57 },
+    { sText_EmptyString,  58 },
+    { sText_EmptyString,  59 },
+    { sText_EmptyString,  60 },
+    { sText_EmptyString,  61 },
+    { sText_EmptyString,  62 },
+    { sText_EmptyString,  63 },
+    { sText_EmptyString,  64 }
+};
+
+static const struct ListMenuTemplate2 sSableyeSnorlaxDmgCalcMenuDefaultTemplate = {
+    .items = sSableyeSnorlaxDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcSableyeSnorlaxDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sSableyeSnorlaxDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Gallade Sableye
+static const struct PrintFuncs sitemPrintFuncsSableyeGallade = {
+    .defaultFunc = DmgCalcSableyeGalladeDefaultItemPrintFunc,
+    .burnFunc = DmgCalcSableyeGalladeDefaultItemPrintFunc,
+    .berryFunc = DmgCalcSableyeGalladeDefaultItemPrintFunc,
+    .burnberryFunc = DmgCalcSableyeGalladeDefaultItemPrintFunc,
+};
+
+static const struct ListMenuItem sSableyeGalladeDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 },
+    { sText_EmptyString,  4 }
+};
+
+static const struct ListMenuTemplate2 sSableyeGalladeDmgCalcMenuDefaultTemplate = {
+    .items = sSableyeGalladeDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcSableyeGalladeDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sSableyeGalladeDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Shuckle Rock Wrecker
+static const struct PrintFuncs sitemPrintFuncsShuckleRockWrecker = {
+    .defaultFunc = DmgCalcShuckleRockWreckerDefaultItemPrintFunc,
+    .burnFunc = DmgCalcShuckleRockWreckerBurnItemPrintFunc,
+    .berryFunc = DmgCalcShuckleRockWreckerDefaultItemPrintFunc,
+    .burnberryFunc = DmgCalcShuckleRockWreckerDefaultItemPrintFunc,
+};
+
+static const struct ListMenuItem sShuckleRockWreckerDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 }
+};
+
+static const struct ListMenuTemplate2 sShuckleRockWreckerDmgCalcMenuDefaultTemplate = {
+    .items = sShuckleRockWreckerDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcShuckleRockWreckerDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sShuckleRockWreckerDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Shuckle Dynamic Punch
+static const struct PrintFuncs sitemPrintFuncsShuckleDynamicPunch = {
+    .defaultFunc = DmgCalcShuckleDynamicPunchDefaultItemPrintFunc,
+    .burnFunc = DmgCalcShuckleDynamicPunchBurnItemPrintFunc,
+    .berryFunc = DmgCalcShuckleDynamicPunchBerryItemPrintFunc,
+    .burnberryFunc = DmgCalcShuckleDynamicPunchBurnBerryItemPrintFunc,
+};
+
+static const struct ListMenuItem sShuckleDynamicPunchDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 }
+};
+
+static const struct ListMenuTemplate2 sShuckleDynamicPunchDmgCalcMenuDefaultTemplate = {
+    .items = sShuckleDynamicPunchDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcShuckleDynamicPunchDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sShuckleDynamicPunchDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Shuckle Diamond Storm
+static const struct PrintFuncs sitemPrintFuncsShuckleDiamondStorm = {
+    .defaultFunc = DmgCalcShuckleDiamondStormDefaultItemPrintFunc,
+    .burnFunc = DmgCalcShuckleDiamondStormBurnItemPrintFunc,
+    .berryFunc = DmgCalcShuckleDiamondStormDefaultItemPrintFunc,
+    .burnberryFunc = DmgCalcShuckleDiamondStormDefaultItemPrintFunc,
+};
+
+static const struct ListMenuItem sShuckleDiamondStormDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 },
+    { sText_EmptyString,  4 },
+    { sText_EmptyString,  5 }
+};
+
+static const struct ListMenuTemplate2 sShuckleDiamondStormDmgCalcMenuDefaultTemplate = {
+    .items = sShuckleDiamondStormDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcShuckleDiamondStormDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sShuckleDiamondStormDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = FONT_NORMAL,
+    .cursorKind = CURSOR_BLACK_ARROW
+};
+
+// Shuckle Natural Gift
+static const struct PrintFuncs sitemPrintFuncsShuckleNaturalGift = {
+    .defaultFunc = DmgCalcShuckleNaturalGiftDefaultItemPrintFunc,
+    .burnFunc = DmgCalcShuckleNaturalGiftDefaultItemPrintFunc,
+    .berryFunc = DmgCalcShuckleNaturalGiftDefaultItemPrintFunc,
+    .burnberryFunc = DmgCalcShuckleNaturalGiftDefaultItemPrintFunc,
+};
+
+static const struct ListMenuItem sShuckleNaturalGiftDmgCalcListMenuItems[] = {
+    { sText_EmptyString,  0 },
+    { sText_EmptyString,  1 },
+    { sText_EmptyString,  2 },
+    { sText_EmptyString,  3 }
+};
+
+static const struct ListMenuTemplate2 sShuckleNaturalGiftDmgCalcMenuDefaultTemplate = {
+    .items = sShuckleNaturalGiftDmgCalcListMenuItems,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFuncDmgCalc,
+    .itemPrintFunc = DmgCalcShuckleNaturalGiftDefaultItemPrintFunc,
+    .totalItems = ARRAY_COUNT(sShuckleNaturalGiftDmgCalcListMenuItems),
+    .maxShowed = 6,
+    .windowId = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 1,
+    .cursorPal = 2,
+    .fillValue = 1,
+    .cursorShadowPal = 3,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
     .fontId = FONT_NORMAL,
     .cursorKind = CURSOR_BLACK_ARROW
 };

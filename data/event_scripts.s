@@ -65,6 +65,7 @@
 #include "constants/vars.h"
 #include "constants/weather.h"
 #include "constants/speaker_names.h"
+#include "constants/mugshots.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
 	.include "constants/constants.inc"
@@ -113,6 +114,7 @@ gStdScripts::
 	.4byte Std_RegisteredInMatchCall   @ STD_REGISTER_MATCH_CALL
 	.4byte Std_MsgboxGetPoints         @ MSGBOX_GETPOINTS
 	.4byte Std_MsgboxPokenav           @ MSGBOX_POKENAV
+	.4byte Std_ObtainItemNoJingle      @ STD_OBTAIN_ITEM_NO_JINGLE
 gStdScripts_End::
 
 	.include "data/maps/PetalburgCity/scripts.inc"
@@ -934,7 +936,7 @@ gText_UnusedNicknameReceivedPokemon::
 
 gText_PlayerWhitedOut::
 	.string "{PLAYER} is out of usable\n"
-	.string "POKéMON!\p{PLAYER} whited out!$"
+	.string "Pokémon!\p{PLAYER} whited out!$"
 
 gText_FirstShouldRestoreMonsHealth::
 	.string "First, you should restore your\n"
@@ -1163,3 +1165,46 @@ EventScript_VsSeekerChargingDone::
 	.include "data/scripts/dexnav.inc"
 	.include "data/scripts/battle_frontier.inc"
 	.include "data/scripts/apricorn_tree.inc"
+	.include "data/scripts/qol_field_move_scripts.inc" @ qol_field_moves 
+
+	.include "data/maps/ShuckleIsland/scripts.inc"
+
+	.include "data/maps/ShuckleIslandCave/scripts.inc"
+
+	.include "data/maps/ShuckleIslandCave_B2F/scripts.inc"
+
+	.include "data/maps/ShuckleIslandCaveIceF1/scripts.inc"
+
+	.include "data/maps/ShuckleIslandMain/scripts.inc"
+
+	.include "data/maps/ShuckleIslandSouth/scripts.inc"
+
+	.include "data/maps/ShuckleIslandMain_House1/scripts.inc"
+
+	.include "data/maps/ShuckleIslandMain_House2/scripts.inc"
+
+	.include "data/maps/ShuckleIslandMain_House3/scripts.inc"
+
+	.include "data/maps/ShuckleIslandSouthCave/scripts.inc"
+
+	.include "data/maps/ShuckleIslandSouthCave_B2F/scripts.inc"
+
+	.include "data/maps/ShuckleIslandSouthCaveIce/scripts.inc"
+
+	.include "data/maps/ShuckleIslandRemoteCave_B2F/scripts.inc"
+
+	.include "data/maps/ShuckleIslandRemoteCave/scripts.inc"
+
+	.include "data/maps/ShuckleIslandRemote/scripts.inc"
+
+	.include "data/maps/ShuckleIslandShuckleHideout_1F/scripts.inc"
+
+	.include "data/maps/ShuckleIslandShuckleHideout_B1F/scripts.inc"
+
+	.include "data/maps/ShuckleIslandShuckleHideout_2F/scripts.inc"
+
+	.include "data/maps/ShuckleIslandShuckleHideout_B2F/scripts.inc"
+
+	.include "data/maps/ShuckleIslandEscape/scripts.inc"
+
+	.include "data/maps/ShuckleIslandEscapeHouse/scripts.inc"

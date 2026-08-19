@@ -84,6 +84,7 @@ static void MoveSelectionDisplayMoveNames(u32 battler);
 static void TryMoveSelectionDisplayMoveDescription(u32 battler);
 static void MoveSelectionDisplayMoveDescription(u32 battler);
 static void WaitForMonSelection(u32 battler);
+static void WaitForOpponentSelection(u32 battler);
 static void CompleteWhenChoseItem(u32 battler);
 static void Task_LaunchLvlUpAnim(u8);
 static void Task_PrepareToGiveExpWithExpBar(u8);
@@ -91,6 +92,8 @@ static void Task_SetControllerToWaitForString(u8);
 static void Task_GiveExpWithExpBar(u8);
 static void Task_UpdateLvlInHealthbox(u8);
 static void PrintLinkStandbyMsg(void);
+static void CheckOpponentParty(u32 battler);
+static void OpenOpponentParty(u32 battler);
 
 static void ReloadMoveNames(u32 battler);
 static u32 CheckTypeEffectiveness(u32 battlerAtk, u32 battlerDef);
@@ -305,6 +308,7 @@ static void HandleInputChooseAction(u32 battler)
     {
         PlaySE(SE_SELECT);
         TryHideLastUsedBall();
+        TryToHideEnemyInfoWindow();
 
         switch (gActionSelectionCursor[battler])
         {
@@ -363,6 +367,11 @@ static void HandleInputChooseAction(u32 battler)
             ActionSelectionCreateCursorAt(gActionSelectionCursor[battler], 0);
         }
     }
+    else if (JOY_NEW(L_BUTTON) && gSaveBlock2Ptr->optionsButtonMode != OPTIONS_BUTTON_MODE_L_EQUALS_A)
+    {
+        PlaySE(SE_SELECT);
+        CheckOpponentParty(battler);
+    }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
         if (IsDoubleBattle()
@@ -404,6 +413,7 @@ static void HandleInputChooseAction(u32 battler)
     {
         PlaySE(SE_SELECT);
         TryHideLastUsedBall();
+        TryToHideEnemyInfoWindow();
         BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_THROW_BALL, 0);
         BtlController_Complete(battler);
     }
@@ -438,6 +448,7 @@ void HandleInputChooseTarget(u32 battler)
             BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_EXEC_SCRIPT, gMoveSelectionCursor[battler] | (gMultiUsePlayerCursor << 8));
         EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
         TryHideLastUsedBall();
+        TryToHideEnemyInfoWindow();
         HideGimmickTriggerSprite();
         BtlController_Complete(battler);
     }
@@ -633,6 +644,7 @@ void HandleInputShowTargets(u32 battler)
             BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_EXEC_SCRIPT, gMoveSelectionCursor[battler] | (gMultiUsePlayerCursor << 8));
         HideGimmickTriggerSprite();
         TryHideLastUsedBall();
+        TryToHideEnemyInfoWindow();
         BtlController_Complete(battler);
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
@@ -737,6 +749,7 @@ void HandleInputChooseMove(u32 battler)
                 BtlController_EmitTwoReturnValues(battler, B_COMM_TO_ENGINE, B_ACTION_EXEC_SCRIPT, gMoveSelectionCursor[battler] | (gMultiUsePlayerCursor << 8));
             HideGimmickTriggerSprite();
             TryHideLastUsedBall();
+            TryToHideEnemyInfoWindow();
             BtlController_Complete(battler);
             break;
         case 1:
@@ -1550,6 +1563,23 @@ static void OpenPartyMenuToChooseMon(u32 battler)
     }
 }
 
+static void CheckOpponentParty(u32 battler)
+{
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+        gBattlerControllerFuncs[battler] = OpenOpponentParty;
+}
+
+static void OpenOpponentParty(u32 battler)
+{
+    if (!gPaletteFade.active)
+    {
+        gBattlerControllerFuncs[battler] = WaitForOpponentSelection;
+        DestroyTask(gBattleControllerData[battler]);
+        FreeAllWindowBuffers();
+        ShowOpponentPartyMenuInBattle();
+    }
+} 
+
 static void WaitForMonSelection(u32 battler)
 {
     if (gMain.callback2 == BattleMainCB2 && !gPaletteFade.active)
@@ -1563,6 +1593,14 @@ static void WaitForMonSelection(u32 battler)
             PrintLinkStandbyMsg();
 
         BtlController_Complete(battler);
+    }
+}
+
+static void WaitForOpponentSelection(u32 battler)
+{
+    if (gMain.callback2 == BattleMainCB2 && !gPaletteFade.active)
+    {
+        gBattlerControllerFuncs[battler] = PlayerHandleChooseAction;
     }
 }
 
@@ -2000,6 +2038,7 @@ static void PlayerHandleChooseAction(u32 battler)
         ActionSelectionDestroyCursorAt(i);
 
     TryRestoreLastUsedBall();
+    TryToAddEnemyInfoWindow();
     ActionSelectionCreateCursorAt(gActionSelectionCursor[battler], 0);
     PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, battler, gBattlerPartyIndexes[battler]);
     BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo);
@@ -2092,6 +2131,7 @@ void PlayerHandleChooseMove(u32 battler)
 
         InitMoveSelectionsVarsAndStrings(battler);
         gBattleStruct->gimmick.playerSelect = FALSE;
+        TryToHideEnemyInfoWindow();
         TryToAddMoveInfoWindow();
 
         AssignUsableZMoves(battler, moveInfo->moves);
@@ -2381,11 +2421,11 @@ static u32 CheckTypeEffectiveness(u32 battlerAtk, u32 battlerDef)
     if (!ShouldShowTypeEffectiveness(battlerDef))
         return EFFECTIVENESS_CANNOT_VIEW;
 
-    if (modifier == UQ_4_12(0.0))
+    if (modifier == UQ_4_12_FLOORED(0.0))
         return EFFECTIVENESS_NO_EFFECT; // No effect
-    else if (modifier <= UQ_4_12(0.5))
+    else if (modifier <= UQ_4_12_FLOORED(0.5))
         return EFFECTIVENESS_NOT_VERY_EFFECTIVE; // Not very effective
-    else if (modifier >= UQ_4_12(2.0))
+    else if (modifier >= UQ_4_12_FLOORED(2.0))
         return EFFECTIVENESS_SUPER_EFFECTIVE; // Super effective
     return EFFECTIVENESS_NORMAL; // Normal effectiveness
 }

@@ -77,6 +77,7 @@
 #include "constants/weather.h"
 #include "cable_club.h"
 #include "test/test_runner_battle.h"
+#include "script_pokemon_util.h"
 
 extern const struct BgTemplate gBattleBgTemplates[];
 extern const struct WindowTemplate *const gBattleWindowTemplates[];
@@ -326,8 +327,8 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_AROMA_LADY] = { _("AROMA LADY"), 10 },
     [TRAINER_CLASS_RUIN_MANIAC] = { _("RUIN MANIAC"), 15 },
     [TRAINER_CLASS_INTERVIEWER] = { _("INTERVIEWER"), 12 },
-    [TRAINER_CLASS_TUBER_F] = { _("TUBER"), 1 },
-    [TRAINER_CLASS_TUBER_M] = { _("TUBER"), 1 },
+    [TRAINER_CLASS_TUBER_F] = { _("Tuber"), 1 },
+    [TRAINER_CLASS_TUBER_M] = { _("Tuber"), 1 },
     [TRAINER_CLASS_LADY] = { _("LADY"), 50 },
     [TRAINER_CLASS_BEAUTY] = { _("BEAUTY"), 20, B_TRAINER_CLASS_POKE_BALLS >= GEN_8 ? BALL_GREAT : BALL_POKE },
     [TRAINER_CLASS_RICH_BOY] = { _("RICH BOY"), 50 },
@@ -345,7 +346,7 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_SR_AND_JR] = { _("SR. AND JR."), 4 },
     [TRAINER_CLASS_WINSTRATE] = { _("WINSTRATE"), 10 },
     [TRAINER_CLASS_POKEFAN] = { _("POKéFAN"), 20 },
-    [TRAINER_CLASS_YOUNGSTER] = { _("YOUNGSTER"), 4 },
+    [TRAINER_CLASS_YOUNGSTER] = { _("Youngster"), 4 },
     [TRAINER_CLASS_CHAMPION] = { _("CHAMPION"), 50, BALL_ULTRA },
     [TRAINER_CLASS_FISHERMAN] = { _("FISHERMAN"), 10, B_TRAINER_CLASS_POKE_BALLS >= GEN_8 ? BALL_DIVE : BALL_LURE },
     [TRAINER_CLASS_TRIATHLETE] = { _("TRIATHLETE"), 10 },
@@ -354,7 +355,7 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_BATTLE_GIRL] = { _("BATTLE GIRL"), 6 },
     [TRAINER_CLASS_PARASOL_LADY] = { _("PARASOL LADY"), 10 },
     [TRAINER_CLASS_SWIMMER_F] = { _("SWIMMER♀"), 2, BALL_DIVE },
-    [TRAINER_CLASS_TWINS] = { _("TWINS"), 3 },
+    [TRAINER_CLASS_TWINS] = { _("Twins"), 3 },
     [TRAINER_CLASS_SAILOR] = { _("SAILOR"), 8 },
     [TRAINER_CLASS_COOLTRAINER_2] = { _("COOLTRAINER"), 5, BALL_ULTRA },
     [TRAINER_CLASS_MAGMA_ADMIN] = { _("MAGMA ADMIN"), 10 },
@@ -374,6 +375,11 @@ const struct TrainerClass gTrainerClasses[TRAINER_CLASS_COUNT] =
     [TRAINER_CLASS_PIKE_QUEEN] = { _("PIKE QUEEN") },
     [TRAINER_CLASS_PYRAMID_KING] = { _("PYRAMID KING") },
     [TRAINER_CLASS_RS_PROTAG] = { _("{PKMN} TRAINER") },
+    [TRAINER_CLASS_TEAM_SHUCKLE] = { _("Team Shuckle") },
+    [TRAINER_CLASS_SHUCKLE_ADMIN] = { _("Shuckle Admin") },
+    [TRAINER_CLASS_SHUCKLE_LEADER] = { _("Shuckle Leader") },
+    [TRAINER_CLASS_SHUCKLE_LEADER2] = { _("Shuckle Leader") },
+    [TRAINER_CLASS_GAME_MASTER] = { _("Game Master") },
 };
 
 static void (*const sTurnActionsFuncsTable[])(void) =
@@ -3120,6 +3126,10 @@ static void BattleStartClearSetData(void)
     {
         gBattleStruct->partyState[B_SIDE_PLAYER][i].usedHeldItem = ITEM_NONE;
         gBattleStruct->partyState[B_SIDE_OPPONENT][i].usedHeldItem = ITEM_NONE;
+        gBattleStruct->partyState[B_SIDE_PLAYER][i].usedPartyHeldItem = ITEM_NONE;
+        gBattleStruct->partyState[B_SIDE_OPPONENT][i].usedPartyHeldItem = ITEM_NONE;
+        gBattleStruct->partyState[B_SIDE_PLAYER][i].uploadType = TYPE_NONE;
+        gBattleStruct->partyState[B_SIDE_OPPONENT][i].uploadType = TYPE_NONE;
         gBattleStruct->itemLost[B_SIDE_PLAYER][i].originalItem = GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM);
         gBattleStruct->itemLost[B_SIDE_OPPONENT][i].originalItem = GetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM);
         gPartyCriticalHits[i] = 0;
@@ -4073,6 +4083,8 @@ void BattleTurnPassed(void)
         BattleScriptExecute(BattleScript_PalacePrintFlavorText);
     else if (gBattleTypeFlags & BATTLE_TYPE_ARENA && gBattleStruct->eventState.arenaTurn == 0)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
+    else if ((i = ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), TRAINER_SLIDE_FIRST_LOSS_HP)))
+        BattleScriptExecute(i == 1 ? BattleScript_TrainerASlideMsgEnd2 : BattleScript_TrainerBSlideMsgEnd2);
     else if ((i = ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), TRAINER_SLIDE_LAST_LOW_HP)))
         BattleScriptExecute(i == 1 ? BattleScript_TrainerASlideMsgEnd2 : BattleScript_TrainerBSlideMsgEnd2);
     else if ((i = ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), TRAINER_SLIDE_LAST_HALF_HP)))
@@ -5478,6 +5490,7 @@ static void HandleEndTurn_BattleWon(void)
         {
         case TRAINER_CLASS_ELITE_FOUR:
         case TRAINER_CLASS_CHAMPION:
+        case TRAINER_CLASS_GAME_MASTER:
             PlayBGM(MUS_VICTORY_LEAGUE);
             break;
         case TRAINER_CLASS_TEAM_AQUA:
@@ -5486,6 +5499,10 @@ static void HandleEndTurn_BattleWon(void)
         case TRAINER_CLASS_AQUA_LEADER:
         case TRAINER_CLASS_MAGMA_ADMIN:
         case TRAINER_CLASS_MAGMA_LEADER:
+        case TRAINER_CLASS_TEAM_SHUCKLE:
+        case TRAINER_CLASS_SHUCKLE_ADMIN:
+        case TRAINER_CLASS_SHUCKLE_LEADER:
+        case TRAINER_CLASS_SHUCKLE_LEADER2:
             PlayBGM(MUS_VICTORY_AQUA_MAGMA);
             break;
         case TRAINER_CLASS_LEADER:
@@ -6070,6 +6087,14 @@ enum Type GetDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler, enum Mo
     case EFFECT_TERA_STARSTORM:
         if (species == SPECIES_TERAPAGOS_STELLAR)
             return TYPE_STELLAR;
+        break;
+    case EFFECT_PERISH_SONG:
+        u8 partyIndex = gBattlerPartyIndexes[battler];
+        u16 uploadedType = gBattleStruct->partyState[B_SIDE_OPPONENT][partyIndex].uploadType;
+        if (uploadedType != TYPE_NONE)
+        {
+            return uploadedType;
+        }
         break;
     default:
         break;

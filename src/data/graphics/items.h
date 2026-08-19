@@ -1746,6 +1746,12 @@ const u16 gItemIconPalette_FameChecker[] = INCBIN_U16("graphics/items/icon_palet
 const u32 gItemIcon_TeachyTV[] = INCBIN_U32("graphics/items/icons/teachy_tv.4bpp.smol");
 const u16 gItemIconPalette_TeachyTV[] = INCBIN_U16("graphics/items/icon_palettes/teachy_tv.gbapal");
 
+const u32 gItemIcon_PowerGlove[] = INCBIN_U32("graphics/items/icons/power_glove.4bpp.smol");
+const u16 gItemIconPalette_PowerGlove[] = INCBIN_U16("graphics/items/icon_palettes/power_glove.gbapal");
+
+const u32 gItemIcon_Surfboard[] = INCBIN_U32("graphics/items/icons/surfboard.4bpp.smol");
+const u16 gItemIconPalette_Surfboard[] = INCBIN_U16("graphics/items/icon_palettes/surfboard.gbapal");
+
 // Story Key Items
 
 const u32 gItemIcon_SSTicket[] = INCBIN_U32("graphics/items/icons/ss_ticket.4bpp.smol");

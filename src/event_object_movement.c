@@ -406,7 +406,7 @@ const u8 gInitialMovementTypeFacingDirections[NUM_MOVEMENT_TYPES] = {
     [MOVEMENT_TYPE_FACE_DOWN] = DIR_SOUTH,
     [MOVEMENT_TYPE_FACE_LEFT] = DIR_WEST,
     [MOVEMENT_TYPE_FACE_RIGHT] = DIR_EAST,
-    [MOVEMENT_TYPE_PLAYER] = DIR_SOUTH,
+    [MOVEMENT_TYPE_PLAYER] = DIR_NORTH,
     [MOVEMENT_TYPE_BERRY_TREE_GROWTH] = DIR_SOUTH,
     [MOVEMENT_TYPE_FACE_DOWN_AND_UP] = DIR_SOUTH,
     [MOVEMENT_TYPE_FACE_LEFT_AND_RIGHT] = DIR_WEST,
@@ -493,6 +493,18 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc2,                  OBJ_EVENT_PAL_TAG_NPC_2},
     {gObjectEventPal_Npc3,                  OBJ_EVENT_PAL_TAG_NPC_3},
     {gObjectEventPal_Npc4,                  OBJ_EVENT_PAL_TAG_NPC_4},
+    {gObjectEventPal_Norman,                OBJ_EVENT_PAL_TAG_NORMAN},
+    {gObjectEventPal_Munchlax,              OBJ_EVENT_PAL_TAG_MUNCHLAX},
+    {gObjectEventPal_ShuckleGruntM,         OBJ_EVENT_PAL_TAG_SHUCKLE_GRUNT_M},
+    {gObjectEventPal_ShuckleAdminPetrel,    OBJ_EVENT_PAL_TAG_SHUCKLE_ADMIN_PETREL},
+    {gObjectEventPal_ShuckleLeaderGiovanni, OBJ_EVENT_PAL_TAG_SHUCKLE_LEADER_GIOVANNI},
+    {gObjectEventPal_Regirock2,             OBJ_EVENT_PAL_TAG_REGIROCK2},
+    {gObjectEventPal_Regice2,               OBJ_EVENT_PAL_TAG_REGICE2},
+    {gObjectEventPal_Registeel2,            OBJ_EVENT_PAL_TAG_REGISTEEL2},
+    {gObjectEventPal_Regigigas,             OBJ_EVENT_PAL_TAG_REGIGIGAS},
+    {gObjectEventPal_Sableye,               OBJ_EVENT_PAL_TAG_SABLEYE},
+    {gObjectEventPal_Hariyama,              OBJ_EVENT_PAL_TAG_HARIYAMA},
+    {gObjectEventPal_Shuckle22,             OBJ_EVENT_PAL_TAG_SHUCKLE22},
     {gObjectEventPal_Npc1Reflection,        OBJ_EVENT_PAL_TAG_NPC_1_REFLECTION},
     {gObjectEventPal_Npc2Reflection,        OBJ_EVENT_PAL_TAG_NPC_2_REFLECTION},
     {gObjectEventPal_Npc3Reflection,        OBJ_EVENT_PAL_TAG_NPC_3_REFLECTION},
@@ -2815,7 +2827,8 @@ static void RemoveObjectEventIfOutsideView(struct ObjectEvent *objectEvent)
     if (objectEvent->initialCoords.x >= left && objectEvent->initialCoords.x <= right
      && objectEvent->initialCoords.y >= top && objectEvent->initialCoords.y <= bottom)
         return;
-    RemoveObjectEvent(objectEvent);
+    if (!(FlagGet(FLAG_DONT_REMOVE_OFFSCREEN_OBJECT) && objectEvent->graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER))
+        RemoveObjectEvent(objectEvent);
 }
 
 void SpawnObjectEventsOnReturnToField(s16 x, s16 y)
@@ -6288,6 +6301,8 @@ static u8 GetVanillaCollision(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 
     else if (MapGridGetCollisionAt(x, y) || GetMapBorderIdAt(x, y) == -1 || IsMetatileDirectionallyImpassable(objectEvent, x, y, direction))
         return COLLISION_IMPASSABLE;
     else if (objectEvent->trackedByCamera && !CanCameraMoveInDirection(direction))
+        return COLLISION_IMPASSABLE;
+    else if (MapGridGetMetatileBehaviorAt(x, y) == MB_BRIDGE_OVER_COLLISION && PlayerGetElevation() == 3)
         return COLLISION_IMPASSABLE;
     else if (IsElevationMismatchAt(objectEvent->currentElevation, x, y))
         return COLLISION_ELEVATION_MISMATCH;

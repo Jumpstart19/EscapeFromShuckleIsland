@@ -26789,3 +26789,13 @@ const u32 gObjectEventPic_Substitute[] = INCBIN_COMP("graphics/pokemon/question_
     const u32 gMonFrontPic_Egg[] = INCBIN_U32("graphics/pokemon/egg/anim_front.4bpp.smol");
     const u16 gMonPalette_Egg[] = INCBIN_U16("graphics/pokemon/egg/normal.gbapal");
     const u8 gMonIcon_Egg[] = INCBIN_U8("graphics/pokemon/egg/icon.4bpp");
+
+    const u32 gMonFrontPic_Shuckle2[] = INCBIN_U32("graphics/pokemon/shuckle2/anim_front.4bpp.smol");
+    const u32 gMonBackPic_Shuckle2[] = INCBIN_U32("graphics/pokemon/shuckle2/back.4bpp.smol");
+    const u16 gMonPalette_Shuckle2[] = INCBIN_U16("graphics/pokemon/shuckle2/normal.gbapal");
+    const u16 gMonShinyPalette_Shuckle2[] = INCBIN_U16("graphics/pokemon/shuckle2/shiny.gbapal");
+    const u8 gMonIcon_Shuckle2[] = INCBIN_U8("graphics/pokemon/shuckle2/icon.4bpp");
+    const u8 gMonFootprint_Shuckle2[] = INCBIN_U8("graphics/pokemon/shuckle2/footprint.1bpp");
+    const u32 gObjectEventPic_Shuckle2[] = INCBIN_COMP("graphics/pokemon/shuckle2/overworld.4bpp");
+    const u16 gOverworldPalette_Shuckle2[] = INCBIN_U16("graphics/pokemon/shuckle2/overworld_normal.gbapal");
+    const u16 gShinyOverworldPalette_Shuckle2[] = INCBIN_U16("graphics/pokemon/shuckle2/overworld_shiny.gbapal");

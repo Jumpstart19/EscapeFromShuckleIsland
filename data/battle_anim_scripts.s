@@ -737,9 +737,9 @@ gBattleAnimMove_MeFirst::
 	delay 24
 	loopsewithpan SE_M_TAIL_WHIP, SOUND_PAN_ATTACKER, 22, 3
 	waitforvisualfinish
-	panse SE_M_MINIMIZE, SOUND_PAN_TARGET, SOUND_PAN_ATTACKER, -3, 0
-	shrink_target_copy unk0=128, unk1=24
-	delay 15
+	@panse SE_M_MINIMIZE, SOUND_PAN_TARGET, SOUND_PAN_ATTACKER, -3, 0
+	@shrink_target_copy unk0=128, unk1=24
+	@delay 15
 	create_mimic_orb_sprite ANIM_TARGET, 2, initial_x=-12, initial_y=24
 	delay 10
 	setarg 7, 0xFFFF
@@ -2408,9 +2408,9 @@ gBattleAnimGeneral_TrickRoom::
 	fadetobg BG_TRICK_ROOM
 	waitbgfadein
 	delay 64
-	restorebg
-	waitbgfadein
-	blendoff
+	@restorebg
+	@waitbgfadein
+	@blendoff
 	end
 InitRoomAnimation:
 	setalpha 8, 8
@@ -25651,7 +25651,7 @@ SnoreEffect:
 	playsewithpan SE_M_SNORE, SOUND_PAN_ATTACKER
 	createvisualtask AnimTask_ScaleMonAndRestore, 5, -7, -7, 7, ANIM_ATTACKER, 1
 	createvisualtask AnimTask_ShakeMon2, 2, ANIM_TARGET, 4, 0, 7, 1
-	shake_mon_or_platform velocity=6, shake_timer=1, shake_duration=14, type=0, battler_selector=0
+	shake_mon_or_platform velocity=6, shake_timer=1, shake_duration=14, type=0 @, battler_selector=0
 	createsprite gSnoreZSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, -42, -38, 24, 0, 0
 	createsprite gSnoreZSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 0, -42, 24, 0, 0
 	createsprite gSnoreZSpriteTemplate, ANIM_ATTACKER, 2, 0, 0, 42, -38, 24, 0, 0
@@ -28232,9 +28232,9 @@ gBattleAnimMove_Mimic::
 	setalpha 11, 5
 	monbg_static ANIM_DEF_PARTNER
 	splitbgprio_all
-	panse SE_M_MINIMIZE, SOUND_PAN_TARGET, SOUND_PAN_ATTACKER, -3, 0
-	shrink_target_copy unk0=128, unk1=24
-	delay 15
+	@panse SE_M_MINIMIZE, SOUND_PAN_TARGET, SOUND_PAN_ATTACKER, -3, 0
+	@shrink_target_copy unk0=128, unk1=24
+	@delay 15
 	create_mimic_orb_sprite ANIM_TARGET, 2, initial_x=-12, initial_y=24
 	delay 10
 	setarg 7, 0xFFFF
@@ -31173,20 +31173,20 @@ Status_Infestation:
 
 gBattleAnimGeneral_HeldItemEffect::
 	loadspritegfx ANIM_TAG_THIN_RING
-	loadspritegfx ANIM_TAG_SPARKLE_2
+	@loadspritegfx ANIM_TAG_SPARKLE_2
 	delay 0
-	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
-	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
-	waitforvisualfinish
-	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
-	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
-	waitforvisualfinish
-	playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
-	createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
-	waitforvisualfinish
-	playsewithpan SE_M_MORNING_SUN, SOUND_PAN_ATTACKER
-	call GrantingStarsEffect
-	waitforvisualfinish
+	@playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
+	@createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
+	@waitforvisualfinish
+	@playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
+	@createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
+	@waitforvisualfinish
+	@playsewithpan SE_M_TAKE_DOWN, SOUND_PAN_ATTACKER
+	@createvisualtask AnimTask_RotateMonToSideAndRestore, 2, 16, 128, ANIM_ATTACKER, 2
+	@waitforvisualfinish
+	@playsewithpan SE_M_MORNING_SUN, SOUND_PAN_ATTACKER
+	@call GrantingStarsEffect
+	@waitforvisualfinish
 	playsewithpan SE_SHINY, SOUND_PAN_ATTACKER
 	simple_palette_blend selector=F_PAL_ATTACKER, delay=3, initial_blend_y=7, target_blend_y=0, color=RGB(17, 31, 25)
 	createsprite gThinRingExpandingSpriteTemplate, ANIM_ATTACKER, 3, 0, 0, 0, 0
