@@ -80,7 +80,7 @@ static const u8* const sTrainerSlides[DIFFICULTY_COUNT][TRAINERS_COUNT][TRAINER_
         {
             [TRAINER_SLIDE_BEFORE_FIRST_TURN] = COMPOUND_STRING("Be aware: for this fight, any time your\nmove can miss, it will!\pAlso, can you defeat Stantler without\nGallade ever taking a hit?{PAUSE_UNTIL_PRESS}"),
             [TRAINER_SLIDE_SECOND_MON_SWITCHIN] = COMPOUND_STRING("This battle's theme is smuggling moves.\nDid you bring the right one for Spinda?\pOh, and did you know Mimic can copy\nmoves that fail?\pAlso, Snorlax should get past my Spinda\nwith over 42 health!{PAUSE_UNTIL_PRESS}"),
-            [TRAINER_SLIDE_THIRD_MON_SWITCHIN] = COMPOUND_STRING("Heal Snorlax to ≥ 120 HP, and leave\nwith both Pokémon alive and awake!{PAUSE_UNTIL_PRESS}"),
+            [TRAINER_SLIDE_THIRD_MON_SWITCHIN] = COMPOUND_STRING("Heal Snorlax to ≥ 120 HP, and leave\nwith both Pokémon alive and awake!\pAnd did you know that a Chilan Berry\nreduces Struggle damage in Gen IV?{PAUSE_UNTIL_PRESS}"),
             [TRAINER_SLIDE_FOURTH_MON_SWITCHIN] = COMPOUND_STRING("Only one move allows you to win here\nassuming Gen VI+ accuracy.\pRight move on the right mon with max PP.\nDo you have it all?{PAUSE_UNTIL_PRESS}"),
             [TRAINER_SLIDE_FIFTH_MON_SWITCHIN] = COMPOUND_STRING("You just chose which mon to let faint.\nDid you choose correctly?{PAUSE_UNTIL_PRESS}"),
             [TRAINER_SLIDE_LAST_SWITCHIN] = COMPOUND_STRING("You're so close!\nJust one final push!{PAUSE_UNTIL_PRESS}")
