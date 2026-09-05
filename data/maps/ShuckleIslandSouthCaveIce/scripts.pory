@@ -596,6 +596,7 @@ script SetOrangeIce2 {
     setmetatile(43, 12, 0x39D, FALSE)
     setmetatile(49, 8, 0x39D, FALSE)
     setmetatile(47, 12, 0x39D, FALSE)
+    setmetatile(46, 12, 0x39D, FALSE)
 
     setmetatile(22, 9, 0x394, FALSE)
     setmetatile(47, 9, 0x394, FALSE)
@@ -617,6 +618,7 @@ script ClearOrangeIce2 {
     setmetatile(43, 12, 0x35F, FALSE)
     setmetatile(49, 8, 0x35F, FALSE)
     setmetatile(47, 12, 0x35F, FALSE)
+    setmetatile(46, 12, 0x35F, FALSE)
     releaseall
 
 }
@@ -694,6 +696,7 @@ script SetOrangeIce2NoSound {
     setmetatile(43, 12, 0x39D, FALSE)
     setmetatile(49, 8, 0x39D, FALSE)
     setmetatile(47, 12, 0x39D, FALSE)
+    setmetatile(46, 12, 0x39D, FALSE)
 
     setmetatile(22, 9, 0x394, FALSE)
     setmetatile(47, 9, 0x394, FALSE)
@@ -711,6 +714,7 @@ script ClearOrangeIce2NoSound {
     setmetatile(43, 12, 0x35F, FALSE)
     setmetatile(49, 8, 0x35F, FALSE)
     setmetatile(47, 12, 0x35F, FALSE)
+    setmetatile(46, 12, 0x35F, FALSE)
 
 }
 
